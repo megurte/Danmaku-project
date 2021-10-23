@@ -17,8 +17,8 @@ public class Kirin_script : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(WaitForCircleIcicle(1, true, icicle, 32));
-        StartCoroutine(WaitForCircleIcicle(2, true, icicle, 32));
+        StartCoroutine(WaitForCircleFireball(1, true, fireballSmall, 32));
+        StartCoroutine(WaitForCircleFireball(2, true, fireballSmall, 32));
         StartCoroutine(WaitForCircleFireball(3, false, fireball, 16));
         StartCoroutine(WaitForCircleFireball(4, false, fireballSmall, 28));
         StartCoroutine(WaitForCircleFireball(5, true, fireball, 24));
