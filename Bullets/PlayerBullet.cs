@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Kirin;
 using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
@@ -16,8 +17,11 @@ public class PlayerBullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
+        {
+            collision.gameObject.GetComponent<KirinStats>().CurrentHp -= 1;
             Destroy(gameObject);
-
+        }
+        
         if (collision.CompareTag("Border"))
             Destroy(gameObject);
     }

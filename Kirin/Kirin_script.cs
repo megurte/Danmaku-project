@@ -3,10 +3,19 @@ using System.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct FireballCircle
+{
+    public float Time;
+    public bool Change;
+    public GameObject Bullet;
+    public int Count;
+}
+
 public class Kirin_script : MonoBehaviour
 {
     //Bullets
     public GameObject fireball;
+    public GameObject timedFireball;
     public GameObject fireballSmall;
     public GameObject icicle;
 
@@ -17,24 +26,41 @@ public class Kirin_script : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(WaitForCircleFireball(1, true, fireballSmall, 32));
-        StartCoroutine(WaitForCircleFireball(2, true, fireballSmall, 32));
-        StartCoroutine(WaitForCircleFireball(3, false, fireball, 16));
+        StartCoroutine(Test(1, true, timedFireball, 32));
+        StartCoroutine(Test(2, true, timedFireball, 32));
+        StartCoroutine(Test(3, false, timedFireball, 32));
         StartCoroutine(WaitForCircleFireball(4, false, fireballSmall, 28));
         StartCoroutine(WaitForCircleFireball(5, true, fireball, 24));
         StartCoroutine(WaitForCircleFireball(6, false, fireballSmall, 26));
         StartCoroutine(WaitForCircleFireball(7, true, fireball, 26));
-        StartCoroutine(WaitForLeftFireball(8, true, fireball, 15));
-        StartCoroutine(WaitForLeftFireball(9, false, fireball, 18));
-        StartCoroutine(WaitForLeftFireball(10, true, fireballSmall, 32));
-        StartCoroutine(WaitForLeftFireball(11, false, fireball, 40));
+        StartCoroutine(WaitForCircleFireball(8, true, fireball, 15));
+        StartCoroutine(WaitForCircleFireball(9, false, fireball, 18));
+        StartCoroutine(WaitForCircleFireball(10, true, fireballSmall, 32));
+        StartCoroutine(WaitForCircleFireball(11, false, fireball, 40));
         StartCoroutine(WaitForCircleFireball(12, false, fireball, 20));
         StartCoroutine(WaitForCircleFireball(13, true, fireball, 14));
     }
 
     private void FireballSpiral(bool change, GameObject bullet, float count, float multiplication)
     {
-        
+        Vector2 point = transform.position;
+        Vector2 direction = new Vector2(-1, 1);
+
+        angle = angle * Mathf.Deg2Rad;
+        for (int i = 1; i <= count; i++)
+        {
+            float y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
+            float x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
+            point.x = x;
+            point.y = y;
+
+            float dirY = Mathf.Cos(angle / count * i);
+            float dirX = Mathf.Sin(angle / count * i);
+            direction.x = dirX;
+            direction.y = dirY;
+            Test(point, direction, change, bullet);
+        }
+        angle = 360;      
     }
     
     private void FireballSpellLeftToRight(bool change, GameObject bullet, int count)
@@ -55,10 +81,7 @@ public class Kirin_script : MonoBehaviour
             var dirX = direction.x + Mathf.Sin(angle / count * i);
             direction.x = dirX;
             direction.y = dirY;
-            if (change)
-                BulletSpawn(point, direction, true, bullet);
-            else
-                BulletSpawn(point, direction, false, bullet);
+            BulletSpawn(point, direction, change, bullet);
         }
         angle = 360;
     }
@@ -139,7 +162,15 @@ public class Kirin_script : MonoBehaviour
             
     }
 
-
+    private void Test(Vector2 pos, Vector2 dir, bool leftToRight, GameObject bullet)
+    {
+        InstObject = Instantiate(bullet, pos, Quaternion.identity);
+        if(leftToRight)
+            InstObject.GetComponent<TimedFireball>().direction = dir;
+        else
+            InstObject.GetComponent<TimedFireball>().direction = -dir;
+    }
+    
     private void BulletSpawn(Vector2 pos, Vector2 dir, bool leftToRight, GameObject bullet)
     {
         InstObject = Instantiate(bullet, pos, Quaternion.identity);
@@ -149,6 +180,18 @@ public class Kirin_script : MonoBehaviour
             InstObject.GetComponent<Fireball>().direction = -dir;
     }
 
+    /*private IEnumerator Test(FireballCircle settings)
+    {
+        yield return new WaitForSeconds(settings.Time);
+        IcicleSpellCircle(settings.Change, settings.Bullet, settings.Count);
+    }*/
+    
+    private IEnumerator Test(float waitTime, bool change, GameObject bullet, int count)
+    {
+        yield return new WaitForSeconds(waitTime);
+        FireballSpiral(change, bullet, count, 4);
+    }
+    
     private IEnumerator WaitForCircleIcicle(float waitTime, bool change, GameObject bullet, int count)
     {
         yield return new WaitForSeconds(waitTime);

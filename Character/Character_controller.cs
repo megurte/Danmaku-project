@@ -17,14 +17,6 @@ public class Character_controller : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
-    {
-       /* if (Input.GetKey(KeyCode.Space))
-        {
-            Shoot(Level);
-        }*/
-    }
-
     private void FixedUpdate()
     {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
