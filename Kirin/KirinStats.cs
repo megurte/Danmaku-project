@@ -6,17 +6,19 @@ namespace Kirin
 {
     public class KirinStats : MonoBehaviour
     {
-        [SerializeField]
         public float CurrentHp { get; set; }
         public float MaxHp { get; set; }
         public float lerpspeed = 2f;
+        private bool _ultimatePhase = false;
+        private int _phase = 1;
         public Image bar;
-        private float _phase = 1;
+        
+        
 
         private void Start()
         {
             MaxHp = 1000;
-            bar.fillAmount = MaxHp;
+            bar.fillAmount = 100;
             CurrentHp = MaxHp;
         }
 
@@ -25,8 +27,16 @@ namespace Kirin
             HandleBar();
             if (CurrentHp <= 0)
             {
-                Destroy(gameObject);
+                _ultimatePhase = false;
+                CurrentHp = MaxHp;
+                _phase += 1;
             }
+
+            if (CurrentHp / MaxHp < 0.3f)
+            {
+                _ultimatePhase = true;
+            }
+
         }
 
 
