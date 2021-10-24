@@ -25,7 +25,12 @@ public class Fireball : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
+        {
+            collision.GetComponent<Character_controller>().Health -= 1;
+            collision.GetComponent<Character_controller>().isInvulnerable = true;
             Destroy(gameObject);
+        }
+            
         if (collision.CompareTag("Border"))
             Destroy(gameObject);
     }

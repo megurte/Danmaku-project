@@ -13,8 +13,6 @@ namespace Kirin
         private int _phase = 1;
         public Image bar;
         
-        
-
         private void Start()
         {
             MaxHp = 1000;
@@ -36,9 +34,7 @@ namespace Kirin
             {
                 _ultimatePhase = true;
             }
-
         }
-
 
         private  void HandleBar()
         {

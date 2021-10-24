@@ -1,11 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Character_controller : MonoBehaviour
 {
+    public float Health;
     public float speed;
     public float level;
+    public bool isInvulnerable = false;
+
 
     private Rigidbody2D _rigidBody;
     private Vector2 _moveVector;
@@ -19,14 +24,14 @@ public class Character_controller : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        _moveVector = moveInput.normalized * speed;
-        _rigidBody.velocity = _moveVector * Time.deltaTime;
-        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W))
-        {
-            _rigidBody.velocity = new Vector2(0, 0);
-        }
+        Moving();
 
+        if (isInvulnerable && Health > 0)
+        {
+            new WaitForSeconds(3000);
+            //isInvulnerable = false;
+        }
+        
         if (Input.GetKey(KeyCode.Space))
         {
             Shoot(level);
@@ -35,6 +40,19 @@ public class Character_controller : MonoBehaviour
         if (Input.GetKey(KeyCode.Q))
         {
             level = 4;
+        }
+        
+    }
+
+    private void Moving()
+    {
+        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        _moveVector = moveInput.normalized * speed;
+        _rigidBody.velocity = _moveVector * Time.deltaTime;
+        
+        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W))
+        {
+            _rigidBody.velocity = new Vector2(0, 0);
         }
     }
 
@@ -74,5 +92,12 @@ public class Character_controller : MonoBehaviour
                 Instantiate(bullet, bulletPosition4, Quaternion.identity);
                 break;
         }
+    }
+
+    private IEnumerator Invulnerable()
+    {
+        yield return new WaitForSeconds(2);
+        Debug.Log("enter");
+        isInvulnerable = false;
     }
 }
