@@ -11,7 +11,7 @@ public struct FireballCircle
     public int Count;
 }
 
-public class Kirin_script : MonoBehaviour
+public class KirinSpells : MonoBehaviour
 {
     //Bullets
     public GameObject fireball;
@@ -23,35 +23,32 @@ public class Kirin_script : MonoBehaviour
     private GameObject InstObject;
     public float distance = 2;
     public float angle = 360;
-
+   
     private void Start()
     {
-        //StartCoroutine(SpiralFireball(1, true, fireball, 60, 0.1f));
-       
-        StartCoroutine(WaitForCircleFireball(2, false, fireballSmall, 32));
-        StartCoroutine(SpiralFireball(2.1f, true, fireball, 70, 0.3f));
-        //StartCoroutine(WaitForCircleFireball(4, false, fireballSmall, 28));
-        StartCoroutine(WaitForCircleFireball(5, true, fireball, 24));
-        StartCoroutine(WaitForCircleFireball(6, false, fireballSmall, 26));
-        StartCoroutine(WaitForCircleFireball(7, true, fireball, 26));
-        StartCoroutine(WaitForCircleFireball(8, true, fireball, 15));
-        StartCoroutine(WaitForCircleFireball(9, false, fireball, 18));
-        StartCoroutine(WaitForCircleFireball(10, true, fireballSmall, 32));
-        StartCoroutine(WaitForCircleFireball(11, false, fireball, 40));
-        StartCoroutine(WaitForCircleFireball(12, false, fireball, 20));
-        StartCoroutine(WaitForCircleFireball(13, true, fireball, 14));
+        /*StartCoroutine(CircleFireball(2, false, fireballSmall, 32));
+        StartCoroutine(CircleFireball(3, true, fireball, 24));
+        StartCoroutine(CircleFireball(4, false, fireballSmall, 26));
+        StartCoroutine(SpiralFireball(4.3f, true, fireball, 100, 0.5f));
+        StartCoroutine(CircleFireball(7, true, fireball, 26));
+        StartCoroutine(CircleFireball(8, true, fireball, 15));
+        StartCoroutine(CircleFireball(9, false, fireball, 18));
+        StartCoroutine(CircleFireball(10, true, fireballSmall, 32));
+        StartCoroutine(CircleFireball(11, false, fireball, 40));
+        StartCoroutine(CircleFireball(12, false, fireball, 20));
+        StartCoroutine(CircleFireball(13, true, fireball, 14));*/
     }
   
     private void FireballSpellLeftToRight(bool change, GameObject bullet, int count)
     {
         Vector2 point = transform.position;
-        Vector2 direction = new Vector2(-1, 1);
+        var direction = new Vector2(-1, 1);
 
         angle *= Mathf.Deg2Rad;
-        for (int i = 1; i <= count; i++)
+        for (var i = 1; i <= count; i++)
         {
-            var y = point.y + Mathf.Cos(angle / count * i) * distance;
-            var x = point.x + Mathf.Sin(angle / count * i) * distance;
+            var y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
+            var x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
             point.x = x;
             point.y = y;
 
@@ -67,45 +64,43 @@ public class Kirin_script : MonoBehaviour
     private void FireballSpellCircle(bool change, GameObject bullet, int count)
     {
         Vector2 point = transform.position;
-        Vector2 direction = new Vector2(-1, 1);
+        var direction = new Vector2(-1, 1);
 
         angle *= Mathf.Deg2Rad;
-        for (int i = 1; i <= count; i++)
+        for (var i = 1; i <= count; i++)
         {
-            float y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
-            float x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
+            var y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
+            var x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
             point.x = x;
             point.y = y;
 
-            float dirY = Mathf.Cos(angle / count * i);
-            float dirX = Mathf.Sin(angle / count * i);
+            var dirY = Mathf.Cos(angle / count * i);
+            var dirX = Mathf.Sin(angle / count * i);
             direction.x = dirX;
             direction.y = dirY;
-            if(change)
-                BulletSpawn(point, direction, true, bullet);
-            else
-                BulletSpawn(point, direction, false, bullet);
+
+            BulletSpawn(point, direction, change, bullet);
         }
-        angle = 360;          
+        angle = 360;           
     }
 
     //TEST
     private void IcicleSpellCircle(bool change, GameObject bullet, int count)
     {
-        Vector2 point = transform.position;
-        Vector2 direction = new Vector2(-1, 1);
-        Vector3 rotation = new Vector3(0, 0, 0);
+        var point = transform.position;
+        var direction = new Vector2(-1, 1);
+        var rotation = new Vector3(0, 0, 0);
 
         angle *= Mathf.Deg2Rad;
         for (int i = 1; i <= count; i++)
         {
-            float _y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
-            float _x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
+            var _y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
+            var _x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
             point.x = _x;
             point.y = _y;
 
-            float dir_y = Mathf.Cos(angle / count * i);
-            float dir_x = Mathf.Sin(angle / count * i);
+            var dir_y = Mathf.Cos(angle / count * i);
+            var dir_x = Mathf.Sin(angle / count * i);
             direction.x = dir_x;
             direction.y = dir_y;
 
@@ -159,21 +154,21 @@ public class Kirin_script : MonoBehaviour
             InstObject.GetComponent<Fireball>().direction = -dir;
     }
    
-    private IEnumerator Test(float waitTime, bool change, GameObject bullet, float count)
+    public IEnumerator SpiralSpellFireball(float waitTime, bool change, GameObject bullet, float count)
     {
         Vector2 point = transform.position;
-        Vector2 direction = new Vector2(-1, 1);
+        var direction = new Vector2(-1, 1);
 
         angle *= Mathf.Deg2Rad;
-        for (int i = 1; i <= count; i++)
+        for (var i = 1; i <= count; i++)
         {
-            float y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
-            float x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
+            var y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
+            var x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
             point.x = x;
             point.y = y;
 
-            float dirY = Mathf.Cos(angle / count * i);
-            float dirX = Mathf.Sin(angle / count * i);
+            var dirY = Mathf.Cos(angle / count * i);
+            var dirX = Mathf.Sin(angle / count * i);
             direction.x = dirX;
             direction.y = dirY;
             yield return new WaitForSeconds(waitTime);
@@ -182,25 +177,25 @@ public class Kirin_script : MonoBehaviour
         angle = 360;
     }
     
-    private IEnumerator SpiralFireball(float waitTime, bool change, GameObject bullet, float count, float delay)
+    public IEnumerator SpiralFireball(float waitTime, bool change, GameObject bullet, float count, float delay)
     {
         yield return new WaitForSeconds(waitTime);
-        StartCoroutine(Test(delay, change, bullet, count));
+        StartCoroutine(SpiralSpellFireball(delay, change, bullet, count));
     }
     
-    private IEnumerator WaitForCircleIcicle(float waitTime, bool change, GameObject bullet, int count)
+    public IEnumerator CircleIcicle(float waitTime, bool change, GameObject bullet, int count)
     {
         yield return new WaitForSeconds(waitTime);
         IcicleSpellCircle(change, bullet, count);
     }
 
-    private IEnumerator WaitForCircleFireball(float waitTime, bool change, GameObject bullet, int count)
+    public IEnumerator CircleFireball(float waitTime, bool change, GameObject bullet, int count)
     {
         yield return new WaitForSeconds(waitTime);
         FireballSpellCircle(change, bullet, count);
     }
 
-    public IEnumerator WaitForLeftFireball(float waitTime, bool change, GameObject bullet, int count)
+    public IEnumerator LeftSideFireball(float waitTime, bool change, GameObject bullet, int count)
     {
         yield return new WaitForSeconds(waitTime);
         FireballSpellLeftToRight(change, bullet, count);

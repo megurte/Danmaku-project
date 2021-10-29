@@ -26,7 +26,7 @@ public class Fireball : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Character_controller>().Health -= 1;
+            collision.GetComponent<CharacterController>().health -= 1;
             //collision.GetComponent<Character_controller>().isInvulnerable = true;
             Destroy(gameObject);
         }

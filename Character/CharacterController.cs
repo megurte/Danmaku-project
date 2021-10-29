@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Character_controller : MonoBehaviour
+public class CharacterController : MonoBehaviour
 {
-    public float Health;
+    public float health;
     public float speed;
     public float level;
     public bool isInvulnerable;
@@ -26,7 +26,7 @@ public class Character_controller : MonoBehaviour
     {
         Moving();
 
-        if (!isInvulnerable && Health <= 0)
+        if (!isInvulnerable && health <= 0)
             Destroy(gameObject);
         
         if (Input.GetKey(KeyCode.Space))

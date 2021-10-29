@@ -7,7 +7,7 @@ namespace Kirin
     public class KirinStats : MonoBehaviour
     {
         public float CurrentHp { get; set; }
-        public float MaxHp { get; set; }
+        private float MaxHp { get; set; }
         public float lerpspeed = 2f;
         private bool _ultimatePhase = false;
         private int _phase = 1;
@@ -38,7 +38,7 @@ namespace Kirin
 
         private  void HandleBar()
         {
-            if (CurrentHp / MaxHp != bar.fillAmount)
+            if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
                 bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * lerpspeed);
         }
     }

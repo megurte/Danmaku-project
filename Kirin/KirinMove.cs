@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Kirin_move : MonoBehaviour
+public class KirinMove : MonoBehaviour
 {
     public float speed;
     public bool isMoving = false;
@@ -17,9 +17,9 @@ public class Kirin_move : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(WaitToMove(5, _position1));
-        StartCoroutine(WaitToMove(9, _position2));
-        StartCoroutine(WaitToMove(14, _position3));
+        StartCoroutine(MoveTo(5, _position1));
+        StartCoroutine(MoveTo(9, _position2));
+        StartCoroutine(MoveTo(14, _position3));
     }
 
     private void Update()
@@ -36,7 +36,7 @@ public class Kirin_move : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPos, speed * Time.deltaTime);   
     }
 
-    private IEnumerator WaitToMove(float waitTime, Vector2 pos)
+    private IEnumerator MoveTo(float waitTime, Vector2 pos)
     {
         yield return new WaitForSeconds(waitTime);
         isMoving = true;
