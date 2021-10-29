@@ -21,10 +21,24 @@ public class KirinSpells : MonoBehaviour
 
     //Bullet spawn
     private GameObject InstObject;
-    private const float FullDegrees = 360;
     public float distance = 2;
     public float angle = 360;
    
+    private void Start()
+    {
+        /*StartCoroutine(CircleFireball(2, false, fireballSmall, 32));
+        StartCoroutine(CircleFireball(3, true, fireball, 24));
+        StartCoroutine(CircleFireball(4, false, fireballSmall, 26));
+        StartCoroutine(SpiralFireball(4.3f, true, fireball, 100, 0.5f));
+        StartCoroutine(CircleFireball(7, true, fireball, 26));
+        StartCoroutine(CircleFireball(8, true, fireball, 15));
+        StartCoroutine(CircleFireball(9, false, fireball, 18));
+        StartCoroutine(CircleFireball(10, true, fireballSmall, 32));
+        StartCoroutine(CircleFireball(11, false, fireball, 40));
+        StartCoroutine(CircleFireball(12, false, fireball, 20));
+        StartCoroutine(CircleFireball(13, true, fireball, 14));*/
+    }
+  
     private void FireballSpellLeftToRight(bool change, GameObject bullet, int count)
     {
         Vector2 point = transform.position;
@@ -44,7 +58,7 @@ public class KirinSpells : MonoBehaviour
             direction.y = dirY;
             BulletSpawn(point, direction, change, bullet);
         }
-        angle = FullDegrees;
+        angle = 360;
     }
 
     private void FireballSpellCircle(bool change, GameObject bullet, int count)
@@ -67,7 +81,7 @@ public class KirinSpells : MonoBehaviour
 
             BulletSpawn(point, direction, change, bullet);
         }
-        angle = FullDegrees;           
+        angle = 360;           
     }
 
     //TEST
@@ -101,7 +115,7 @@ public class KirinSpells : MonoBehaviour
             else
                 BulletSpawnTest(point, direction, rotation, false, bullet);
         }
-        angle = FullDegrees;
+        angle = 360;
     }
 
     //TEST
@@ -160,7 +174,7 @@ public class KirinSpells : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
             BulletSpawn(point, direction, change, bullet);
         }
-        angle = FullDegrees;
+        angle = 360;
     }
     
     public IEnumerator SpiralFireball(float waitTime, bool change, GameObject bullet, float count, float delay)
