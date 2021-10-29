@@ -9,7 +9,7 @@ public class Character_controller : MonoBehaviour
     public float Health;
     public float speed;
     public float level;
-    public bool isInvulnerable = false;
+    public bool isInvulnerable;
 
 
     private Rigidbody2D _rigidBody;
@@ -26,22 +26,14 @@ public class Character_controller : MonoBehaviour
     {
         Moving();
 
-        if (isInvulnerable && Health > 0)
-        {
-            new WaitForSeconds(3000);
-            //isInvulnerable = false;
-        }
+        if (!isInvulnerable && Health <= 0)
+            Destroy(gameObject);
         
         if (Input.GetKey(KeyCode.Space))
-        {
             Shoot(level);
-        }
 
         if (Input.GetKey(KeyCode.Q))
-        {
             level = 4;
-        }
-        
     }
 
     private void Moving()
@@ -51,9 +43,7 @@ public class Character_controller : MonoBehaviour
         _rigidBody.velocity = _moveVector * Time.deltaTime;
         
         if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W))
-        {
             _rigidBody.velocity = new Vector2(0, 0);
-        }
     }
 
     private void Shoot(float characterLevel)
