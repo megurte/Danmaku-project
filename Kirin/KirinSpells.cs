@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class KirinSpells : MonoBehaviour
 {
     //Bullets
     public GameObject fireball;
+    public GameObject fireBullet;
     public GameObject timedFireball;
     public GameObject fireballSmall;
     public GameObject icicle;
@@ -33,16 +35,17 @@ public class KirinSpells : MonoBehaviour
         angle *= Mathf.Deg2Rad;
         for (var i = 1; i <= count; i++)
         {
-            var y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
-            var x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
+            var degree = angle / count * i;
+            var y = transform.position.y + Mathf.Cos(degree) * distance;
+            var x = transform.position.x + Mathf.Sin(degree) * distance;
             point.x = x;
             point.y = y;
 
-            var dirY = direction.y + Mathf.Cos(angle / count * i);
-            var dirX = direction.x + Mathf.Sin(angle / count * i);
+            var dirY = direction.y + Mathf.Cos(degree);
+            var dirX = direction.x + Mathf.Sin(degree);
             direction.x = dirX;
             direction.y = dirY;
-            BulletSpawn(point, direction, change, bullet);
+            BulletSpawn(point, direction, degree * Mathf.Rad2Deg, change, bullet);
         }
         angle = FullDegrees;
     }
@@ -55,17 +58,18 @@ public class KirinSpells : MonoBehaviour
         angle *= Mathf.Deg2Rad;
         for (var i = 1; i <= count; i++)
         {
-            var y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
-            var x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
+            var degree = angle / count * i;
+            var y = transform.position.y + Mathf.Cos(degree) * distance;
+            var x = transform.position.x + Mathf.Sin(degree) * distance;
             point.x = x;
             point.y = y;
 
-            var dirY = Mathf.Cos(angle / count * i);
-            var dirX = Mathf.Sin(angle / count * i);
+            var dirY = Mathf.Cos(degree);
+            var dirX = Mathf.Sin(degree);
             direction.x = dirX;
             direction.y = dirY;
 
-            BulletSpawn(point, direction, change, bullet);
+            BulletSpawn(point, direction,degree * Mathf.Rad2Deg, change, bullet);
         }
         angle = FullDegrees;           
     }
@@ -125,22 +129,23 @@ public class KirinSpells : MonoBehaviour
     private void Test(Vector2 pos, Vector2 dir, bool leftToRight, GameObject bullet)
     {
         InstObject = Instantiate(bullet, pos, Quaternion.identity);
-        if(leftToRight)
+        if (leftToRight)
             InstObject.GetComponent<TimedFireball>().direction = dir;
         else
             InstObject.GetComponent<TimedFireball>().direction = -dir;
     }
     
-    private void BulletSpawn(Vector2 pos, Vector2 dir, bool leftToRight, GameObject bullet)
+    private void BulletSpawn(Vector2 pos, Vector2 dir, float degree, bool leftToRight, GameObject bullet)
     {
         InstObject = Instantiate(bullet, pos, Quaternion.identity);
-        if(leftToRight)
+        InstObject.GetComponent<Fireball>().angle = degree;
+        if (leftToRight)
             InstObject.GetComponent<Fireball>().direction = dir;
         else
             InstObject.GetComponent<Fireball>().direction = -dir;
     }
-   
-    public IEnumerator SpiralSpellFireball(float waitTime, bool change, GameObject bullet, float count)
+
+    public IEnumerator SpiralSpellFireball(float delay, bool change, GameObject bullet, float count)
     {
         Vector2 point = transform.position;
         var direction = new Vector2(-1, 1);
@@ -148,19 +153,50 @@ public class KirinSpells : MonoBehaviour
         angle *= Mathf.Deg2Rad;
         for (var i = 1; i <= count; i++)
         {
-            var y = transform.position.y + Mathf.Cos(angle / count * i) * distance;
-            var x = transform.position.x + Mathf.Sin(angle / count * i) * distance;
+            var degree = angle / count * i;
+            var y = transform.position.y + Mathf.Cos(degree) * distance;
+            var x = transform.position.x + Mathf.Sin(degree) * distance;
             point.x = x;
             point.y = y;
 
-            var dirY = Mathf.Cos(angle / count * i);
-            var dirX = Mathf.Sin(angle / count * i);
+            var dirY = Mathf.Cos(degree);
+            var dirX = Mathf.Sin(degree);
             direction.x = dirX;
             direction.y = dirY;
-            yield return new WaitForSeconds(waitTime);
-            BulletSpawn(point, direction, change, bullet);
+            yield return new WaitForSeconds(delay);
+            BulletSpawn(point, direction, degree * Mathf.Rad2Deg, change, bullet);
         }
         angle = FullDegrees;
+    }
+    
+    public IEnumerator RouletteSpellFireball(float delay, bool change, GameObject bullet, float count)
+    {
+        Vector2 point = transform.position;
+        var direction = new Vector2(0, -1);
+
+        angle *= Mathf.Deg2Rad;
+        for (var i = 1; i <= count; i++)
+        {
+            var degree = angle / count * i;
+            var y = transform.position.y + Mathf.Cos(degree) * distance;
+            var x = transform.position.x + Mathf.Sin(degree) * distance;
+            point.x = x;
+            point.y = y;
+
+            var dirY = Mathf.Cos(degree);
+            var dirX = Mathf.Sin(degree);
+            direction.x = dirX;
+            direction.y = dirY;
+            yield return new WaitForSeconds(delay);
+            BulletSpawn(point, direction, degree * Mathf.Rad2Deg, change, bullet);
+        }
+        angle = FullDegrees;
+    }
+    
+    public IEnumerator RouletteFireball(float waitTime, bool change, GameObject bullet, float count, float delay)
+    {
+        yield return new WaitForSeconds(waitTime);
+        StartCoroutine(RouletteSpellFireball(delay, change, bullet, count));
     }
     
     public IEnumerator SpiralFireball(float waitTime, bool change, GameObject bullet, float count, float delay)
