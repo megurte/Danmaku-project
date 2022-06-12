@@ -7,10 +7,16 @@ public class Fireball : MonoBehaviour
 {
     public float startSpeed = 0.1f;
     private bool _isActive = false;
-    public string bulletType = "Bullet";
+    public BulletType bulletType = BulletType.Fireball;
     public Vector3 direction;
     public float angle = 180;
-    public Vector3 rotation;
+    
+    public enum BulletType
+    {
+        Other,
+        Fireball,
+        Fire,
+    }
     
     private void FixedUpdate()
     {
@@ -22,7 +28,7 @@ public class Fireball : MonoBehaviour
         
         transform.Translate(direction.normalized * startSpeed, Space.World);
 
-        if (bulletType == "Fire")
+        if (bulletType == BulletType.Fire)
         {
             var degree = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(degree, Vector3.forward);
