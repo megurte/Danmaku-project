@@ -10,7 +10,7 @@ namespace Kirin
         private int _phaseNumber = 1;
         private bool _isPhaseActive = false;
 
-        private void Start()
+        private void Awake()
         {
             _kirinSpells = GetComponent<KirinSpells>();
             GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
