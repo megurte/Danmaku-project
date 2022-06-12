@@ -1,4 +1,5 @@
 ﻿using System;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,15 +18,11 @@ namespace Kirin
         
         public Image bar;
         
-        private KirinTimer _kirinTimer;
-        
         private void Start()
         {
             MaxHp = 1000;
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
-            
-            _kirinTimer = GameObject.FindWithTag("TimerManager").GetComponent<KirinTimer>();
         }
 
         private void Update()
@@ -36,15 +33,7 @@ namespace Kirin
                 _ultimatePhase = false;
                 CurrentHp = MaxHp;
                 _phase += 1;
-
-                if (_phase <= _kirinTimer.timers.Count)
-                {
-                    _kirinTimer.TimerInit(_kirinTimer.timers[_phase - 1]);
-                }
-                else
-                {
-                    _kirinTimer.timerIsRunning = false;
-                }
+                GlobalEventManager.ChangePhase(_phase);
             }
 
             if (CurrentHp / MaxHp < 0.3f)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,8 @@ namespace Kirin
         public float timeRemaining = 0;
         
         public bool timerIsRunning = false;
-
+        
+        private int _phaseIndex = 0;
         
         [Serializable]
         public struct PhaseTimer
@@ -25,10 +27,11 @@ namespace Kirin
         }
 
         public List<PhaseTimer> timers;
-
+        
         private void Start()
         {
             _text = textObj.GetComponent<Text>();
+            GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
         }
         
         private void FixedUpdate()
@@ -45,7 +48,7 @@ namespace Kirin
             UpdateTimerText(timer.seconds, timer.milSec);
         }
 
-        public void TimerInit(PhaseTimer timer)
+        private void TimerInit(PhaseTimer timer)
         {
             timeRemaining = timer.seconds;
             timerIsRunning = true;
@@ -75,6 +78,17 @@ namespace Kirin
             seconds = Mathf.FloorToInt(timeRemaining % 100);  
             milliseconds = (timeRemaining % 1) * 1000;
             _text.text = $"{seconds:00}:{milliseconds:00}";
+        }
+
+        private void OnPhaseChange(int phase)
+        {
+            if (phase <= timers.Count)
+            {
+                _phaseIndex = phase - 1;
+                TimerInit(timers[_phaseIndex]);
+            }
+            else
+                timerIsRunning = false;
         }
     }
 }

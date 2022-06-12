@@ -38,7 +38,7 @@ public class CharacterController : MonoBehaviour
 
     private void Moving()
     {
-        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        var moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         _moveVector = moveInput.normalized * speed;
         _rigidBody.velocity = _moveVector * Time.deltaTime;
         

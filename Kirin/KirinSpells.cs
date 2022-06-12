@@ -79,7 +79,6 @@ public class KirinSpells : MonoBehaviour
     {
         var point = transform.position;
         var direction = new Vector2(-1, 1);
-        var rotation = new Vector3(0, 0, 0);
 
         angle *= Mathf.Deg2Rad;
         for (int i = 1; i <= count; i++)
@@ -94,46 +93,16 @@ public class KirinSpells : MonoBehaviour
             direction.x = dir_x;
             direction.y = dir_y;
 
-            rotation.z = angle / count * i * Mathf.Rad2Deg;
-            //rotation.z = ((Mathf.Atan2(direction.y - point.y, direction.x - point.x) + 2 * Mathf.PI) * 180 / Mathf.PI) % 360;
-            //float degree = Angle * Mathf.Rad2Deg;
-            //rotation.z = Mathf.Cos((direction.y * point.y + direction.x * point.x) / (Mathf.Sqrt(Mathf.Pow(direction.y + direction.x, 2) * Mathf.Pow( point.y * point.x, 2)))) *Mathf.Rad2Deg;
-
+                            
 
             if (change)
-                BulletSpawnTest(point, direction, rotation, true, bullet);
+                BulletSpawn(point, direction, angle / count * i,true, bullet);
             else
-                BulletSpawnTest(point, direction, rotation, false, bullet);
+                BulletSpawn(point, direction, angle / count * i, false, bullet);
         }
         angle = FullDegrees;
     }
-
-    //TEST
-    private void BulletSpawnTest(Vector2 pos, Vector2 dir, Vector3 rot, bool leftToRight, GameObject bullet)
-    {
-        InstObject = Instantiate(bullet, pos, Quaternion.identity);
-        if (leftToRight)
-        {
-            InstObject.GetComponent<Fireball>().rotation = rot;
-            InstObject.GetComponent<Fireball>().direction = dir;
-        }
-        else
-        {
-            InstObject.GetComponent<Fireball>().rotation = rot;
-            InstObject.GetComponent<Fireball>().direction = -dir;
-        }
-            
-    }
-
-    //TEST
-    private void Test(Vector2 pos, Vector2 dir, bool leftToRight, GameObject bullet)
-    {
-        InstObject = Instantiate(bullet, pos, Quaternion.identity);
-        if (leftToRight)
-            InstObject.GetComponent<TimedFireball>().direction = dir;
-        else
-            InstObject.GetComponent<TimedFireball>().direction = -dir;
-    }
+    
     
     private void BulletSpawn(Vector2 pos, Vector2 dir, float degree, bool leftToRight, GameObject bullet)
     {
@@ -222,4 +191,18 @@ public class KirinSpells : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         FireballSpellLeftToRight(change, bullet, count);
     }
+    
+    /*public IEnumerator CircleFireballSpell(CircleFireballSettings settings)
+    {
+        yield return new WaitForSeconds(settings.waitTime);
+        FireballSpellCircle(settings.change, settings.bullet, settings.count);
+    }*/
 }
+
+/*public class CircleFireballSettings
+{
+    public float waitTime;
+    public bool change;
+    public GameObject bullet;
+    public int count;
+}*/
