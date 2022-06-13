@@ -22,6 +22,14 @@ namespace Kirin
             yield return new WaitForSeconds(waitTime);
             StartCoroutine(SpiralSpellFireball(delay, change, bullet, count));
         }
+
+        
+        //
+        public void DoSome()
+        {
+            
+        }
+
     
         /// <summary>
         /// Spell with delay between bullets spawn
