@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using DefaultNamespace;
 using UnityEngine;
 
 namespace Kirin
@@ -27,7 +28,7 @@ namespace Kirin
         //
         public void DoSome()
         {
-            
+            Debug.Log("pass");
         }
 
     

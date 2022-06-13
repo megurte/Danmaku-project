@@ -65,6 +65,7 @@ namespace Kirin
             {
                 timeRemaining = 0;
                 timerIsRunning = false;
+                GlobalEventManager.ChangePhase();
             }
         }
 

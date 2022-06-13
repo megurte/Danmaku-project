@@ -14,12 +14,11 @@ namespace Kirin
         
         private bool _ultimatePhase = false;
         
-        private int _phase = 1;
-        
         public Image bar;
         
         private void Start()
         {
+            GlobalEventManager.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
             MaxHp = 1000;
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
@@ -32,8 +31,7 @@ namespace Kirin
             {
                 _ultimatePhase = false;
                 CurrentHp = MaxHp;
-                _phase += 1;
-                GlobalEventManager.ChangePhase(_phase);
+                GlobalEventManager.ChangePhase();
             }
 
             if (CurrentHp / MaxHp < 0.3f)
