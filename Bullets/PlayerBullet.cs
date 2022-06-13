@@ -1,28 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using Kirin;
 using UnityEngine;
 
-public class PlayerBullet : MonoBehaviour
+namespace Bullets
 {
-    public float startSpeed;
-    public Vector2 direction;
-
-
-    private void FixedUpdate()
+    public class PlayerBullet : MonoBehaviour
     {
-        transform.Translate(direction.normalized * startSpeed);
-    }
-    
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Enemy"))
+        public float startSpeed;
+        public Vector2 direction;
+
+        private void FixedUpdate()
         {
-            collision.gameObject.GetComponent<KirinStats>().CurrentHp -= 1;
-            Destroy(gameObject);
+            transform.Translate(direction.normalized * startSpeed);
         }
+    
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Enemy"))
+            {
+                collision.gameObject.GetComponent<KirinStats>().CurrentHp -= 1;
+                Destroy(gameObject);
+            }
         
-        if (collision.CompareTag("Border"))
-            Destroy(gameObject);
+            if (collision.CompareTag("Border"))
+                Destroy(gameObject);
+        }
     }
 }
