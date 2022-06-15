@@ -50,6 +50,7 @@ namespace Kirin
             StopAllCoroutines();
             _phaseNumber = phase;
             _isPhaseActive = false;
+            var test = 3;
         }
     }
 }
