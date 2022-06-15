@@ -36,7 +36,7 @@ public class KirinMove : MonoBehaviour
 
     private void MovementToPosition(Vector3 targetPos)
     {    
-        transform.position = Vector3.Lerp(transform.position, targetPos, speed * Time.deltaTime);   
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);   
     }
 
     public IEnumerator MoveTo(float waitTime, Vector2 pos)
