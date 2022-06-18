@@ -25,8 +25,8 @@ namespace DefaultNamespace.Spells
         
         public static void CircleBulletSpawn(GameObject bullet, Vector3 centerPos, float distance, int count)
         {
+            const float angle = 360 * Mathf.Deg2Rad;
             var direction = new Vector2(-1, 1);
-            var angle = 360 * Mathf.Deg2Rad;
             var position = new Vector3();
 
             for (var i = 1; i <= count; i++)

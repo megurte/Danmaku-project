@@ -1,3 +1,4 @@
+using Bullets;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new Enemy", menuName = "Enemy")]
