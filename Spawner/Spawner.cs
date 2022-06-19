@@ -17,6 +17,7 @@ public class Spawner : MonoBehaviour
     private void Awake()
     {
         _enemySpawnPropertiesList = spawnerSo.enemySpawnPropertiesList;
+        SetIterationData();
         SpawnerManager.AwakeSpawner.AddListener(OnSpawnerAwake);
     }
 
@@ -35,7 +36,7 @@ public class Spawner : MonoBehaviour
     {
         if (isAwake)
         {
-            Debug.Log("Iteration " + _iteration);
+            Debug.Log("Iteration " + _iteration + ". Spawner: " + spawnerIndex);
             for (var i = 0; i < _enemySpawnPropertiesList[_iteration].enemyNumber; i++)
             {
                 StartCoroutine(Spawn(_innerTimer));
@@ -65,6 +66,10 @@ public class Spawner : MonoBehaviour
     {
         _innerTimer = spawnerSo.spawnTime;
         _spawnDelta = SetSpawnDelta();
+        if (_enemySpawnPropertiesList.Count < _iteration)
+        {
+            
+        }
     }
 
     private IEnumerator Spawn(float waitTime)

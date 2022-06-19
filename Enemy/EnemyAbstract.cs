@@ -37,7 +37,7 @@ namespace Enemy
         {
             if (CurrentHp <= 0)
             {
-                Debug.Log($"Destroyed {gameObject.name}");
+                //Debug.Log($"Destroyed {gameObject.name}");
                 Destroy(gameObject);
             }
         }

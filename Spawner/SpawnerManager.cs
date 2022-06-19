@@ -6,12 +6,15 @@ using UnityEngine.Events;
 
 public class SpawnerManager : MonoBehaviour
 {
-    public EnemySO spawnerManagerConfig;
+    public SpawnerManagerConfig spawnerManagerConfig;
     public static UnityEvent<int> AwakeSpawner = new UnityEvent<int>();
 
     private void Start()
     {
-        StartCoroutine(Test(10));
+        foreach (var enemyWave in spawnerManagerConfig.EnemyWaves)
+        {
+            StartCoroutine(AwakeSpawnerInTime(enemyWave));
+        }
     }
 
     public static void OnSpawnerAwake(int index)
@@ -19,9 +22,9 @@ public class SpawnerManager : MonoBehaviour
         AwakeSpawner.Invoke(index);
     }
 
-    public IEnumerator Test(int index)
+    public IEnumerator AwakeSpawnerInTime(EnemyWave enemyWave)
     {
-        yield return new WaitForSeconds(4); 
-        OnSpawnerAwake(index);
+        yield return new WaitForSeconds(enemyWave.waveTime); 
+        OnSpawnerAwake(enemyWave.spawnerIndex);
     }
 }
