@@ -35,13 +35,27 @@ namespace DefaultNamespace.Spells
                 position.y = centerPos.y + Mathf.Cos(degree) * distance;
                 position.x = centerPos.x + Mathf.Sin(degree) * distance;
 
-
                 direction.y = Mathf.Cos(degree);
                 direction.x = Mathf.Sin(degree);
 
                 var instObject = Instantiate(bullet, position, Quaternion.identity);
                 instObject.GetComponent<Bullet>().direction = direction;
             }
+        }
+        
+        public static void TargetDegreeBulletSpawn(GameObject bullet, Vector3 centerPos, float distance, float degree)
+        {
+            var direction = new Vector2(-1, 1);
+            var position = new Vector3();
+
+            position.y = centerPos.y + Mathf.Cos(degree) * distance;
+            position.x = centerPos.x + Mathf.Sin(degree) * distance;
+
+            direction.y = Mathf.Cos(degree);
+            direction.x = Mathf.Sin(degree);
+
+            var instObject = Instantiate(bullet, position, Quaternion.identity);
+            instObject.GetComponent<Bullet>().direction = direction;
         }
     }
 }

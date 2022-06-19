@@ -18,7 +18,7 @@ namespace Bullets
         {
             if (collision.CompareTag("Enemy"))
             {
-                collision.gameObject.GetComponent<EnemyStats>().CurrentHp -= 1;
+                EnemyAbstract.TakeDamage(1, collision.gameObject.GetInstanceID());
                 Destroy(gameObject);
             }
             

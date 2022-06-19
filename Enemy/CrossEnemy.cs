@@ -1,0 +1,83 @@
+using System.Collections;
+using Bullets;
+using DefaultNamespace.Spells;
+using UnityEngine;
+using Random = System.Random;
+
+namespace Enemy
+{
+    public class CrossEnemy : EnemyAbstract
+    {
+        public EnemySO enemySo;
+        
+        private GameObject _bulletPrefab;
+        private float _speed;
+        private Vector3 _playersPosition;
+        private Vector3 _direction;
+        private bool _isCharging = false;
+        private bool _isCharged = false;
+
+        private void Awake()
+        {
+            _bulletPrefab = enemySo.bullet;
+            _speed = enemySo.speed;
+            CurrentHp = enemySo.maxHp;
+
+            OnTakingDamageEvent.AddListener(OnTakingDamage);
+        }
+
+        private void FixedUpdate()
+        {
+
+            CheckHealth();
+            CommonSpells.RandomShooting(_bulletPrefab, transform.position, 1);
+        
+            if (!_isCharging)
+                MovementToPosition(targetPosition, _speed);
+
+
+            if (_isCharged)
+                MoveToDirection(_direction, _speed);
+
+            if (gameObject.transform.position == targetPosition && !_isCharging)
+            {
+                _isCharging = true;
+                StartCoroutine(Charge());
+            }
+        }
+    
+        private void BulletSpawnBeforeDeath()
+        {
+            var rnd = new Random();
+
+            for (var i = 0; i < 12; i++)
+            {
+                _playersPosition = GetNewTargetPosition();
+            
+                var position = transform.position;
+                var newBullet = Instantiate(_bulletPrefab, new Vector3(
+                        position.x + rnd.Next(0, 5),
+                        position.y + rnd.Next(0, 3), position.z), 
+                    Quaternion.Euler(_playersPosition));
+
+                newBullet.GetComponent<Bullet>().direction = GetDirection(_playersPosition, 
+                    newBullet.transform.position);
+            }
+        }
+
+        private IEnumerator Charge()
+        {
+            yield return new WaitForSeconds(3);
+            _speed = 0.5f;
+            _isCharged = true;
+            targetPosition = GetNewTargetPosition();
+            _direction = GetDirection(targetPosition, transform.position);
+        }
+        
+        private void OnTakingDamage(float damage, int enemyID)
+        {
+            if (enemyID == gameObject.GetInstanceID())
+                CurrentHp -= damage;
+        }
+    }
+}

@@ -4,12 +4,11 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class CommonEnemy : MonoBehaviour
+    public class CommonEnemy : EnemyAbstract
     {
-        public Vector2 targetPosition;
+        public EnemySO enemySo;
         public Color bulletColor = default;
-        
-        private EnemySO _enemySo;
+
         private float _cooldown;
         private GameObject _bullet;
         private int _bulletCount;
@@ -18,16 +17,19 @@ namespace Enemy
 
         private void Awake()
         {
-            _enemySo = GetComponent<EnemyStats>().enemySo;
-            _cooldown = _enemySo.cooldown;
-            _bullet = _enemySo.bullet;
-            _bulletCount = _enemySo.counter;
-            _speed = _enemySo.speed;
+            CurrentHp = enemySo.maxHp;
+            _cooldown = enemySo.cooldown;
+            _bullet = enemySo.bullet;
+            _bulletCount = enemySo.counter;
+            _speed = enemySo.speed;
+            
+            OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
         private void FixedUpdate()
         {
-            MoveToDirection(GetDirection(targetPosition, transform.position));
+            CheckHealth();
+            MoveToDirection(GetDirection(targetPosition, transform.position), _speed);
             
             if (_innerTimer > 0)
             {
@@ -40,31 +42,10 @@ namespace Enemy
             }
         }
 
-        private void MoveToDirection(Vector3 direction)
+        private void OnTakingDamage(float damage, int enemyID)
         {
-            transform.Translate(direction.normalized * _speed, Space.World);
-        }
-        
-        private Vector3 GetDirection(Vector3 targetPos, Vector3 objectPosition)
-        {
-            var heading = targetPos - objectPosition;
-            var distance = heading.magnitude;
-
-            return heading / distance;
-        }
-        
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                other.GetComponent<CharacterController>().health -= 1;
-                //collision.GetComponent<Character_controller>().isInvulnerable = true;
-            }
-
-            if (other.CompareTag("Border"))
-            {
-                Destroy(gameObject);
-            }
+            if (enemyID == gameObject.GetInstanceID())
+                CurrentHp -= damage;
         }
     }
 }

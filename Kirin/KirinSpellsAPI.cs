@@ -24,14 +24,6 @@ namespace Kirin
             StartCoroutine(SpiralSpellFireball(delay, change, bullet, count));
         }
 
-        
-        //
-        public void DoSome()
-        {
-            Debug.Log("pass");
-        }
-
-    
         /// <summary>
         /// Spell with delay between bullets spawn
         /// </summary>
