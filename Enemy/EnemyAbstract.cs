@@ -7,7 +7,7 @@ namespace Enemy
     public abstract class EnemyAbstract: MonoBehaviour
     {
         protected float CurrentHp { get; set; }
-        
+
         public Vector3 targetPosition;
         public static UnityEvent<float, int> OnTakingDamageEvent = new UnityEvent<float, int>();
         
@@ -34,10 +34,11 @@ namespace Enemy
             return heading / distance;
         }
 
-        protected void CheckHealth()
+        protected void CheckHealth(GameObject drop)
         {
             if (CurrentHp <= 0)
             {
+                DropItem(drop);
                 Destroy(gameObject);
             }
         }
@@ -54,6 +55,11 @@ namespace Enemy
             {
                 Destroy(gameObject);
             }
+        }
+
+        private void DropItem(GameObject drop)
+        {
+            Instantiate(drop, transform.position, Quaternion.identity);
         }
 
         public static void TakeDamage(float damage, int enemyID)

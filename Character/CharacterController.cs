@@ -7,18 +7,28 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour
 {
     public float health;
+    
     public float speed;
-    public float level;
+    
+    public int level;
+    
     public bool isInvulnerable;
-
+    
+    public GameObject bullet;
+    
+    public GameObject targetBullet;
+    
+    public float targetBulletFrequency;
 
     private Rigidbody2D _rigidBody;
+    
     private Vector2 _moveVector;
-
-    public GameObject bullet;
+    
+    private float _innerTimer;
 
     private void Start()
     {
+        _innerTimer = targetBulletFrequency;
         _rigidBody = GetComponent<Rigidbody2D>();
     }
 
@@ -28,11 +38,23 @@ public class CharacterController : MonoBehaviour
 
         if (!isInvulnerable && health <= 0)
             Destroy(gameObject);
-        
-        if (Input.GetKey(KeyCode.Space))
-            Shoot(level);
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Space))
+        {
+            ShootCommon(level);
+            
+            if (level >= 3)
+            {
+                ShootTarget(level);
+                _innerTimer -= Time.deltaTime;
+            }
+        }
+
+        if (Input.GetKey(KeyCode.F2))
+            level = 2;
+        if (Input.GetKey(KeyCode.F3))
+            level = 3;
+        if (Input.GetKey(KeyCode.F4))
             level = 4;
     }
 
@@ -46,7 +68,7 @@ public class CharacterController : MonoBehaviour
             _rigidBody.velocity = new Vector2(0, 0);
     }
 
-    private void Shoot(float characterLevel)
+    private void ShootCommon(int characterLevel)
     {
         Vector2 bulletPosition1;
         Vector2 bulletPosition2;
@@ -55,7 +77,7 @@ public class CharacterController : MonoBehaviour
 
         var positionX = transform.position.x;
         var positionY = transform.position.y;
-        
+
         switch (characterLevel)
         {
             case 1:
@@ -69,19 +91,54 @@ public class CharacterController : MonoBehaviour
                 Instantiate(bullet, bulletPosition2, Quaternion.identity);
                 break;
             case 3:
-                ///
+                bulletPosition1 = new Vector2(positionX + 0.3f, positionY + 0.3f);
+                bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
+                Instantiate(bullet, bulletPosition1, Quaternion.identity);
+                Instantiate(bullet, bulletPosition2, Quaternion.identity);
+
                 break;
             case 4:
                 bulletPosition1 = new Vector2(transform.position.x + 0.3f, positionY + 0.3f);
                 bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
-                bulletPosition3 = new Vector2(positionX + 0.9f, positionY + 0.3f);
-                bulletPosition4 = new Vector2(positionX - 0.9f, positionY + 0.3f);
+                bulletPosition3 = new Vector2(positionX + 0.6f, positionY + 0.3f);
+                bulletPosition4 = new Vector2(positionX - 0.6f, positionY + 0.3f);
                 Instantiate(bullet, bulletPosition1, Quaternion.identity);
                 Instantiate(bullet, bulletPosition2, Quaternion.identity);
                 Instantiate(bullet, bulletPosition3, Quaternion.identity);
                 Instantiate(bullet, bulletPosition4, Quaternion.identity);
                 break;
         }
+    }
+
+    private void ShootTarget(int characterLevel)
+    {
+        ShootCommon(characterLevel);
+        
+        if (!(_innerTimer <= 0)) return;
+        
+        Vector2 targetBulletPosition1;
+        Vector2 targetBulletPosition2;
+        
+        var positionX = transform.position.x;
+        var positionY = transform.position.y;
+        
+        switch (characterLevel)
+        {
+            case 3:
+                targetBulletPosition1 = new Vector2(positionX + 1.2f, positionY + 0.3f);
+                targetBulletPosition2 = new Vector2(positionX - 1.2f, positionY + 0.3f);
+                Instantiate(targetBullet, targetBulletPosition1, Quaternion.identity);
+                Instantiate(targetBullet, targetBulletPosition2, Quaternion.identity);
+                break;
+            case 4:
+                targetBulletPosition1 = new Vector2(positionX + 1.2f, positionY + 0.3f);
+                targetBulletPosition2 = new Vector2(positionX - 1.2f, positionY + 0.3f);
+                Instantiate(targetBullet, targetBulletPosition1, Quaternion.identity);
+                Instantiate(targetBullet, targetBulletPosition2, Quaternion.identity);
+                break;
+        }
+            
+        _innerTimer = targetBulletFrequency;
     }
 
     private IEnumerator Invulnerable()

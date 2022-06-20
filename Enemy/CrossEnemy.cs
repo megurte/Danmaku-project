@@ -11,6 +11,7 @@ namespace Enemy
         public EnemySO enemySo;
         
         private GameObject _bulletPrefab;
+        private GameObject _drop;
         private float _speed;
         private Vector3 _playersPosition;
         private Vector3 _direction;
@@ -21,6 +22,7 @@ namespace Enemy
         {
             _bulletPrefab = enemySo.bullet;
             _speed = enemySo.speed;
+            _drop = enemySo.drop;
             CurrentHp = enemySo.maxHp;
 
             OnTakingDamageEvent.AddListener(OnTakingDamage);
@@ -29,7 +31,7 @@ namespace Enemy
         private void FixedUpdate()
         {
 
-            CheckHealth();
+            CheckHealth(_drop);
             CommonSpells.RandomShooting(_bulletPrefab, transform.position, 1);
         
             if (!_isCharging)

@@ -11,6 +11,11 @@ namespace Bullets
 
         private void FixedUpdate()
         {
+            Movement();
+        }
+
+        protected void Movement()
+        {
             transform.Translate(direction.normalized * startSpeed);
         }
     

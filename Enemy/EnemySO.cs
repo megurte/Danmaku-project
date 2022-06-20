@@ -12,6 +12,7 @@ public class EnemySO : ScriptableObject
     public MoveSet moveSet;
     public float speed;
     public Vector3 targetPosition;
+    public GameObject drop;
 }
 
 public enum Spells

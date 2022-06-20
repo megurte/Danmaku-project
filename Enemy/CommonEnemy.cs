@@ -17,6 +17,7 @@ namespace Enemy
         private float _innerTimer;
         private float _speed;
         private Spells _spell;
+        private GameObject _drop;
 
         private void Awake()
         {
@@ -26,13 +27,14 @@ namespace Enemy
             _bulletCount = enemySo.counter;
             _speed = enemySo.speed;
             _spell = enemySo.spell;
+            _drop = enemySo.drop;
             
             OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
         private void FixedUpdate()
         {
-            CheckHealth();
+            CheckHealth(_drop);
             MoveToDirection(GetDirection(targetPosition, transform.position), _speed);
             
             if (_innerTimer > 0)
