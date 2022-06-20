@@ -28,8 +28,10 @@ public class Spawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        var instObject = Instantiate(spawnerSo.enemyPrefab, transform.position, Quaternion.identity);
-        instObject.GetComponent<EnemyAbstract>().targetPosition = _enemySpawnPropertiesList[_iteration].targetPosition;
+        var instObject = Instantiate(_enemySpawnPropertiesList[_iteration].enemyPrefab,
+            transform.position, Quaternion.identity);
+        instObject.GetComponent<EnemyAbstract>().targetPosition 
+            = _enemySpawnPropertiesList[_iteration].targetPosition;
     }
 
     private void SpawnCycle()
@@ -51,10 +53,6 @@ public class Spawner : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            _innerTimer = spawnerSo.spawnTime;
-        }
     }
 
     private float SetSpawnDelta()
@@ -64,12 +62,8 @@ public class Spawner : MonoBehaviour
 
     private void SetIterationData()
     {
-        _innerTimer = spawnerSo.spawnTime;
+        _innerTimer = _enemySpawnPropertiesList[_iteration].spawnTime;
         _spawnDelta = SetSpawnDelta();
-        if (_enemySpawnPropertiesList.Count < _iteration)
-        {
-            
-        }
     }
 
     private IEnumerator Spawn(float waitTime)

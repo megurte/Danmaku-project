@@ -8,6 +8,20 @@ public class EnemySO : ScriptableObject
     public int counter;
     public float cooldown;
     public GameObject bullet;
+    public Spells spell;
+    public MoveSet moveSet;
     public float speed;
     public Vector3 targetPosition;
+}
+
+public enum Spells
+{
+    DirectTarget,
+    Circle,
+    RandomShooting,
+}
+
+public enum MoveSet
+{
+    ToPosition,
 }

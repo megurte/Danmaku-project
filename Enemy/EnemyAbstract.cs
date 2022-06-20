@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +10,7 @@ namespace Enemy
         
         public Vector3 targetPosition;
         public static UnityEvent<float, int> OnTakingDamageEvent = new UnityEvent<float, int>();
-
+        
         protected void MovementToPosition(Vector3 targetPos, float speed)
         {    
             transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);   
@@ -37,7 +38,6 @@ namespace Enemy
         {
             if (CurrentHp <= 0)
             {
-                //Debug.Log($"Destroyed {gameObject.name}");
                 Destroy(gameObject);
             }
         }

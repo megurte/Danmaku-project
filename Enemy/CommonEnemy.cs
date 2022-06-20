@@ -7,13 +7,16 @@ namespace Enemy
     public class CommonEnemy : EnemyAbstract
     {
         public EnemySO enemySo;
-        public Color bulletColor = default;
 
+
+        //public Color bulletColor = default;
+        
         private float _cooldown;
         private GameObject _bullet;
         private int _bulletCount;
         private float _innerTimer;
         private float _speed;
+        private Spells _spell;
 
         private void Awake()
         {
@@ -22,6 +25,7 @@ namespace Enemy
             _bullet = enemySo.bullet;
             _bulletCount = enemySo.counter;
             _speed = enemySo.speed;
+            _spell = enemySo.spell;
             
             OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
@@ -37,8 +41,22 @@ namespace Enemy
             }
             else
             {
+                switch (_spell)
+                {
+                    case Spells.Circle:
+                        CommonSpells.CircleBulletSpawn(_bullet, transform.position, 1, _bulletCount);
+                        break;
+                    case Spells.RandomShooting:
+                        CommonSpells.RandomShooting(_bullet, transform.position, 1);
+                        break;
+                    case Spells.DirectTarget:
+                        CommonSpells.RandomShooting(_bullet, transform.position, 1);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                
                 _innerTimer = _cooldown;
-                CommonSpells.CircleBulletSpawn(_bullet, transform.position, 1, _bulletCount);
             }
         }
 
@@ -48,4 +66,5 @@ namespace Enemy
                 CurrentHp -= damage;
         }
     }
+
 }
