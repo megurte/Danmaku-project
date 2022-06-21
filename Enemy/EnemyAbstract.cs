@@ -76,9 +76,7 @@ namespace Enemy
 
         private void DropSpawn(GameObject drop, float chance, int seed)
         {
-            var trueChange = chance * 100;
-            
-            if (new Random().Next(0, 100) <= trueChange)
+            if (new Random(seed).NextFloat(0, 1) <= chance)
             {
                 var rnd = new Random(seed);
                 var startPos = transform.position;
