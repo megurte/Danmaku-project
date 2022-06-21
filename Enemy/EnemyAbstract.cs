@@ -80,8 +80,8 @@ namespace Enemy
             {
                 var rnd = new Random(seed);
                 var startPos = transform.position;
-                var randomXOffset = (float) rnd.NextFloat(0, 3);
-                var randomYOffset = (float) rnd.NextFloat(0, 3);
+                var randomXOffset = (float) rnd.NextFloat(0, 2);
+                var randomYOffset = (float) rnd.NextFloat(0, 2);
                 var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
                 
                 Instantiate(drop, dropPosition, Quaternion.identity);
