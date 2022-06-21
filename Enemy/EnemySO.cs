@@ -15,21 +15,12 @@ public class EnemySO : ScriptableObject
     public float speed;
     public Vector3 targetPosition;
     public GameObject drop;
-    public LootSettings lootSettings;
+    public List<LootSettings> lootSettings;
 
 }
 
 [Serializable]
 public struct LootSettings
-{
-    public DropSettings expSettings;
-    public DropSettings pointSettings;
-    public DropSettings healthSettings;
-    public DropSettings specialSettings;
-}
-
-[Serializable]
-public struct DropSettings
 {
     public GameObject dropItem;
     public int dropNumber;

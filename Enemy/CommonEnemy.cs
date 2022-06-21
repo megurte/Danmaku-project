@@ -24,7 +24,7 @@ namespace Enemy
 
         private void FixedUpdate()
         {
-            CheckHealth(_drop);
+            CheckHealth(enemySo.lootSettings);
             MoveToDirection(GetDirection(targetPosition, transform.position), _speed);
             
             if (_innerTimer > 0)

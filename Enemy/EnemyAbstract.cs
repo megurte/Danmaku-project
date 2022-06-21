@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SocialPlatforms;
 using CharacterController = Character.CharacterController;
+using Random = System.Random;
 
 namespace Enemy
 {
@@ -35,11 +38,11 @@ namespace Enemy
             return heading / distance;
         }
 
-        protected void CheckHealth(GameObject drop)
+        protected void CheckHealth(List<LootSettings> lootSettings)
         {
             if (CurrentHp <= 0)
             {
-                DropItem(drop);
+                DropItems(lootSettings);
                 Destroy(gameObject);
             }
         }
@@ -58,14 +61,51 @@ namespace Enemy
             }
         }
 
-        private void DropItem(GameObject drop)
+        private void DropItems(List<LootSettings> lootSettings)
         {
-            Instantiate(drop, transform.position, Quaternion.identity);
+            foreach (var loot in lootSettings)
+            {
+                for (var i = 0; i < loot.dropNumber; i++)
+                {
+                    var seed = Guid.NewGuid().GetHashCode();
+                    
+                    DropSpawn(loot.dropItem, loot.chance, seed);
+                }
+            }
+        }
+
+        private void DropSpawn(GameObject drop, float chance, int seed)
+        {
+            var trueChange = chance * 100;
+            
+            if (new Random().Next(0, 100) <= trueChange)
+            {
+                var rnd = new Random(seed);
+                var startPos = transform.position;
+                var randomXOffset = (float) rnd.NextFloat(0, 3);
+                var randomYOffset = (float) rnd.NextFloat(0, 3);
+                var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
+                
+                Instantiate(drop, dropPosition, Quaternion.identity);
+            }
         }
 
         public static void TakeDamage(float damage, int enemyID)
         {
             OnTakingDamageEvent.Invoke(damage, enemyID);
         }
+    }
+}
+
+public static class RandomExtend
+{
+    public static double NextDouble (this Random @this, double min, double max)
+    {
+        return @this.NextDouble() * (max - min) + min;
+    }
+
+    public static double NextFloat (this Random @this, float min, float max)
+    {
+        return (float)@this.NextDouble(min, max);
     }
 }

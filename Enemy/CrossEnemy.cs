@@ -31,7 +31,7 @@ namespace Enemy
         private void FixedUpdate()
         {
 
-            CheckHealth(_drop);
+            CheckHealth(enemySo.lootSettings);
             CommonSpells.RandomShooting(_bulletPrefab, transform.position, 1);
         
             if (!_isCharging)
