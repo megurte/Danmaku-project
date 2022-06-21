@@ -1,4 +1,6 @@
+using System;
 using Bullets;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new Enemy", menuName = "Enemy")]
@@ -13,6 +15,24 @@ public class EnemySO : ScriptableObject
     public float speed;
     public Vector3 targetPosition;
     public GameObject drop;
+    public LootSettings lootSettings;
+
+}
+
+[Serializable]
+public struct LootSettings
+{
+    public DropSettings expSettings;
+    public DropSettings pointSettings;
+    public DropSettings healthSettings;
+    public DropSettings specialSettings;
+}
+
+[Serializable]
+public struct DropSettings
+{
+    public int dropNumber;
+    public float chance;
 }
 
 public enum Spells

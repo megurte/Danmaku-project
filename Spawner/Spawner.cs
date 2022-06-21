@@ -44,14 +44,11 @@ public class Spawner : MonoBehaviour
                 StartCoroutine(Spawn(_innerTimer));
 
                 if (_innerTimer > 0)
-                {
                     _innerTimer -= _spawnDelta;
-                }
-                else
-                {
-                    isAwake = false;
-                }
             }
+            
+            _iteration++;
+            isAwake = false;
         }
     }
 
@@ -77,7 +74,6 @@ public class Spawner : MonoBehaviour
         if (index == spawnerIndex)
         {
             isAwake = true;
-            _iteration++;
             SetIterationData();
         }
     }

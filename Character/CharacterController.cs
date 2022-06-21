@@ -100,12 +100,12 @@ public class CharacterController : MonoBehaviour
             case 4:
                 bulletPosition1 = new Vector2(transform.position.x + 0.3f, positionY + 0.3f);
                 bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
-                bulletPosition3 = new Vector2(positionX + 0.6f, positionY + 0.3f);
-                bulletPosition4 = new Vector2(positionX - 0.6f, positionY + 0.3f);
+                /*bulletPosition3 = new Vector2(positionX + 0.6f, positionY + 0.3f);
+                bulletPosition4 = new Vector2(positionX - 0.6f, positionY + 0.3f);*/
                 Instantiate(bullet, bulletPosition1, Quaternion.identity);
                 Instantiate(bullet, bulletPosition2, Quaternion.identity);
-                Instantiate(bullet, bulletPosition3, Quaternion.identity);
-                Instantiate(bullet, bulletPosition4, Quaternion.identity);
+                /*Instantiate(bullet, bulletPosition3, Quaternion.identity);
+                Instantiate(bullet, bulletPosition4, Quaternion.identity);*/
                 break;
         }
     }
@@ -118,6 +118,8 @@ public class CharacterController : MonoBehaviour
         
         Vector2 targetBulletPosition1;
         Vector2 targetBulletPosition2;
+        Vector2 targetBulletPosition3;
+        Vector2 targetBulletPosition4;
         
         var positionX = transform.position.x;
         var positionY = transform.position.y;
@@ -133,8 +135,12 @@ public class CharacterController : MonoBehaviour
             case 4:
                 targetBulletPosition1 = new Vector2(positionX + 1.2f, positionY + 0.3f);
                 targetBulletPosition2 = new Vector2(positionX - 1.2f, positionY + 0.3f);
+                targetBulletPosition3 = new Vector2(positionX + 1.8f, positionY + 0.0f);
+                targetBulletPosition4 = new Vector2(positionX - 1.8f, positionY + 0.0f);
                 Instantiate(targetBullet, targetBulletPosition1, Quaternion.identity);
                 Instantiate(targetBullet, targetBulletPosition2, Quaternion.identity);
+                Instantiate(targetBullet, targetBulletPosition3, Quaternion.identity);
+                Instantiate(targetBullet, targetBulletPosition4, Quaternion.identity);
                 break;
         }
             

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Drop : MonoBehaviour
 {
+    public DropType dropType;
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -16,4 +18,13 @@ public class Drop : MonoBehaviour
         if (other.CompareTag("Border"))
             Destroy(gameObject);
     }
+}
+
+[Serializable]
+public enum DropType
+{
+    ExpDrop,
+    PointDrop,
+    HealthDrop,
+    SpecialDrop
 }
