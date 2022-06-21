@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using CharacterController = Character.CharacterController;
 
 namespace Enemy
 {

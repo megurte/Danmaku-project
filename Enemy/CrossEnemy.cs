@@ -9,7 +9,7 @@ namespace Enemy
     public class CrossEnemy : EnemyAbstract
     {
         public EnemySO enemySo;
-        
+
         private GameObject _bulletPrefab;
         private GameObject _drop;
         private float _speed;

@@ -31,10 +31,12 @@ public struct LootSettings
 [Serializable]
 public struct DropSettings
 {
+    public GameObject dropItem;
     public int dropNumber;
     public float chance;
 }
 
+[Serializable]
 public enum Spells
 {
     DirectTarget,
@@ -42,7 +44,10 @@ public enum Spells
     RandomShooting,
 }
 
+[Serializable]
 public enum MoveSet
 {
     ToPosition,
+    ToPoint,
+    MoveAround,
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using CharacterController = Character.CharacterController;
 
 namespace Bullets
 {

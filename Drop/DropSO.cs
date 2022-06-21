@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DropSO : MonoBehaviour
+[CreateAssetMenu(fileName = "new Drop", menuName = "Drop")]
+public class DropSO : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public DropType dropType;
+    public int value;
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+[Serializable]
+public enum DropType
+{
+    ExpDrop,
+    PointDrop,
+    HealthDrop,
+    SpecialDrop
 }

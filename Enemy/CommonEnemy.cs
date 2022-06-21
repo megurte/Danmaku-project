@@ -7,9 +7,6 @@ namespace Enemy
     public class CommonEnemy : EnemyAbstract
     {
         public EnemySO enemySo;
-
-
-        //public Color bulletColor = default;
         
         private float _cooldown;
         private GameObject _bullet;
@@ -21,14 +18,7 @@ namespace Enemy
 
         private void Awake()
         {
-            CurrentHp = enemySo.maxHp;
-            _cooldown = enemySo.cooldown;
-            _bullet = enemySo.bullet;
-            _bulletCount = enemySo.counter;
-            _speed = enemySo.speed;
-            _spell = enemySo.spell;
-            _drop = enemySo.drop;
-            
+            SetParamsFromSo();
             OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
@@ -67,6 +57,16 @@ namespace Enemy
             if (enemyID == gameObject.GetInstanceID())
                 CurrentHp -= damage;
         }
-    }
 
+        private void SetParamsFromSo()
+        {
+            CurrentHp = enemySo.maxHp;
+            _cooldown = enemySo.cooldown;
+            _bullet = enemySo.bullet;
+            _bulletCount = enemySo.counter;
+            _speed = enemySo.speed;
+            _spell = enemySo.spell;
+            _drop = enemySo.drop;
+        }
+    }
 }
