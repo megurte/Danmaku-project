@@ -6,7 +6,7 @@ using Random = System.Random;
 
 namespace Enemy
 {
-    public class CrossEnemy : EnemyAbstract
+    public class CrossEnemy : EnemyFactory
     {
         public EnemySO enemySo;
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class CommonEnemy : EnemyAbstract
+    public class CommonEnemy : EnemyFactory
     {
         public EnemySO enemySo;
         private float Cooldown => enemySo.cooldown;

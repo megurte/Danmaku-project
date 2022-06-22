@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Xml.Schema;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,15 +7,21 @@ namespace Character
 {
     public class CharacterController : MonoBehaviour
     {
-        public float health;
-        public float speed;
-        public int level;
-        public int exp = default;
-        public bool isInvulnerable;
-        public GameObject bullet;
-        public GameObject targetBullet;
-        public float targetBulletFrequency;
+        public PlayerSO playerSo;
 
+        public float health;
+        public bool isInvulnerable;
+        [SerializeField] private int _exp;
+        [SerializeField] private int _points;
+        [SerializeField] private float _special;
+        
+        private float _maxValue;
+        private float _maxLevel;
+        private float _playerSpeed;
+        private int _level;
+        private GameObject _playerBullet;
+        private GameObject _targetBullet;
+        private float _targetBulletFrequency;
         private Rigidbody2D _rigidBody;
         private Vector2 _moveVector;
         private float _innerTimer;
@@ -23,7 +30,9 @@ namespace Character
 
         private void Start()
         {
-            _innerTimer = targetBulletFrequency;
+            GetPlayersParamsFromSo();
+            
+            _innerTimer = _targetBulletFrequency;
             _rigidBody = GetComponent<Rigidbody2D>();
             
             OnGetDrop.AddListener(OnDrop);
@@ -38,31 +47,36 @@ namespace Character
 
             if (Input.GetKey(KeyCode.Space))
             {
-                ShootCommon(level);
+                ShootCommon(_level);
             
-                if (level >= 3)
+                if (_level >= 3)
                 {
-                    ShootTarget(level);
+                    ShootTarget(_level);
                     _innerTimer -= Time.deltaTime;
                 }
             }
 
             if (Input.GetKey(KeyCode.F2))
-                level = 2;
+                _level = 2;
             if (Input.GetKey(KeyCode.F3))
-                level = 3;
+                _level = 3;
             if (Input.GetKey(KeyCode.F4))
-                level = 4;
+                _level = 4;
         }
 
         private void Moving()
         {
             var moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            _moveVector = moveInput.normalized * speed;
+            _moveVector = moveInput.normalized * _playerSpeed;
             _rigidBody.velocity = _moveVector * Time.deltaTime;
         
             if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W))
                 _rigidBody.velocity = new Vector2(0, 0);
+        }
+
+        private void CheckLevelUp()
+        {
+            
         }
 
         private void ShootCommon(int characterLevel)
@@ -79,19 +93,19 @@ namespace Character
             {
                 case 1:
                     bulletPosition1 = new Vector2(positionX, transform.position.y + 0.3f);
-                    Instantiate(bullet, bulletPosition1, Quaternion.identity);
+                    Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
                     break;
                 case 2:
                     bulletPosition1 = new Vector2(positionX + 0.3f, positionY + 0.3f);
                     bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
-                    Instantiate(bullet, bulletPosition1, Quaternion.identity);
-                    Instantiate(bullet, bulletPosition2, Quaternion.identity);
+                    Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
+                    Instantiate(_playerBullet, bulletPosition2, Quaternion.identity);
                     break;
                 case 3:
                     bulletPosition1 = new Vector2(positionX + 0.3f, positionY + 0.3f);
                     bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
-                    Instantiate(bullet, bulletPosition1, Quaternion.identity);
-                    Instantiate(bullet, bulletPosition2, Quaternion.identity);
+                    Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
+                    Instantiate(_playerBullet, bulletPosition2, Quaternion.identity);
 
                     break;
                 case 4:
@@ -99,8 +113,8 @@ namespace Character
                     bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
                     /*bulletPosition3 = new Vector2(positionX + 0.6f, positionY + 0.3f);
                 bulletPosition4 = new Vector2(positionX - 0.6f, positionY + 0.3f);*/
-                    Instantiate(bullet, bulletPosition1, Quaternion.identity);
-                    Instantiate(bullet, bulletPosition2, Quaternion.identity);
+                    Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
+                    Instantiate(_playerBullet, bulletPosition2, Quaternion.identity);
                     /*Instantiate(bullet, bulletPosition3, Quaternion.identity);
                 Instantiate(bullet, bulletPosition4, Quaternion.identity);*/
                     break;
@@ -124,22 +138,22 @@ namespace Character
                 case 3:
                     targetBulletPosition1 = new Vector2(positionX + 1.2f, positionY + 0.3f);
                     targetBulletPosition2 = new Vector2(positionX - 1.2f, positionY + 0.3f);
-                    Instantiate(targetBullet, targetBulletPosition1, Quaternion.identity);
-                    Instantiate(targetBullet, targetBulletPosition2, Quaternion.identity);
+                    Instantiate(_targetBullet, targetBulletPosition1, Quaternion.identity);
+                    Instantiate(_targetBullet, targetBulletPosition2, Quaternion.identity);
                     break;
                 case 4:
                     targetBulletPosition1 = new Vector2(positionX + 1.2f, positionY + 0.3f);
                     targetBulletPosition2 = new Vector2(positionX - 1.2f, positionY + 0.3f);
                     targetBulletPosition3 = new Vector2(positionX + 1.8f, positionY + 0.0f);
                     targetBulletPosition4 = new Vector2(positionX - 1.8f, positionY + 0.0f);
-                    Instantiate(targetBullet, targetBulletPosition1, Quaternion.identity);
-                    Instantiate(targetBullet, targetBulletPosition2, Quaternion.identity);
-                    Instantiate(targetBullet, targetBulletPosition3, Quaternion.identity);
-                    Instantiate(targetBullet, targetBulletPosition4, Quaternion.identity);
+                    Instantiate(_targetBullet, targetBulletPosition1, Quaternion.identity);
+                    Instantiate(_targetBullet, targetBulletPosition2, Quaternion.identity);
+                    Instantiate(_targetBullet, targetBulletPosition3, Quaternion.identity);
+                    Instantiate(_targetBullet, targetBulletPosition4, Quaternion.identity);
                     break;
             }
             
-            _innerTimer = targetBulletFrequency;
+            _innerTimer = _targetBulletFrequency;
         }
 
         public static void GetDrop(DropType type, int value)
@@ -152,18 +166,40 @@ namespace Character
             switch (type)
             {
                 case DropType.ExpDrop:
-                    exp += value;
+                    if (_level <= _maxLevel)
+                    {
+                        _exp += value;
+                    }
+                    else
+                    {
+                        _points += value * 10;
+                    }
                     break;
                 case DropType.PointDrop:
-                    ///
+                    _points += value;
                     break;
                 case DropType.HealthDrop:
-                    ///
+                    health += health + value <= _maxValue ? value : 0;
                     break;
                 case DropType.SpecialDrop:
-                    ///
+                    _special += _special + value <= _maxValue ? value : 0;
                     break;
             }
+        }
+
+        private void GetPlayersParamsFromSo()
+        {
+            health = playerSo.health;
+            _maxValue = playerSo.maxLevel;
+            _maxLevel = playerSo.maxLevel;
+            _special = playerSo.special;
+            _playerSpeed = playerSo.speed;
+            _level = playerSo.level;
+            _exp = playerSo.exp;
+            _points = playerSo.points;
+            _playerBullet = playerSo.bullet;
+            _targetBullet = playerSo.targetBullet;
+            _targetBulletFrequency = playerSo.targetBulletFrequency;
         }
 
         private IEnumerator Invulnerable()

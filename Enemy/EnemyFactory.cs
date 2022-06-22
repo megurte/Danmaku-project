@@ -8,7 +8,7 @@ using Random = System.Random;
 
 namespace Enemy
 {
-    public abstract class EnemyAbstract: MonoBehaviour
+    public abstract class EnemyFactory: MonoBehaviour
     {
         protected float CurrentHp { get; set; }
 

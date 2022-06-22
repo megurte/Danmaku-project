@@ -35,7 +35,7 @@ public class Spawner : MonoBehaviour
         var instObject = Instantiate(EnemySpawnPropertiesList[_iteration].enemyPrefab,
             transform.position, Quaternion.identity);
         
-        instObject.GetComponent<EnemyAbstract>().targetPosition 
+        instObject.GetComponent<EnemyFactory>().targetPosition 
             = EnemySpawnPropertiesList[_iteration].targetPosition;
     }
 

@@ -23,7 +23,7 @@ namespace Bullets
         {
             if (collision.CompareTag("Enemy"))
             {
-                EnemyAbstract.TakeDamage(1, collision.gameObject.GetInstanceID());
+                EnemyFactory.TakeDamage(1, collision.gameObject.GetInstanceID());
                 Destroy(gameObject);
             }
             
