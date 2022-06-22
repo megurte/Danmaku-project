@@ -6,17 +6,21 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public int spawnerIndex = default;
+    
     public SpawnerSO spawnerSo;
+    
     public bool isAwake;
 
-    private List<EnemySpawnProperties> _enemySpawnPropertiesList;
-    private float _innerTimer = 0;
-    private float _spawnDelta;
-    private int _iteration = 0;
+    private List<EnemySpawnProperties> EnemySpawnPropertiesList => spawnerSo.enemySpawnPropertiesList;
+    
+    private float _innerTimer = default;
+    
+    private float _spawnDelta = default;
+    
+    private int _iteration = default;
 
     private void Awake()
     {
-        _enemySpawnPropertiesList = spawnerSo.enemySpawnPropertiesList;
         SetIterationData();
         SpawnerManager.AwakeSpawner.AddListener(OnSpawnerAwake);
     }
@@ -28,10 +32,11 @@ public class Spawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        var instObject = Instantiate(_enemySpawnPropertiesList[_iteration].enemyPrefab,
+        var instObject = Instantiate(EnemySpawnPropertiesList[_iteration].enemyPrefab,
             transform.position, Quaternion.identity);
+        
         instObject.GetComponent<EnemyAbstract>().targetPosition 
-            = _enemySpawnPropertiesList[_iteration].targetPosition;
+            = EnemySpawnPropertiesList[_iteration].targetPosition;
     }
 
     private void SpawnCycle()
@@ -39,7 +44,7 @@ public class Spawner : MonoBehaviour
         if (isAwake)
         {
             Debug.Log("Iteration " + _iteration + ". Spawner: " + spawnerIndex);
-            for (var i = 0; i < _enemySpawnPropertiesList[_iteration].enemyNumber; i++)
+            for (var i = 0; i < EnemySpawnPropertiesList[_iteration].enemyNumber; i++)
             {
                 StartCoroutine(Spawn(_innerTimer));
 
@@ -59,7 +64,7 @@ public class Spawner : MonoBehaviour
 
     private void SetIterationData()
     {
-        _innerTimer = _enemySpawnPropertiesList[_iteration].spawnTime;
+        _innerTimer = EnemySpawnPropertiesList[_iteration].spawnTime;
         _spawnDelta = SetSpawnDelta();
     }
 

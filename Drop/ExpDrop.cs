@@ -4,29 +4,18 @@ using CharacterController = Character.CharacterController;
 
 namespace DefaultNamespace.Drop
 {
-    public class ExpDrop: MonoBehaviour, IDrop
+    public class ExpDrop: MonoBehaviour
     {
-        private int _value;
-        private DropType _dropType;
-
         public DropSO dropSo;
 
-        private void Start()
-        {
-            SetParams();
-        }
-
-        public void SetParams()
-        {
-            _value = dropSo.value;
-            _dropType = dropSo.dropType;
-        }
+        private int Value => dropSo.value;
+        private DropType DropType => dropSo.dropType;
         
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player"))
             {
-                CharacterController.GetDrop(_dropType, _value);
+                CharacterController.GetDrop(DropType, Value);
                 Destroy(gameObject);
             }
             

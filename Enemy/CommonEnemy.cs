@@ -7,25 +7,24 @@ namespace Enemy
     public class CommonEnemy : EnemyAbstract
     {
         public EnemySO enemySo;
+        private float Cooldown => enemySo.cooldown;
+        private GameObject Bullet => enemySo.bullet;
+        private int BulletCount => enemySo.counter;
+        private float Speed => enemySo.speed;
+        private Spells Spell => enemySo.spell;
         
-        private float _cooldown;
-        private GameObject _bullet;
-        private int _bulletCount;
         private float _innerTimer;
-        private float _speed;
-        private Spells _spell;
-        private GameObject _drop;
-
+        
         private void Awake()
         {
-            SetParamsFromSo();
+            CurrentHp = enemySo.maxHp;
             OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
         private void FixedUpdate()
         {
             CheckHealth(enemySo.lootSettings);
-            MoveToDirection(GetDirection(targetPosition, transform.position), _speed);
+            MoveToDirection(GetDirection(targetPosition, transform.position), Speed);
             
             if (_innerTimer > 0)
             {
@@ -33,22 +32,22 @@ namespace Enemy
             }
             else
             {
-                switch (_spell)
+                switch (Spell)
                 {
                     case Spells.Circle:
-                        CommonSpells.CircleBulletSpawn(_bullet, transform.position, 1, _bulletCount);
+                        CommonSpells.CircleBulletSpawn(Bullet, transform.position, 1, BulletCount);
                         break;
                     case Spells.RandomShooting:
-                        CommonSpells.RandomShooting(_bullet, transform.position, 1);
+                        CommonSpells.RandomShooting(Bullet, transform.position, 1);
                         break;
                     case Spells.DirectTarget:
-                        CommonSpells.RandomShooting(_bullet, transform.position, 1);
+                        CommonSpells.RandomShooting(Bullet, transform.position, 1);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
                 
-                _innerTimer = _cooldown;
+                _innerTimer = Cooldown;
             }
         }
 
@@ -56,17 +55,6 @@ namespace Enemy
         {
             if (enemyID == gameObject.GetInstanceID())
                 CurrentHp -= damage;
-        }
-
-        private void SetParamsFromSo()
-        {
-            CurrentHp = enemySo.maxHp;
-            _cooldown = enemySo.cooldown;
-            _bullet = enemySo.bullet;
-            _bulletCount = enemySo.counter;
-            _speed = enemySo.speed;
-            _spell = enemySo.spell;
-            _drop = enemySo.drop;
         }
     }
 }
