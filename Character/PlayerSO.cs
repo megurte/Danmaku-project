@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Utils;
 
 namespace Character
 {
@@ -8,13 +11,14 @@ namespace Character
         public float health;
         public float maxValue;
         public float maxLevel;
+        public int level;
         public float special;
         public float speed;
-        public int level;
         public int exp = default;
         public int points = default;
         public GameObject bullet;
         public GameObject targetBullet;
         public float targetBulletFrequency;
+        public KeyMap levelUpMap = new KeyMap();
     }
 }

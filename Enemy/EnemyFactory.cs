@@ -80,8 +80,8 @@ namespace Enemy
             {
                 var rnd = new Random(seed);
                 var startPos = transform.position;
-                var randomXOffset = (float) rnd.NextFloat(0, 2);
-                var randomYOffset = (float) rnd.NextFloat(0, 2);
+                var randomXOffset = rnd.NextFloat(0, 2);
+                var randomYOffset = rnd.NextFloat(0, 2);
                 var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
                 
                 Instantiate(drop, dropPosition, Quaternion.identity);
@@ -102,7 +102,7 @@ public static class RandomExtend
         return @this.NextDouble() * (max - min) + min;
     }
 
-    public static double NextFloat (this Random @this, float min, float max)
+    public static float NextFloat (this Random @this, float min, float max)
     {
         return (float)@this.NextDouble(min, max);
     }

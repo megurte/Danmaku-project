@@ -18,7 +18,7 @@ namespace Character
         private float _maxValue;
         private float _maxLevel;
         private float _playerSpeed;
-        private int _level;
+        [SerializeField] private int _level;
         private GameObject _playerBullet;
         private GameObject _targetBullet;
         private float _targetBulletFrequency;
@@ -41,6 +41,7 @@ namespace Character
         private void FixedUpdate()
         {
             Moving();
+            CheckLevelUp();
 
             if (!isInvulnerable && health <= 0)
                 Destroy(gameObject);
@@ -76,7 +77,15 @@ namespace Character
 
         private void CheckLevelUp()
         {
+            var keyMap = playerSo.levelUpMap;
             
+            for (var index = 0; index < keyMap.keys.Count; index++)
+            {
+                if (keyMap.keys[index] == _level)
+                    if (index + 1 < keyMap.values.Count)
+                        if (_exp >= keyMap.values[index + 1])
+                            _level++;
+            }
         }
 
         private void ShootCommon(int characterLevel)
@@ -166,14 +175,10 @@ namespace Character
             switch (type)
             {
                 case DropType.ExpDrop:
-                    if (_level <= _maxLevel)
-                    {
+                    if (_level < _maxLevel)
                         _exp += value;
-                    }
                     else
-                    {
-                        _points += value * 10;
-                    }
+                        _points += value * 100;
                     break;
                 case DropType.PointDrop:
                     _points += value;

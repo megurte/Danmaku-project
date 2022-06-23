@@ -15,14 +15,13 @@ namespace Enemy
         private float _speed;
         private Vector3 _playersPosition;
         private Vector3 _direction;
-        private bool _isCharging = false;
-        private bool _isCharged = false;
+        private bool _isCharging = default;
+        private bool _isCharged = default;
 
         private void Awake()
         {
             _bulletPrefab = enemySo.bullet;
             _speed = enemySo.speed;
-            _drop = enemySo.drop;
             CurrentHp = enemySo.maxHp;
 
             OnTakingDamageEvent.AddListener(OnTakingDamage);
