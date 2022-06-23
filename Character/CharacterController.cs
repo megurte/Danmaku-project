@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Xml.Schema;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +19,8 @@ namespace Character
         private float _maxValue;
         private float _maxLevel;
         private float _playerSpeed;
+        private float _specialTimer;
+        private float _specialCooldown;
         [SerializeField] private int _level;
         private GameObject _playerBullet;
         private GameObject _targetBullet;
@@ -57,12 +60,19 @@ namespace Character
                 }
             }
 
+            if (Input.GetKey(KeyCode.X))
+                UseSpecial();
+
+            if (_specialTimer - _specialCooldown < 0)
+                _specialTimer -= Time.deltaTime;
+
             if (Input.GetKey(KeyCode.F2))
                 _level = 2;
             if (Input.GetKey(KeyCode.F3))
                 _level = 3;
             if (Input.GetKey(KeyCode.F4))
                 _level = 4;
+            
         }
 
         private void Moving()
@@ -79,6 +89,9 @@ namespace Character
         {
             var keyMap = playerSo.levelUpMap;
             
+            if (!keyMap.CheckLength())
+                return;
+
             for (var index = 0; index < keyMap.keys.Count; index++)
             {
                 if (keyMap.keys[index] == _level)
@@ -88,12 +101,21 @@ namespace Character
             }
         }
 
+        private void UseSpecial()
+        {
+            if (_specialTimer <= 0)
+            {
+                Debug.Log("Special used");
+                _special--;
+                _specialTimer = _specialCooldown;
+                _specialTimer -= Time.deltaTime;
+            }
+        }
+
         private void ShootCommon(int characterLevel)
         {
             Vector2 bulletPosition1;
             Vector2 bulletPosition2;
-            Vector2 bulletPosition3;
-            Vector2 bulletPosition4;
 
             var positionX = transform.position.x;
             var positionY = transform.position.y;
@@ -120,12 +142,8 @@ namespace Character
                 case 4:
                     bulletPosition1 = new Vector2(transform.position.x + 0.3f, positionY + 0.3f);
                     bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
-                    /*bulletPosition3 = new Vector2(positionX + 0.6f, positionY + 0.3f);
-                bulletPosition4 = new Vector2(positionX - 0.6f, positionY + 0.3f);*/
                     Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
                     Instantiate(_playerBullet, bulletPosition2, Quaternion.identity);
-                    /*Instantiate(bullet, bulletPosition3, Quaternion.identity);
-                Instantiate(bullet, bulletPosition4, Quaternion.identity);*/
                     break;
             }
         }
@@ -195,7 +213,9 @@ namespace Character
         private void GetPlayersParamsFromSo()
         {
             health = playerSo.health;
-            _maxValue = playerSo.maxLevel;
+            _maxValue = playerSo.maxValue;
+            _specialTimer = 0;
+            _specialCooldown = playerSo.specialCooldown;
             _maxLevel = playerSo.maxLevel;
             _special = playerSo.special;
             _playerSpeed = playerSo.speed;

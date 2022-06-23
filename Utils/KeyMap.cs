@@ -9,6 +9,11 @@ namespace Utils
     {
         [SerializeField] public List<int> keys = new List<int>();
         [SerializeField] public List<int> values = new List<int>();
+
+        public bool CheckLength()
+        {
+            return this.keys.Count == this.values.Count;
+        }
     }
 
     public static class KeyMapExtend

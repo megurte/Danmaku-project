@@ -13,6 +13,7 @@ namespace Character
         public float maxLevel;
         public int level;
         public float special;
+        public float specialCooldown;
         public float speed;
         public int exp = default;
         public int points = default;
