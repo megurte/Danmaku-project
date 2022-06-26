@@ -114,36 +114,22 @@ namespace Character
 
         private void ShootCommon(int characterLevel)
         {
-            Vector2 bulletPosition1;
-            Vector2 bulletPosition2;
-
-            var positionX = transform.position.x;
-            var positionY = transform.position.y;
-
             switch (characterLevel)
             {
                 case 1:
-                    bulletPosition1 = new Vector2(positionX, transform.position.y + 0.3f);
-                    Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
+                    CreateShoot(_playerBullet, 0, 0.3f);
                     break;
                 case 2:
-                    bulletPosition1 = new Vector2(positionX + 0.3f, positionY + 0.3f);
-                    bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
-                    Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
-                    Instantiate(_playerBullet, bulletPosition2, Quaternion.identity);
+                    CreateShoot(_playerBullet, 0.3f, 0.3f);
+                    CreateShoot(_playerBullet, 0.3f, 0.3f, true);
                     break;
                 case 3:
-                    bulletPosition1 = new Vector2(positionX + 0.3f, positionY + 0.3f);
-                    bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
-                    Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
-                    Instantiate(_playerBullet, bulletPosition2, Quaternion.identity);
-
+                    CreateShoot(_playerBullet, 0.3f, 0.3f);
+                    CreateShoot(_playerBullet, 0.3f, 0.3f, true);
                     break;
                 case 4:
-                    bulletPosition1 = new Vector2(transform.position.x + 0.3f, positionY + 0.3f);
-                    bulletPosition2 = new Vector2(positionX - 0.3f, positionY + 0.3f);
-                    Instantiate(_playerBullet, bulletPosition1, Quaternion.identity);
-                    Instantiate(_playerBullet, bulletPosition2, Quaternion.identity);
+                    CreateShoot(_playerBullet, 0.3f, 0.3f);
+                    CreateShoot(_playerBullet, 0.3f, 0.3f, true);
                     break;
             }
         }
@@ -151,36 +137,32 @@ namespace Character
         private void ShootTarget(int characterLevel)
         {
             if (!(_innerTimer <= 0)) return;
-        
-            Vector2 targetBulletPosition1;
-            Vector2 targetBulletPosition2;
-            Vector2 targetBulletPosition3;
-            Vector2 targetBulletPosition4;
-        
-            var positionX = transform.position.x;
-            var positionY = transform.position.y;
-        
+
             switch (characterLevel)
             {
                 case 3:
-                    targetBulletPosition1 = new Vector2(positionX + 1.2f, positionY + 0.3f);
-                    targetBulletPosition2 = new Vector2(positionX - 1.2f, positionY + 0.3f);
-                    Instantiate(_targetBullet, targetBulletPosition1, Quaternion.identity);
-                    Instantiate(_targetBullet, targetBulletPosition2, Quaternion.identity);
+                    CreateShoot(_targetBullet, 1.2f, 0.3f);
+                    CreateShoot(_targetBullet, 1.2f, 0.3f, true);
                     break;
                 case 4:
-                    targetBulletPosition1 = new Vector2(positionX + 1.2f, positionY + 0.3f);
-                    targetBulletPosition2 = new Vector2(positionX - 1.2f, positionY + 0.3f);
-                    targetBulletPosition3 = new Vector2(positionX + 1.8f, positionY + 0.0f);
-                    targetBulletPosition4 = new Vector2(positionX - 1.8f, positionY + 0.0f);
-                    Instantiate(_targetBullet, targetBulletPosition1, Quaternion.identity);
-                    Instantiate(_targetBullet, targetBulletPosition2, Quaternion.identity);
-                    Instantiate(_targetBullet, targetBulletPosition3, Quaternion.identity);
-                    Instantiate(_targetBullet, targetBulletPosition4, Quaternion.identity);
+                    CreateShoot(_targetBullet, 1.2f, 0.3f);
+                    CreateShoot(_targetBullet, 1.2f, 0.3f, true);
+                    CreateShoot(_targetBullet, 1.8f, 0);
+                    CreateShoot(_targetBullet, 1.8f, 0, true);
                     break;
             }
             
             _innerTimer = _targetBulletFrequency;
+        }
+        
+        private void CreateShoot(GameObject prefab, float xOffset, float yOffset, bool deduction = false)
+        {
+            var position = transform.position;
+            
+            Vector3 bulletPosition = deduction 
+                ? new Vector2(position.x - xOffset, position.y + yOffset) 
+                : new Vector2(position.x + xOffset, position.y + yOffset);
+            Instantiate(prefab, bulletPosition, Quaternion.identity);
         }
 
         public static void GetDrop(DropType type, int value)

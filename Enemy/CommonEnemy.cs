@@ -18,6 +18,7 @@ namespace Enemy
         private void Awake()
         {
             CurrentHp = enemySo.maxHp;
+            _innerTimer = Cooldown;
             OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
