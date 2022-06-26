@@ -29,7 +29,7 @@ namespace Bullets
             
             if (collision.CompareTag("Boss"))
             {
-                collision.gameObject.GetComponent<KirinStats>().CurrentHp -= 1;
+                EnemyFactory.TakeDamage(1, collision.gameObject.GetInstanceID());
                 Destroy(gameObject);
             }
             

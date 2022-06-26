@@ -25,16 +25,6 @@ namespace Kirin
         }
 
         /// <summary>
-        /// Spell with delay between bullets spawn
-        /// </summary>
-        /// TODO
-        public IEnumerator CircleSpellCastTest(float waitTime, bool change, GameObject bullet, int count)
-        {
-            yield return new WaitForSeconds(waitTime);
-            IcicleSpellCircle(change, bullet, count);
-        }
-
-        /// <summary>
         /// Full Circle bullet spawn 
         /// </summary>
         public IEnumerator CircleSpellCast(float waitTime, bool change, GameObject bullet, int count)

@@ -26,19 +26,19 @@ namespace Kirin
             if (_isPhaseActive) return;
             switch (_phaseNumber)
             {
-                case 1:
+                case (int) Phases.PhaseOne:
                     _kirinPhases.InitPhaseOne(_kirinSpells, _kirinPositions);
                     _isPhaseActive = true;
                     break;
-                case 2:
+                case (int) Phases.PhaseTwo:
                     _kirinPhases.InitPhaseTwo(_kirinSpells, _kirinPositions);
                     _isPhaseActive = true;
                     break;
-                case 3:
+                case (int) Phases.PhaseThree:
                     _kirinPhases.InitPhaseThree(_kirinSpells, _kirinPositions);
                     _isPhaseActive = true;
                     break;
-                case 4:
+                case (int) Phases.PhaseFour:
                     _kirinPhases.InitPhaseFour(_kirinSpells, _kirinPositions);
                     _isPhaseActive = true;
                     break;

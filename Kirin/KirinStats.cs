@@ -1,32 +1,36 @@
 ﻿using System;
 using DefaultNamespace;
+using Enemy;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Kirin
 {
-    public class KirinStats : MonoBehaviour
+    public class KirinStats : EnemyFactory
     {
-        public float CurrentHp { get; set; }
+        public KirinSO kirinSo;
         private float MaxHp { get; set; }
         
-        public float LerpSpeed = 2f;
+        public float lerpSpeed;
         
         private bool _ultimatePhase = false;
         
         public Image bar;
         
-        private void Start()
+        private void Awake()
         {
-            GlobalEventManager.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
-            MaxHp = 1000;
+            MaxHp = kirinSo.maxHp;
+            lerpSpeed = kirinSo.lerpSpeed;
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
+            OnTakingDamageEvent.AddListener(OnTakingDamage);
+            GlobalEventManager.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
         }
 
         private void Update()
         {
             HandleBar();
+            
             if (CurrentHp <= 0)
             {
                 _ultimatePhase = false;
@@ -43,7 +47,13 @@ namespace Kirin
         private  void HandleBar()
         {
             if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
-                bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * LerpSpeed);
+                bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * lerpSpeed);
+        }
+        
+        private void OnTakingDamage(float damage, int enemyID)
+        {
+            if (enemyID == gameObject.GetInstanceID())
+                CurrentHp -= damage;
         }
     }
 }
