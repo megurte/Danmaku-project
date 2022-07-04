@@ -11,7 +11,7 @@ namespace Kirin
         public void InitPhaseOne(KirinSpellsAPI kirinSpells, KirinMove kirinPositions)
         {
             GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
-            Debug.Log("InitPhaseOne");
+            Debug.Log("Init " + Phases.PhaseOne);
             // SPELLS 
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(2, true, kirinSpells.fireBullet, 70));
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(3, true, kirinSpells.fireBullet, 80));
@@ -39,7 +39,7 @@ namespace Kirin
         public void InitPhaseTwo(KirinSpellsAPI kirinSpells, KirinMove kirinPositions)
         {
             GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
-            Debug.Log("InitPhaseTwo");
+            Debug.Log("Init " + Phases.PhaseTwo);
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(2, true, kirinSpells.fireBullet, 70));
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(3, true, kirinSpells.fireBullet, 80));
             kirinSpells.StartCoroutine(kirinSpells.RouletteSpellCast(3.5f, true, kirinSpells.fireBullet, 70,0.001f));
@@ -67,7 +67,7 @@ namespace Kirin
         public void InitPhaseThree(KirinSpellsAPI kirinSpells, KirinMove kirinPositions)
         {
             GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
-            Debug.Log("InitPhaseThree");
+            Debug.Log("Init " + Phases.PhaseThree);
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(2, true, kirinSpells.fireBullet, 70));
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(3, true, kirinSpells.fireBullet, 80));
             kirinSpells.StartCoroutine(kirinSpells.RouletteSpellCast(3.5f, true, kirinSpells.fireBullet, 70,0.001f));
@@ -95,7 +95,7 @@ namespace Kirin
         public void InitPhaseFour(KirinSpellsAPI kirinSpells, KirinMove kirinPositions)
         {
             GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
-            Debug.Log("InitPhaseFour");
+            Debug.Log("Init " + Phases.PhaseFour);
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(2, true, kirinSpells.fireBullet, 70));
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(3, true, kirinSpells.fireBullet, 80));
             kirinSpells.StartCoroutine(kirinSpells.RouletteSpellCast(3.5f, true, kirinSpells.fireBullet, 70,0.001f));

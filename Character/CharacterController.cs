@@ -12,16 +12,16 @@ namespace Character
 
         public float health;
         public bool isInvulnerable;
-        [SerializeField] private int _exp;
-        [SerializeField] private int _points;
-        [SerializeField] private float _special;
-        
-        private float _maxValue;
-        private float _maxLevel;
+        public int exp;
+        public int points;
+        public float special;
+        public float maxValue;
+        public int level;
+        public float maxLevel;
+
         private float _playerSpeed;
         private float _specialTimer;
         private float _specialCooldown;
-        [SerializeField] private int _level;
         private GameObject _playerBullet;
         private GameObject _targetBullet;
         private float _targetBulletFrequency;
@@ -51,11 +51,11 @@ namespace Character
 
             if (Input.GetKey(KeyCode.Space))
             {
-                ShootCommon(_level);
+                ShootCommon(level);
             
-                if (_level >= 3)
+                if (level >= 3)
                 {
-                    ShootTarget(_level);
+                    ShootTarget(level);
                     _innerTimer -= Time.deltaTime;
                 }
             }
@@ -67,11 +67,11 @@ namespace Character
                 _specialTimer -= Time.deltaTime;
 
             if (Input.GetKey(KeyCode.F2))
-                _level = 2;
+                level = 2;
             if (Input.GetKey(KeyCode.F3))
-                _level = 3;
+                level = 3;
             if (Input.GetKey(KeyCode.F4))
-                _level = 4;
+                level = 4;
             
         }
 
@@ -94,10 +94,10 @@ namespace Character
 
             for (var index = 0; index < keyMap.keys.Count; index++)
             {
-                if (keyMap.keys[index] == _level)
+                if (keyMap.keys[index] == level)
                     if (index + 1 < keyMap.values.Count)
-                        if (_exp >= keyMap.values[index + 1])
-                            _level++;
+                        if (exp >= keyMap.values[index + 1])
+                            level++;
             }
         }
 
@@ -106,7 +106,7 @@ namespace Character
             if (_specialTimer <= 0)
             {
                 Debug.Log("Special used");
-                _special--;
+                special--;
                 _specialTimer = _specialCooldown;
                 _specialTimer -= Time.deltaTime;
             }
@@ -175,19 +175,19 @@ namespace Character
             switch (type)
             {
                 case DropType.ExpDrop:
-                    if (_level < _maxLevel)
-                        _exp += value;
+                    if (level < maxLevel)
+                        exp += value;
                     else
-                        _points += value * 100;
+                        points += value * 100;
                     break;
                 case DropType.PointDrop:
-                    _points += value;
+                    points += value;
                     break;
                 case DropType.HealthDrop:
-                    health += health + value <= _maxValue ? value : 0;
+                    health += health + value <= maxValue ? value : 0;
                     break;
                 case DropType.SpecialDrop:
-                    _special += _special + value <= _maxValue ? value : 0;
+                    special += special + value <= maxValue ? value : 0;
                     break;
             }
         }
@@ -195,15 +195,15 @@ namespace Character
         private void GetPlayersParamsFromSo()
         {
             health = playerSo.health;
-            _maxValue = playerSo.maxValue;
+            maxValue = playerSo.maxValue;
             _specialTimer = 0;
             _specialCooldown = playerSo.specialCooldown;
-            _maxLevel = playerSo.maxLevel;
-            _special = playerSo.special;
+            maxLevel = playerSo.maxLevel;
+            special = playerSo.special;
             _playerSpeed = playerSo.speed;
-            _level = playerSo.level;
-            _exp = playerSo.exp;
-            _points = playerSo.points;
+            level = playerSo.level;
+            exp = playerSo.exp;
+            points = playerSo.points;
             _playerBullet = playerSo.bullet;
             _targetBullet = playerSo.targetBullet;
             _targetBulletFrequency = playerSo.targetBulletFrequency;
