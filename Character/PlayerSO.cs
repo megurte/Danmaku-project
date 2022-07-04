@@ -8,7 +8,8 @@ namespace Character
     [CreateAssetMenu(fileName = "new PlayerConfig", menuName = "PlayerConfig")]
     public class PlayerSO: ScriptableObject
     {
-        public float health;
+        public int health;
+        public int maxHealth;
         public float maxValue;
         public float maxLevel;
         public int level;

@@ -10,7 +10,8 @@ namespace Character
     {
         public PlayerSO playerSo;
 
-        public float health;
+        public int health;
+        public int maxHealth;
         public bool isInvulnerable;
         public int exp;
         public int points;
@@ -195,6 +196,7 @@ namespace Character
         private void GetPlayersParamsFromSo()
         {
             health = playerSo.health;
+            maxHealth = playerSo.maxHealth;
             maxValue = playerSo.maxValue;
             _specialTimer = 0;
             _specialCooldown = playerSo.specialCooldown;
