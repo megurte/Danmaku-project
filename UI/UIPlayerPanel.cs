@@ -88,12 +88,14 @@ namespace UI
             {
                 var prefab = Instantiate(iconHealthFull);
                 prefab.transform.SetParent(health.transform);
+                SetNormalScale(prefab);
             }
             
             for (var i = 0; i < player.playerSo.maxHealth - currentHealth; i++)
             {
                 var prefab = Instantiate(iconHealthEmpty);
                 prefab.transform.SetParent(health.transform);
+                SetNormalScale(prefab);
             }
         }
         
@@ -108,13 +110,20 @@ namespace UI
             {
                 var prefab = Instantiate(iconSpecialFull);
                 prefab.transform.SetParent(specials.transform);
+                SetNormalScale(prefab);
             }
             
             for (var i = 0; i < player.playerSo.maxValue - currentSpecials; i++)
             {
                 var prefab = Instantiate(iconSpecialEmpty);
                 prefab.transform.SetParent(specials.transform);
+                SetNormalScale(prefab);
             }
+        }
+
+        private void SetNormalScale(GameObject prefab)
+        {
+            prefab.GetComponent<RectTransform>().localScale = new Vector3(0.48757f, 0.48757f, 0.48757f);
         }
     }
 }
