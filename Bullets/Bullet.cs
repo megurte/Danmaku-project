@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DefaultNamespace;
+using UnityEngine;
 using CharacterController = Character.CharacterController;
 
 namespace Bullets
@@ -32,6 +33,7 @@ namespace Bullets
             if (collision.CompareTag("Player"))
             {
                 collision.GetComponent<CharacterController>().health -= 1;
+                GlobalEventManager.HealthChanged(collision.GetComponent<CharacterController>().health);
                 //collision.GetComponent<Character_controller>().isInvulnerable = true;
                 Destroy(gameObject);
             }

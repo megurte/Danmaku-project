@@ -1,3 +1,4 @@
+using DefaultNamespace;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,11 +30,15 @@ namespace UI
         
         public GameObject iconSpecialEmpty;
 
-        private void Awake()
+        private void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
-            ClearFiller(health);
-            ClearFiller(specials);
+            
+            UpdateHealthFiller(player.playerSo.health);
+            UpdateSpecialFiller(player.playerSo.special);
+            
+            GlobalEventManager.OnHealthChange.AddListener(UpdateHealthFiller);
+            GlobalEventManager.OnSpecialChange.AddListener(UpdateSpecialFiller);
         }
 
         private void FixedUpdate()
@@ -54,9 +59,6 @@ namespace UI
             else
                 experienceText.text = levelUpMap.values[levelUpMap.values.Count - 1] + "/" 
                     + levelUpMap.values[levelUpMap.values.Count - 1];
-
-            UpdateHealthFiller();
-            UpdateSpecialFiller();
         }
 
         private void ClearFiller(GameObject filler) {
@@ -75,36 +77,40 @@ namespace UI
             }
         }
 
-        private void UpdateHealthFiller()
+        private void UpdateHealthFiller(int currentHealth)
         {
-            if (health.transform.childCount >= 7)
+            if (currentHealth < 0 || currentHealth > player.playerSo.maxHealth)
                 return;
+            
+            ClearFiller(health);
 
-            for (var i = 0; i < player.health; i++)
+            for (var i = 0; i < currentHealth; i++)
             {
                 var prefab = Instantiate(iconHealthFull);
                 prefab.transform.SetParent(health.transform);
             }
             
-            for (var i = 0; i < player.maxHealth - player.health; i++)
+            for (var i = 0; i < player.playerSo.maxHealth - currentHealth; i++)
             {
                 var prefab = Instantiate(iconHealthEmpty);
                 prefab.transform.SetParent(health.transform);
             }
         }
         
-        private void UpdateSpecialFiller()
+        private void UpdateSpecialFiller(int currentSpecials)
         {
-            if (specials.transform.childCount >= 7)
+            if (currentSpecials < 0 || currentSpecials > player.playerSo.maxValue)
                 return;
+         
+            ClearFiller(specials);
 
-            for (var i = 0; i < player.special; i++)
+            for (var i = 0; i < currentSpecials; i++)
             {
                 var prefab = Instantiate(iconSpecialFull);
                 prefab.transform.SetParent(specials.transform);
             }
             
-            for (var i = 0; i < player.maxValue - player.special; i++)
+            for (var i = 0; i < player.playerSo.maxValue - currentSpecials; i++)
             {
                 var prefab = Instantiate(iconSpecialEmpty);
                 prefab.transform.SetParent(specials.transform);

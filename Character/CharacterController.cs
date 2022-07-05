@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Xml.Schema;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -15,7 +16,7 @@ namespace Character
         public bool isInvulnerable;
         public int exp;
         public int points;
-        public float special;
+        public int special;
         public float maxValue;
         public int level;
         public float maxLevel;
@@ -104,10 +105,11 @@ namespace Character
 
         private void UseSpecial()
         {
-            if (_specialTimer <= 0)
+            if (_specialTimer <= 0 && special > 0)
             {
                 Debug.Log("Special used");
                 special--;
+                GlobalEventManager.SpecialChanged(special);
                 _specialTimer = _specialCooldown;
                 _specialTimer -= Time.deltaTime;
             }
@@ -186,10 +188,14 @@ namespace Character
                     break;
                 case DropType.HealthDrop:
                     health += health + value <= maxValue ? value : 0;
+                    GlobalEventManager.HealthChanged(health);
                     break;
                 case DropType.SpecialDrop:
                     special += special + value <= maxValue ? value : 0;
+                    GlobalEventManager.SpecialChanged(special);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, $"Drop index out of range: {type}");
             }
         }
 
