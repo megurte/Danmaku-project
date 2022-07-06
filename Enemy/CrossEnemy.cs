@@ -30,7 +30,7 @@ namespace Enemy
         private void FixedUpdate()
         {
 
-            CheckHealth(enemySo.lootSettings);
+            CheckHealth(enemySo.lootSettings, enemySo.deathEffect);
             CommonSpells.RandomShooting(_bulletPrefab, transform.position, 1);
         
             if (!_isCharging)
@@ -79,6 +79,11 @@ namespace Enemy
         {
             if (enemyID == gameObject.GetInstanceID())
                 CurrentHp -= damage;
+        }
+        
+        public void OnDestroy()
+        {
+            Instantiate(enemySo.deathEffect, transform.position, Quaternion.identity);
         }
     }
 }

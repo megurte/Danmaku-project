@@ -24,7 +24,7 @@ namespace Enemy
 
         private void FixedUpdate()
         {
-            CheckHealth(enemySo.lootSettings);
+            CheckHealth(enemySo.lootSettings, enemySo.deathEffect);
             MoveToDirection(GetDirection(targetPosition, transform.position), Speed);
             
             if (_innerTimer > 0)
@@ -56,6 +56,11 @@ namespace Enemy
         {
             if (enemyID == gameObject.GetInstanceID())
                 CurrentHp -= damage;
+        }
+
+        public void OnDestroy()
+        {
+            Instantiate(enemySo.deathEffect, transform.position, Quaternion.identity);
         }
     }
 }

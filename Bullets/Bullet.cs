@@ -1,4 +1,6 @@
-﻿using DefaultNamespace;
+﻿using System;
+using DefaultNamespace;
+using Unity.Mathematics;
 using UnityEngine;
 using CharacterController = Character.CharacterController;
 
@@ -8,6 +10,7 @@ namespace Bullets
     {
         public float startSpeed = 0.1f;
         public BulletType bulletType;
+        public GameObject destroyEffect;
         public Vector3 direction;
         public float angle = 180;
     
@@ -40,6 +43,11 @@ namespace Bullets
             
             if (collision.CompareTag("Border"))
                 Destroy(gameObject);
+        }
+
+        public void OnDestroy()
+        {
+            Instantiate(destroyEffect, transform.position, quaternion.identity);
         }
     }
 }

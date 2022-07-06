@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Utils;
 
 namespace Character
@@ -22,5 +23,13 @@ namespace Character
         public GameObject targetBullet;
         public float targetBulletFrequency;
         public KeyMap levelUpMap = new KeyMap();
+        public List<SpecialSettings> specialSettings;
+    }
+
+    [Serializable]
+    public class SpecialSettings
+    {
+        public GameObject specialGameObject;
+        public Vector3 specialPosition;
     }
 }

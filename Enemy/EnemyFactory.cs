@@ -38,11 +38,12 @@ namespace Enemy
             return heading / distance;
         }
 
-        protected void CheckHealth(List<LootSettings> lootSettings)
+        protected void CheckHealth(List<LootSettings> lootSettings, GameObject deathEffect)
         {
             if (CurrentHp <= 0)
             {
                 DropItems(lootSettings);
+                Instantiate(deathEffect, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
         }

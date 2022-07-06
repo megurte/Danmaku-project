@@ -107,11 +107,14 @@ namespace Character
         {
             if (_specialTimer <= 0 && special > 0)
             {
-                Debug.Log("Special used");
+                var settings = playerSo.specialSettings[0];
+                
                 special--;
                 GlobalEventManager.SpecialChanged(special);
                 _specialTimer = _specialCooldown;
                 _specialTimer -= Time.deltaTime;
+                Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
+                Debug.Log("Special used");
             }
         }
 
