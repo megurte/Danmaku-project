@@ -45,9 +45,7 @@ public class SimpleFlash : MonoBehaviour
     {
         var interval = flashDuration * 2;
         
-        Flash();
-        
-        for (var i = interval; i <= duration; i += interval)
+        for (float i = 0; i <= duration; i += interval)
         {
             StartCoroutine(FlashRepeat(i));
         }
