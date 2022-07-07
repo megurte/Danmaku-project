@@ -32,6 +32,7 @@ namespace Character
         private GameObject _playerBullet;
         private GameObject _targetBullet;
         private GameObject _destroyEffect;
+        private SimpleFlash _flashEffect;
         private float _targetBulletFrequency;
         private Rigidbody2D _rigidBody;
         private Vector2 _moveVector;
@@ -45,6 +46,7 @@ namespace Character
             GetPlayersParamsFromSo();
             
             _innerTimer = _targetBulletFrequency;
+            _flashEffect = GetComponent<SimpleFlash>();
             _rigidBody = GetComponent<Rigidbody2D>();
             
             OnGetDrop.AddListener(OnDrop);
@@ -236,6 +238,8 @@ namespace Character
             if (health > 0 && !isInvulnerable)
             {
                 health -= damageValue;
+                
+                _flashEffect.FlashEffect();
                 StartCoroutine(Invulnerable());
             }
 
@@ -251,9 +255,7 @@ namespace Character
         private IEnumerator Invulnerable()
         {
             isInvulnerable = true;
-            Debug.Log("Invulnerable mode is On");
             yield return new WaitForSeconds(2);
-            Debug.Log("Invulnerable mode is Off");
             isInvulnerable = false;
         }
     }
