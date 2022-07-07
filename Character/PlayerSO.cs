@@ -21,6 +21,7 @@ namespace Character
         public int points = default;
         public GameObject bullet;
         public GameObject targetBullet;
+        public GameObject destroyEffect;
         public float targetBulletFrequency;
         public KeyMap levelUpMap = new KeyMap();
         public List<SpecialSettings> specialSettings;

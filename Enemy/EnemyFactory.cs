@@ -52,8 +52,7 @@ namespace Enemy
         {
             if (other.CompareTag("Player"))
             {
-                other.GetComponent<CharacterController>().health -= 1;
-                //collision.GetComponent<Character_controller>().isInvulnerable = true;
+                CharacterController.TakeDamage(1);
             }
 
             if (other.CompareTag("Border"))

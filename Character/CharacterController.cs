@@ -11,27 +11,34 @@ namespace Character
     {
         public PlayerSO playerSo;
 
+        [Header("Stats")]
         public int health;
         public int maxHealth;
-        public bool isInvulnerable;
-        public int exp;
-        public int points;
-        public int special;
-        public float maxValue;
+        [Space(5f)]
         public int level;
         public float maxLevel;
+        public int exp;
+        [Space(5f)]
+        public int special;
+        public float maxSpecials;
+        [Space(5f)]
+        public int points;
+        [Space(5f)] 
+        public bool isInvulnerable;
 
         private float _playerSpeed;
         private float _specialTimer;
         private float _specialCooldown;
         private GameObject _playerBullet;
         private GameObject _targetBullet;
+        private GameObject _destroyEffect;
         private float _targetBulletFrequency;
         private Rigidbody2D _rigidBody;
         private Vector2 _moveVector;
         private float _innerTimer;
         
         private static UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
+        private static UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
 
         private void Start()
         {
@@ -41,15 +48,13 @@ namespace Character
             _rigidBody = GetComponent<Rigidbody2D>();
             
             OnGetDrop.AddListener(OnDrop);
+            OnTakeDamage.AddListener(OnDamage);
         }
 
         private void FixedUpdate()
         {
             Moving();
             CheckLevelUp();
-
-            if (!isInvulnerable && health <= 0)
-                Destroy(gameObject);
 
             if (Input.GetKey(KeyCode.Space))
             {
@@ -170,6 +175,11 @@ namespace Character
                 : new Vector2(position.x + xOffset, position.y + yOffset);
             Instantiate(prefab, bulletPosition, Quaternion.identity);
         }
+        
+        public static void TakeDamage(int damageValue)
+        {
+            OnTakeDamage.Invoke(damageValue);
+        }
 
         public static void GetDrop(DropType type, int value)
         {
@@ -190,11 +200,11 @@ namespace Character
                     points += value;
                     break;
                 case DropType.HealthDrop:
-                    health += health + value <= maxValue ? value : 0;
+                    health += health + value <= maxSpecials ? value : 0;
                     GlobalEventManager.HealthChanged(health);
                     break;
                 case DropType.SpecialDrop:
-                    special += special + value <= maxValue ? value : 0;
+                    special += special + value <= maxSpecials ? value : 0;
                     GlobalEventManager.SpecialChanged(special);
                     break;
                 default:
@@ -206,7 +216,7 @@ namespace Character
         {
             health = playerSo.health;
             maxHealth = playerSo.maxHealth;
-            maxValue = playerSo.maxValue;
+            maxSpecials = playerSo.maxValue;
             _specialTimer = 0;
             _specialCooldown = playerSo.specialCooldown;
             maxLevel = playerSo.maxLevel;
@@ -217,13 +227,33 @@ namespace Character
             points = playerSo.points;
             _playerBullet = playerSo.bullet;
             _targetBullet = playerSo.targetBullet;
+            _destroyEffect = playerSo.destroyEffect;
             _targetBulletFrequency = playerSo.targetBulletFrequency;
+        }
+
+        private void OnDamage(int damageValue)
+        {
+            if (health > 0 && !isInvulnerable)
+            {
+                health -= damageValue;
+                StartCoroutine(Invulnerable());
+            }
+
+            if (!isInvulnerable && health <= 0)
+                Destroy(gameObject);
+        }
+        
+        public void OnDestroy()
+        {
+            Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity);
         }
 
         private IEnumerator Invulnerable()
         {
+            isInvulnerable = true;
+            Debug.Log("Invulnerable mode is On");
             yield return new WaitForSeconds(2);
-            Debug.Log("enter");
+            Debug.Log("Invulnerable mode is Off");
             isInvulnerable = false;
         }
     }
