@@ -1,6 +1,7 @@
 using System;
 using Bullets;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new Enemy", menuName = "Enemy")]
@@ -14,6 +15,8 @@ public class EnemySO : ScriptableObject
     public Spells spell;
     public MoveSet moveSet;
     public float speed;
+    public float angularSpeed;
+    public float radius;
     public Vector3 targetPosition;
     public List<LootSettings> lootSettings;
 }
@@ -29,15 +32,15 @@ public struct LootSettings
 [Serializable]
 public enum Spells
 {
-    DirectTarget,
-    Circle,
-    RandomShooting,
+    [InspectorName("Shoot in target")] DirectTarget,
+    [InspectorName("Shoot around object (Circle)")] Circle,
+    [InspectorName("Random shoot direction")] RandomShooting,
 }
 
 [Serializable]
 public enum MoveSet
 {
-    ToPosition,
-    ToPoint,
-    MoveAround,
+    [InspectorName("Move to exact position")] ToPosition,
+    [InspectorName("Move in direction")] ToPoint,
+    [InspectorName("Move around point")] MoveAround,
 }

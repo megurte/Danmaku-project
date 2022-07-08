@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.UIElements;
 using CharacterController = Character.CharacterController;
 using Random = System.Random;
 
@@ -13,18 +15,61 @@ namespace Enemy
         protected float CurrentHp { get; set; }
 
         public Vector3 targetPosition;
+        
         public static UnityEvent<float, int> OnTakingDamageEvent = new UnityEvent<float, int>();
         
-        protected void MovementToPosition(Vector3 targetPos, float speed)
-        {    
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);   
+        private float _angle = default;
+
+        protected IEnumerator MovementToPosition(Vector3 targetPos, float speed)
+        {
+            while (transform.position != targetPos) 
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+                yield return null;
+            }
         }
     
         protected void MoveToDirection(Vector3 direction, float speed)
         {
             transform.Translate(direction.normalized * speed, Space.World);
         }
-    
+
+        protected IEnumerator MoveAroundRoutine(Vector3 targetPos, Transform centerPoint, float radius, float speed, float angularSpeed)
+        {
+            while (transform.position != targetPos) 
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+                yield return null;
+            }
+
+            if (transform.position == targetPos)
+            {
+                yield return StartCoroutine(MoveAround(centerPoint, radius, angularSpeed));
+            }
+        }
+        
+        private IEnumerator MoveAround(Transform centerPoint, float radius, float angularSpeed)
+        {
+            while (angularSpeed > 0)
+            {
+                var center = centerPoint.position;
+                var positionX = center.x + Mathf.Cos(_angle) * radius;
+                var positionY = center.y + Mathf.Sin(_angle) * radius;
+
+                transform.position = new Vector2(positionX, positionY);
+                _angle += Time.deltaTime * angularSpeed;
+
+                if (_angle >= 360f)
+                    _angle = 0;
+                yield return null;
+            }
+        }
+
+        protected Vector3 GetCircleCenter(Transform self, float radius)
+        {
+            return new Vector3(self.position.x,self.position.y, self.position.z);
+        }
+
         protected Vector3 GetNewTargetPosition()
         {
             return GameObject.FindGameObjectWithTag("Player").transform.position;

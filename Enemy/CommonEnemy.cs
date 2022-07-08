@@ -12,6 +12,9 @@ namespace Enemy
         private int BulletCount => enemySo.counter;
         private float Speed => enemySo.speed;
         private Spells Spell => enemySo.spell;
+        private MoveSet MoveSet => enemySo.moveSet;
+
+        public Transform centerPoint;
         
         private float _innerTimer;
         
@@ -22,11 +25,29 @@ namespace Enemy
             OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
+        private void Start()
+        {
+            switch (MoveSet)
+            {
+                case MoveSet.MoveAround:
+                    StartCoroutine(MoveAroundRoutine(targetPosition, centerPoint, enemySo.radius, Speed, enemySo.angularSpeed));
+                    break;
+                case MoveSet.ToPosition:
+                    StartCoroutine(MovementToPosition(targetPosition, Speed));
+                    //MoveToDirection(GetDirection(targetPosition, transform.position), Speed);
+                    break;
+                case MoveSet.ToPoint:
+                    //
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         private void FixedUpdate()
         {
             CheckHealth(enemySo.lootSettings, enemySo.destroyEffect);
-            MoveToDirection(GetDirection(targetPosition, transform.position), Speed);
-            
+
             if (_innerTimer > 0)
             {
                 _innerTimer -= Time.deltaTime;
