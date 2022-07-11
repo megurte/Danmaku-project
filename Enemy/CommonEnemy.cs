@@ -13,8 +13,6 @@ namespace Enemy
         private float Speed => enemySo.speed;
         private Spells Spell => enemySo.spell;
         private MoveSet MoveSet => enemySo.moveSet;
-
-        public Transform centerPoint;
         
         private float _innerTimer;
         
@@ -30,7 +28,7 @@ namespace Enemy
             switch (MoveSet)
             {
                 case MoveSet.MoveAround:
-                    StartCoroutine(MoveAroundRoutine(targetPosition, centerPoint, enemySo.radius, Speed, enemySo.angularSpeed));
+                    StartCoroutine(MoveAroundRoutine(targetPosition, enemySo.radius, Speed, enemySo.angularSpeed));
                     break;
                 case MoveSet.ToPosition:
                     StartCoroutine(MovementToPosition(targetPosition, Speed));

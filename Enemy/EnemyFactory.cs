@@ -16,9 +16,11 @@ namespace Enemy
 
         public Vector3 targetPosition;
         
-        public static UnityEvent<float, int> OnTakingDamageEvent = new UnityEvent<float, int>();
-        
         private float _angle = default;
+
+        private Vector3 _circleCenterPoint = default;
+
+        public static UnityEvent<float, int> OnTakingDamageEvent = new UnityEvent<float, int>();
 
         protected IEnumerator MovementToPosition(Vector3 targetPos, float speed)
         {
@@ -34,7 +36,7 @@ namespace Enemy
             transform.Translate(direction.normalized * speed, Space.World);
         }
 
-        protected IEnumerator MoveAroundRoutine(Vector3 targetPos, Transform centerPoint, float radius, float speed, float angularSpeed)
+        protected IEnumerator MoveAroundRoutine(Vector3 targetPos, float radius, float speed, float angularSpeed)
         {
             while (transform.position != targetPos) 
             {
@@ -44,17 +46,19 @@ namespace Enemy
 
             if (transform.position == targetPos)
             {
-                yield return StartCoroutine(MoveAround(centerPoint, radius, angularSpeed));
+                _circleCenterPoint = transform.position;
+                
+                _circleCenterPoint = GetCircleCenter(_circleCenterPoint, radius);
+                yield return StartCoroutine(MoveAround(_circleCenterPoint, radius, angularSpeed));
             }
         }
         
-        private IEnumerator MoveAround(Transform centerPoint, float radius, float angularSpeed)
+        private IEnumerator MoveAround(Vector3 centerPoint, float radius, float angularSpeed)
         {
             while (angularSpeed > 0)
             {
-                var center = centerPoint.position;
-                var positionX = center.x + Mathf.Cos(_angle) * radius;
-                var positionY = center.y + Mathf.Sin(_angle) * radius;
+                var positionX = centerPoint.x + Mathf.Cos(_angle) * radius;
+                var positionY = centerPoint.y + Mathf.Sin(_angle) * radius;
 
                 transform.position = new Vector2(positionX, positionY);
                 _angle += Time.deltaTime * angularSpeed;
@@ -65,9 +69,9 @@ namespace Enemy
             }
         }
 
-        protected Vector3 GetCircleCenter(Transform self, float radius)
+        protected Vector3 GetCircleCenter(Vector3 position, float radius)
         {
-            return new Vector3(self.position.x,self.position.y, self.position.z);
+            return new Vector3(position.x - radius , position.y, position.z);
         }
 
         protected Vector3 GetNewTargetPosition()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Bullets;
 using Random = System.Random;
 
@@ -8,7 +9,9 @@ namespace DefaultNamespace.Spells
     {
         public static void RandomShooting(GameObject bullet, Vector3 centerPos, float distance)
         {
-            var degree = new Random().Next(0, 360);
+            var seed = Guid.NewGuid().GetHashCode();
+
+            var degree = new Random(seed).Next(0, 360);
             var direction = new Vector2(0, 0);
             var position = new Vector3();
             
