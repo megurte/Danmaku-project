@@ -46,7 +46,7 @@ namespace DefaultNamespace.Spells
             }
         }
         
-        public static void TargetDegreeBulletSpawn(GameObject bullet, Vector3 centerPos, float distance, float degree)
+        public static void TargetPositionShooting(GameObject bullet, Vector3 centerPos, float distance, float degree)
         {
             var direction = new Vector2(-1, 1);
             var position = new Vector3();

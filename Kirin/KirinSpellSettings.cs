@@ -6,10 +6,11 @@ namespace Kirin
     [Serializable]
     public class KirinSpellSettings
     {
+        public SpellName spellName;
         public float waitTime;
         public bool change;
         public GameObject bullet;
-        public float count;
+        public int count;
     }
     
     [Serializable]
@@ -23,5 +24,12 @@ namespace Kirin
     {
         public float waitTime;
         public Vector2 position;
+    }
+
+    [Serializable]
+    public enum SpellName
+    {
+        SpiralWithDelay,
+        Circle,
     }
 }

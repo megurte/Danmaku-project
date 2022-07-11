@@ -35,7 +35,6 @@ namespace Bullets
         {
             if (collision.CompareTag("Player"))
             {
-                //collision.GetComponent<CharacterController>().health -= 1;
                 CharacterController.TakeDamage(1);
                 GlobalEventManager.HealthChanged(collision.GetComponent<CharacterController>().health);
                 Destroy(gameObject);

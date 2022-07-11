@@ -153,19 +153,5 @@ public abstract class KirinSpells : MonoBehaviour
         angle = FullDegrees;
     }
     
-    
-    
-    /*public IEnumerator CircleFireballSpell(CircleFireballSettings settings)
-    {
-        yield return new WaitForSeconds(settings.waitTime);
-        FireballSpellCircle(settings.change, settings.bullet, settings.count);
-    }*/
 }
 
-/*public class CircleFireballSettings
-{
-    public float waitTime;
-    public bool change;
-    public GameObject bullet;
-    public int count;
-}*/

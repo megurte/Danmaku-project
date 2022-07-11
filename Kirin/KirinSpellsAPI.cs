@@ -9,37 +9,37 @@ namespace Kirin
         /// <summary>
         /// Spell with delay between bullets spawn
         /// </summary>
-        public IEnumerator RouletteSpellCast(float waitTime, bool change, GameObject bullet, float count, float delay)
+        public IEnumerator RouletteSpellCastWithDelay(KirinSpellSettingsWithDelay settings)
         {
-            yield return new WaitForSeconds(waitTime);
-            StartCoroutine(RouletteSpellFireball(delay, change, bullet, count));
+            yield return new WaitForSeconds(settings.waitTime);
+            StartCoroutine(RouletteSpellFireball(settings.delay, settings.change, settings.bullet, settings.count));
         }
     
         /// <summary>
         /// SpiralSpell with delay
         /// </summary>
-        public IEnumerator SpiralSpellCast(float waitTime, bool change, GameObject bullet, float count, float delay)
+        public IEnumerator SpiralSpellCast(KirinSpellSettingsWithDelay settings)
         {
-            yield return new WaitForSeconds(waitTime);
-            StartCoroutine(SpiralSpellFireball(delay, change, bullet, count));
+            yield return new WaitForSeconds(settings.waitTime);
+            StartCoroutine(SpiralSpellFireball(settings.delay, settings.change, settings.bullet, settings.count));
         }
 
         /// <summary>
         /// Full Circle bullet spawn 
         /// </summary>
-        public IEnumerator CircleSpellCast(float waitTime, bool change, GameObject bullet, int count)
+        public IEnumerator CircleSpellCast(KirinSpellSettings settings)
         {
-            yield return new WaitForSeconds(waitTime);
-            FireballSpellCircle(change, bullet, count);
+            yield return new WaitForSeconds(settings.waitTime);
+            FireballSpellCircle(settings.change, settings.bullet, settings.count);
         }
 
         /// <summary>
         /// Spell with delay between bullets spawn
         /// </summary>
-        public IEnumerator LeftSideSpellCast(float waitTime, bool change, GameObject bullet, int count)
+        public IEnumerator LeftSideSpellCast(KirinSpellSettings settings)
         {
-            yield return new WaitForSeconds(waitTime);
-            FireballSpellLeftToRight(change, bullet, count);
+            yield return new WaitForSeconds(settings.waitTime);
+            FireballSpellLeftToRight(settings.change, settings.bullet, settings.count);
         }
     }
 }

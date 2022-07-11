@@ -7,6 +7,7 @@ namespace Kirin
 {
     public class KirinScript : MonoBehaviour
     {
+        public KirinSO kirinSo;
         private KirinSpellsAPI _kirinSpells;
         private KirinMove _kirinPositions;
         private KirinPhases _kirinPhases;
@@ -27,7 +28,7 @@ namespace Kirin
             switch (_phaseNumber)
             {
                 case (int) Phases.PhaseOne:
-                    _kirinPhases.InitPhaseOne(_kirinSpells, _kirinPositions);
+                    _kirinPhases.InitPhaseOne(_kirinSpells, _kirinPositions, kirinSo.phaseSpellSettings, kirinSo.phaseMovementPositions);
                     _isPhaseActive = true;
                     break;
                 case (int) Phases.PhaseTwo:
@@ -50,7 +51,6 @@ namespace Kirin
             StopAllCoroutines();
             _phaseNumber = phase;
             _isPhaseActive = false;
-            var test = 3;
         }
     }
 }

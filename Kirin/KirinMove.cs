@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Kirin;
 using UnityEngine;
 
 public class KirinMove : MonoBehaviour
@@ -39,10 +40,10 @@ public class KirinMove : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);   
     }
 
-    public IEnumerator MoveTo(float waitTime, Vector2 pos)
+    public IEnumerator MoveTo(KirinMoveSettings settings)
     {
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(settings.waitTime);
         isMoving = true;
-        toPosition = pos;
+        toPosition = settings.position;
     }
 }
