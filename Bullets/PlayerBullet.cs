@@ -1,5 +1,4 @@
 using Enemy;
-using Kirin;
 using UnityEngine;
 
 namespace Bullets

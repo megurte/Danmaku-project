@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SocialPlatforms;
-using UnityEngine.UIElements;
 using CharacterController = Character.CharacterController;
 using Random = System.Random;
 

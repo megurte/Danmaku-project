@@ -26,11 +26,4 @@ namespace Character
         public KeyMap levelUpMap = new KeyMap();
         public List<SpecialSettings> specialSettings;
     }
-
-    [Serializable]
-    public class SpecialSettings
-    {
-        public GameObject specialGameObject;
-        public Vector3 specialPosition;
-    }
 }

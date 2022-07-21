@@ -1,7 +1,6 @@
 using DefaultNamespace;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using CharacterController = Character.CharacterController;
 
 namespace UI
@@ -61,7 +60,7 @@ namespace UI
                     + levelUpMap.values[levelUpMap.values.Count - 1];
         }
 
-        private void ClearFiller(GameObject filler) {
+        private static void ClearFiller(GameObject filler) {
             var allChildren = new GameObject[filler.transform.childCount];
             var i = 0;
 
@@ -121,7 +120,7 @@ namespace UI
             }
         }
 
-        private void SetNormalScale(GameObject prefab)
+        private static void SetNormalScale(GameObject prefab)
         {
             prefab.GetComponent<RectTransform>().localScale = new Vector3(0.48757f, 0.48757f, 0.48757f);
         }

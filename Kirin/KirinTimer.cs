@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
@@ -13,11 +12,11 @@ namespace Kirin
         
         private Text _text;
         
-        public float timeRemaining = 0;
+        public float timeRemaining = default;
         
-        public bool timerIsRunning = false;
+        public bool timerIsRunning = default;
         
-        private int _phaseIndex = 0;
+        private int _phaseIndex = default;
         
         [Serializable]
         public struct PhaseTimer
@@ -31,6 +30,7 @@ namespace Kirin
         private void Start()
         {
             _text = textObj.GetComponent<Text>();
+            
             GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
         }
         
@@ -57,6 +57,7 @@ namespace Kirin
         private void TimerRun()
         {
             if (!timerIsRunning) return;
+            
             if (timeRemaining > 0)
             {
                 timeRemaining -= Time.deltaTime;
@@ -65,6 +66,7 @@ namespace Kirin
             {
                 timeRemaining = 0;
                 timerIsRunning = false;
+                
                 GlobalEventManager.ChangePhase();
             }
         }
@@ -86,6 +88,7 @@ namespace Kirin
             if (phase <= timers.Count)
             {
                 _phaseIndex = phase - 1;
+                
                 TimerInit(timers[_phaseIndex]);
             }
             else

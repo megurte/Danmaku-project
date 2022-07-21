@@ -1,9 +1,9 @@
 ﻿using System;
-using UnityEngine;
 using Bullets;
+using UnityEngine;
 using Random = System.Random;
 
-namespace DefaultNamespace.Spells
+namespace Spells
 {
     public class CommonSpells : MonoBehaviour
     {
@@ -13,11 +13,12 @@ namespace DefaultNamespace.Spells
 
             var degree = new Random(seed).Next(0, 360);
             var direction = new Vector2(0, 0);
-            var position = new Vector3();
-            
-            position.y = centerPos.y + Mathf.Cos(degree) * distance;
-            position.x = centerPos.x + Mathf.Sin(degree) * distance;
-            
+            var position = new Vector3
+            {
+                y = centerPos.y + Mathf.Cos(degree) * distance,
+                x = centerPos.x + Mathf.Sin(degree) * distance
+            };
+
             direction.y = Mathf.Cos(degree);
             direction.x = Mathf.Sin(degree);
             

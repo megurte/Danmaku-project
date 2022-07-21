@@ -18,18 +18,4 @@ namespace Kirin
     {
         public float delay;
     }
-    
-    [Serializable]
-    public class KirinMoveSettings
-    {
-        public float waitTime;
-        public Vector2 position;
-    }
-
-    [Serializable]
-    public enum SpellName
-    {
-        SpiralWithDelay,
-        Circle,
-    }
 }

@@ -1,29 +1,32 @@
 using TMPro;
 using UnityEngine;
 
-public class FPSDisplay : MonoBehaviour
+namespace UI
 {
-    public TextMeshProUGUI fpsText;
-
-    private const float PollingTime = 1f;
-    private float _time = default;
-    private int _frameCount = default;
-
-    private void Update()
+    public class FPSDisplay : MonoBehaviour
     {
-        _time += Time.deltaTime;
-        _frameCount++;
+        public TextMeshProUGUI fpsText;
 
-        if (_time >= PollingTime)
+        private const float PollingTime = 1f;
+        private float _time = default;
+        private int _frameCount = default;
+
+        private void Update()
         {
-            fpsText.text = CalculateFrameRate() + " FPS";
-            _time -= PollingTime;
-            _frameCount = 0;
-        }
-    }
+            _time += Time.deltaTime;
+            _frameCount++;
 
-    private int CalculateFrameRate()
-    {
-        return Mathf.RoundToInt(_frameCount / _time);
+            if (_time >= PollingTime)
+            {
+                fpsText.text = CalculateFrameRate() + " FPS";
+                _time -= PollingTime;
+                _frameCount = 0;
+            }
+        }
+
+        private int CalculateFrameRate()
+        {
+            return Mathf.RoundToInt(_frameCount / _time);
+        }
     }
 }

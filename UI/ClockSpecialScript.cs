@@ -1,41 +1,38 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DefaultNamespace;
-using Kirin;
 using UnityEngine;
 
-public class ClockSpecialScript : MonoBehaviour
+namespace UI
 {
-    public GameObject hourArrow;
-    
-    public GameObject minuteArrow;
-    
-    public float timeRemaining = default;
-
-    private const float DelayHourArrow = 1f;
-    
-    private float _delayTimer = default;
-
-    private void Start()
+    public class ClockSpecialScript : MonoBehaviour
     {
-        _delayTimer = DelayHourArrow;
-    }
+        public GameObject hourArrow;
+    
+        public GameObject minuteArrow;
+    
+        public float timeRemaining = default;
 
-    private void FixedUpdate()
-    {
-        TimerRun();
+        private const float DelayHourArrow = 1f;
+    
+        private float _delayTimer = default;
 
-        if (timeRemaining <= 0)
+        private void Start()
         {
-            Destroy(gameObject);
+            _delayTimer = DelayHourArrow;
         }
-    }
 
-    private void TimerRun()
-    {
-        if (timeRemaining > 0)
+        private void FixedUpdate()
         {
+            TimerRun();
+
+            if (timeRemaining <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        private void TimerRun()
+        {
+            if (!(timeRemaining > 0)) return;
+            
             timeRemaining -= Time.deltaTime;
             
             minuteArrow.transform.Rotate(new Vector3(0, 0, -360) * Time.deltaTime);

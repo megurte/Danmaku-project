@@ -2,7 +2,7 @@
 using UnityEngine;
 using CharacterController = Character.CharacterController;
 
-namespace DefaultNamespace.Drop
+namespace Drop
 {
     public class ExpDrop: MonoBehaviour
     {

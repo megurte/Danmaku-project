@@ -1,6 +1,6 @@
 using System.Collections;
 using Bullets;
-using DefaultNamespace.Spells;
+using Spells;
 using UnityEngine;
 using Random = System.Random;
 

@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 namespace Bullets
 {
@@ -23,12 +21,12 @@ namespace Bullets
         private void FixedUpdate()
         {
             Moving();
+
+            if (bulletType != BulletType.Fire) return;
             
-            if (bulletType == BulletType.Fire)
-            {
-                var degree = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(degree, Vector3.forward);
-            }
+            var degree = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            
+            transform.rotation = Quaternion.AngleAxis(degree, Vector3.forward);
         }
 
         private new void Moving()

@@ -1,5 +1,4 @@
-﻿using System;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using Unity.Mathematics;
 using UnityEngine;
 using CharacterController = Character.CharacterController;
@@ -13,14 +12,7 @@ namespace Bullets
         public GameObject destroyEffect;
         public Vector3 direction;
         public float angle = 180;
-    
-        public enum BulletType
-        {
-            Other,
-            Fireball,
-            Fire,
-        }
-    
+
         private void FixedUpdate()
         {
             Moving();

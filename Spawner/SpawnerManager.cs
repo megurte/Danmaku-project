@@ -1,30 +1,33 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SpawnerManager : MonoBehaviour
+namespace Spawner
 {
-    public SpawnerManagerConfig spawnerManagerConfig;
-    public static UnityEvent<int> AwakeSpawner = new UnityEvent<int>();
-
-    private void Start()
+    public class SpawnerManager : MonoBehaviour
     {
-        foreach (var enemyWave in spawnerManagerConfig.EnemyWaves)
+        public SpawnerManagerConfig spawnerManagerConfig;
+        
+        public static readonly UnityEvent<int> AwakeSpawner = new UnityEvent<int>();
+
+        private void Start()
         {
-            StartCoroutine(AwakeSpawnerInTime(enemyWave));
+            foreach (var enemyWave in spawnerManagerConfig.enemyWaves)
+            {
+                StartCoroutine(AwakeSpawnerInTime(enemyWave));
+            }
         }
-    }
 
-    public static void OnSpawnerAwake(int index)
-    {
-        AwakeSpawner.Invoke(index);
-    }
+        private static void OnSpawnerAwake(int index)
+        {
+            AwakeSpawner.Invoke(index);
+        }
 
-    public IEnumerator AwakeSpawnerInTime(EnemyWave enemyWave)
-    {
-        yield return new WaitForSeconds(enemyWave.waveTime); 
-        OnSpawnerAwake(enemyWave.spawnerIndex);
+        private IEnumerator AwakeSpawnerInTime(EnemyWave enemyWave)
+        {
+            yield return new WaitForSeconds(enemyWave.waveTime); 
+            
+            OnSpawnerAwake(enemyWave.spawnerIndex);
+        }
     }
 }

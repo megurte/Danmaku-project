@@ -1,24 +1,24 @@
-﻿using System;
-using Bullets;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using UnityEngine;
 
 namespace Kirin
 {
-    public class KirinScript : MonoBehaviour
+    public class KirinPhaseController : MonoBehaviour
     {
         public KirinSO kirinSo;
+        
         private KirinSpellsAPI _kirinSpells;
         private KirinMove _kirinPositions;
         private KirinPhases _kirinPhases;
         private int _phaseNumber = 1;
-        private bool _isPhaseActive = false;
+        private bool _isPhaseActive = default;
 
         private void Awake()
         {
             _kirinSpells = GetComponent<KirinSpellsAPI>();
             _kirinPhases = GetComponent<KirinPhases>();
             _kirinPositions = GetComponent<KirinMove>();
+            
             GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
         }
 

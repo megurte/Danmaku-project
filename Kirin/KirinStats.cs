@@ -9,20 +9,22 @@ namespace Kirin
     public class KirinStats : EnemyFactory
     {
         public KirinSO kirinSo;
-        private float MaxHp { get; set; }
         
         public float lerpSpeed;
         
-        private bool _ultimatePhase = false;
-        
         public Image bar;
+
+        private float MaxHp { get; set; }
         
+        private bool _ultimatePhase = false;
+
         private void Awake()
         {
             MaxHp = kirinSo.maxHp;
             lerpSpeed = kirinSo.lerpSpeed;
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
+            
             OnTakingDamageEvent.AddListener(OnTakingDamage);
             GlobalEventManager.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
         }
@@ -35,6 +37,7 @@ namespace Kirin
             {
                 _ultimatePhase = false;
                 CurrentHp = MaxHp;
+                
                 GlobalEventManager.ChangePhase();
             }
 

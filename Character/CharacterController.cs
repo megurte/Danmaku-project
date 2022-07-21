@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Xml.Schema;
 using DefaultNamespace;
+using Drop;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -112,17 +112,16 @@ namespace Character
 
         private void UseSpecial()
         {
-            if (_specialTimer <= 0 && special > 0)
-            {
-                var settings = playerSo.specialSettings[0];
+            if (!(_specialTimer <= 0) || special <= 0) return;
+            
+            var settings = playerSo.specialSettings[0];
                 
-                special--;
-                GlobalEventManager.SpecialChanged(special);
-                _specialTimer = _specialCooldown;
-                _specialTimer -= Time.deltaTime;
-                Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
-                Debug.Log("Special used");
-            }
+            special--;
+            GlobalEventManager.SpecialChanged(special);
+            _specialTimer = _specialCooldown;
+            _specialTimer -= Time.deltaTime;
+            
+            Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
         }
 
         private void ShootCommon(int characterLevel)

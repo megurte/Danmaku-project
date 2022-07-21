@@ -1,5 +1,5 @@
 using System;
-using DefaultNamespace.Spells;
+using Spells;
 using UnityEngine;
 
 namespace Enemy
@@ -20,6 +20,7 @@ namespace Enemy
         {
             CurrentHp = enemySo.maxHp;
             _innerTimer = Cooldown;
+            
             OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
@@ -32,7 +33,6 @@ namespace Enemy
                     break;
                 case MoveSet.ToPosition:
                     StartCoroutine(MovementToPosition(targetPosition, Speed));
-                    //MoveToDirection(GetDirection(targetPosition, transform.position), Speed);
                     break;
                 case MoveSet.ToPoint:
                     //
