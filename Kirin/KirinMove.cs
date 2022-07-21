@@ -1,33 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
-using Kirin;
 using UnityEngine;
 
-public class KirinMove : MonoBehaviour
+namespace Kirin
 {
-    public float speed;
-    public bool isMoving = false;
-    public Vector3 toPosition;
-
-    private void Update()
+    public class KirinMove : MonoBehaviour
     {
-        if (isMoving)
-            MovementToPosition(toPosition);
+        public float speed;
+        public bool isMoving = false;
+        public Vector3 toPosition;
 
-        if (transform.position == toPosition)
-            isMoving = false;
-    }
+        private void Update()
+        {
+            if (isMoving)
+                MovementToPosition(toPosition);
 
-    private void MovementToPosition(Vector3 targetPos)
-    {    
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);   
-    }
+            if (transform.position == toPosition)
+                isMoving = false;
+        }
 
-    public IEnumerator MoveTo(KirinMoveSettings settings)
-    {
-        yield return new WaitForSeconds(settings.waitTime);
+        private void MovementToPosition(Vector3 targetPos)
+        {    
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);   
+        }
+
+        public IEnumerator MoveTo(KirinMoveSettings settings)
+        {
+            yield return new WaitForSeconds(settings.waitTime);
         
-        isMoving = true;
-        toPosition = settings.position;
+            isMoving = true;
+            toPosition = settings.position;
+        }
     }
 }

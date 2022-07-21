@@ -18,7 +18,7 @@ namespace Enemy
 
         private Vector3 _circleCenterPoint = default;
 
-        public static UnityEvent<float, int> OnTakingDamageEvent = new UnityEvent<float, int>();
+        protected static readonly UnityEvent<float, int> OnTakingDamageEvent = new UnityEvent<float, int>();
 
         protected IEnumerator MovementToPosition(Vector3 targetPos, float speed)
         {
@@ -67,17 +67,17 @@ namespace Enemy
             }
         }
 
-        protected Vector3 GetCircleCenter(Vector3 position, float radius)
+        private static Vector3 GetCircleCenter(Vector3 position, float radius)
         {
             return new Vector3(position.x - radius , position.y, position.z);
         }
 
-        protected Vector3 GetNewTargetPosition()
+        protected static Vector3 GetNewTargetPosition()
         {
             return GameObject.FindGameObjectWithTag("Player").transform.position;
         }
         
-        protected Vector3 GetDirection(Vector3 targetPos, Vector3 objectPosition)
+        protected static Vector3 GetDirection(Vector3 targetPos, Vector3 objectPosition)
         {
             var heading = targetPos - objectPosition;
             var distance = heading.magnitude;
