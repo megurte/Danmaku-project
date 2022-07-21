@@ -1,6 +1,6 @@
 ﻿namespace Kirin
 {
-    public enum Phases: int
+    public enum Phases: uint
     {
         PhaseOne = 1,
         PhaseTwo = 2,

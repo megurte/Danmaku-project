@@ -44,21 +44,20 @@ namespace Spawner
 
         private void SpawnCycle()
         {
-            if (isAwake)
+            if (!isAwake) return;
+            
+            Debug.Log("Iteration " + _iteration + ". Spawner: " + spawnerIndex);
+            
+            for (var i = 0; i < EnemySpawnPropertiesList[_iteration].enemyNumber; i++)
             {
-                Debug.Log("Iteration " + _iteration + ". Spawner: " + spawnerIndex);
-            
-                for (var i = 0; i < EnemySpawnPropertiesList[_iteration].enemyNumber; i++)
-                {
-                    StartCoroutine(Spawn(_innerTimer));
+                StartCoroutine(Spawn(_innerTimer));
 
-                    if (_innerTimer > 0)
-                        _innerTimer -= _spawnDelta;
-                }
-            
-                _iteration++;
-                isAwake = false;
+                if (_innerTimer > 0)
+                    _innerTimer -= _spawnDelta;
             }
+            
+            _iteration++;
+            isAwake = false;
         }
 
         private float SetSpawnDelta()
