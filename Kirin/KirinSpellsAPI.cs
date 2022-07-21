@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Kirin
 {
+    // TODO: refactor
     public class KirinSpellsAPI : KirinSpells
     {
         /// <summary>

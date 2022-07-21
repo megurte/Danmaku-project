@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Kirin
 {
+    // TODO: refactor
     public abstract class KirinSpells : MonoBehaviour
     {
         //Bullets
