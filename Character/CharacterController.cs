@@ -118,13 +118,15 @@ namespace Character
             var settings = playerSo.specialSettings[0];
                 
             special--;
-            GlobalEventManager.SpecialChanged(special);
             _specialTimer = _specialCooldown;
             _specialTimer -= Time.deltaTime;
             
+            GlobalEventManager.SpecialChanged(special);
+
             Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
         }
 
+        // TODO: parameters refactor
         private void ShootCommon(int characterLevel)
         {
             switch (characterLevel)
