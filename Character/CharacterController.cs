@@ -88,6 +88,7 @@ namespace Character
         private void Moving()
         {
             var moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            
             _moveVector = moveInput.normalized * _playerSpeed;
             _rigidBody.velocity = _moveVector * Time.deltaTime;
         
