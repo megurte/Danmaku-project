@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Character;
 using UnityEngine;
 using UnityEngine.Events;
-using CharacterController = Character.CharacterController;
 using Random = System.Random;
 
 namespace Enemy
@@ -99,7 +99,7 @@ namespace Enemy
         {
             if (other.CompareTag("Player"))
             {
-                CharacterController.TakeDamage(1);
+                PlayerModel.TakeDamage(1);
             }
 
             if (other.CompareTag("Border"))

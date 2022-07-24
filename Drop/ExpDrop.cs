@@ -1,6 +1,6 @@
 ﻿using System;
+using Character;
 using UnityEngine;
-using CharacterController = Character.CharacterController;
 
 namespace Drop
 {
@@ -15,7 +15,7 @@ namespace Drop
         {
             if (other.CompareTag("Player"))
             {
-                CharacterController.GetDrop(DropType, Value);
+                PlayerModel.GetDrop(DropType, Value);
                 Destroy(gameObject);
             }
             

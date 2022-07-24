@@ -1,13 +1,14 @@
+using Character;
 using DefaultNamespace;
 using TMPro;
 using UnityEngine;
-using CharacterController = Character.CharacterController;
+using Zenject;
 
 namespace UI
 {
     public class UIPlayerPanel : MonoBehaviour
     {
-        public CharacterController player;
+        public PlayerModel player;
     
         public GameObject health;
 
@@ -29,10 +30,14 @@ namespace UI
         
         public GameObject iconSpecialEmpty;
 
+        [Inject]
+        public void Construct(PlayerModel settings)
+        {
+            player = settings;
+        }
+        
         private void Start()
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
-            
             UpdateHealthFiller(player.playerSo.health);
             UpdateSpecialFiller(player.playerSo.special);
             

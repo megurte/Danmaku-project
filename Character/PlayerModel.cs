@@ -5,10 +5,11 @@ using Drop;
 using SubEffects;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace Character
 {
-    public class CharacterController : MonoBehaviour
+    public class PlayerModel : MonoBehaviour
     {
         public PlayerSO playerSo;
 
@@ -42,10 +43,15 @@ namespace Character
         private static UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
         private static UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
 
+        [Inject]
+        public void Construct(PlayerSO playerSettings)
+        {
+            playerSo = playerSettings;
+            
+            SetPlayersParametersFromSettings(playerSettings);
+        }
         private void Start()
         {
-            GetPlayersParamsFromSo();
-            
             _innerTimer = _targetBulletFrequency;
             _flashEffect = GetComponent<SimpleFlash>();
             _rigidBody = GetComponent<Rigidbody2D>();
@@ -217,25 +223,6 @@ namespace Character
             }
         }
 
-        private void GetPlayersParamsFromSo()
-        {
-            health = playerSo.health;
-            maxHealth = playerSo.maxHealth;
-            maxSpecials = playerSo.maxValue;
-            _specialTimer = 0;
-            _specialCooldown = playerSo.specialCooldown;
-            maxLevel = playerSo.maxLevel;
-            special = playerSo.special;
-            _playerSpeed = playerSo.speed;
-            level = playerSo.level;
-            exp = playerSo.exp;
-            points = playerSo.points;
-            _playerBullet = playerSo.bullet;
-            _targetBullet = playerSo.targetBullet;
-            _destroyEffect = playerSo.destroyEffect;
-            _targetBulletFrequency = playerSo.targetBulletFrequency;
-        }
-
         private void OnDamage(int damageValue)
         {
             if (health > 0 && !isInvulnerable)
@@ -260,6 +247,24 @@ namespace Character
             isInvulnerable = true;
             yield return new WaitForSeconds(2);
             isInvulnerable = false;
+        }
+        private void SetPlayersParametersFromSettings(PlayerSO settings)
+        {
+            health = settings.health;
+            maxHealth = settings.maxHealth;
+            maxSpecials = settings.maxValue;
+            _specialTimer = 0;
+            _specialCooldown = settings.specialCooldown;
+            maxLevel = settings.maxLevel;
+            special = settings.special;
+            _playerSpeed = settings.speed;
+            level = settings.level;
+            exp = settings.exp;
+            points = settings.points;
+            _playerBullet = settings.bullet;
+            _targetBullet = settings.targetBullet;
+            _destroyEffect = settings.destroyEffect;
+            _targetBulletFrequency = settings.targetBulletFrequency;
         }
     }
 }

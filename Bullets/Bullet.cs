@@ -1,7 +1,7 @@
-﻿using DefaultNamespace;
+﻿using Character;
+using DefaultNamespace;
 using Unity.Mathematics;
 using UnityEngine;
-using CharacterController = Character.CharacterController;
 
 namespace Bullets
 {
@@ -27,8 +27,8 @@ namespace Bullets
         {
             if (collision.CompareTag("Player"))
             {
-                CharacterController.TakeDamage(1);
-                GlobalEventManager.HealthChanged(collision.GetComponent<CharacterController>().health);
+                PlayerModel.TakeDamage(1);
+                GlobalEventManager.HealthChanged(collision.GetComponent<PlayerModel>().health);
                 Destroy(gameObject);
             }
             
