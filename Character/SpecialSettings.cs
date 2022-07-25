@@ -8,5 +8,6 @@ namespace Character
     {
         public GameObject specialGameObject;
         public Vector3 specialPosition;
+        public int damageToBoss;
     }
 }
