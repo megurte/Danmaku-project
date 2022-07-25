@@ -1,11 +1,8 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SocialPlatforms.Impl;
+﻿using UnityEngine.Events;
 
 namespace DefaultNamespace
 {
-    public class GlobalEventManager
+    public class GlobalEvents
     {
         public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
         

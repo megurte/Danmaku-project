@@ -9,7 +9,7 @@ namespace Kirin
     {
         public void InitPhaseOne(KirinSpellsAPI kirinSpells, KirinMove kirinPositions, List<SubListSpell> spells, List<SubListMove> moves)
         {
-            GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
+            GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
             Debug.Log("Init " + Phases.PhaseOne);
             
             // SPELLS
@@ -41,7 +41,7 @@ namespace Kirin
         
         public void InitPhaseTwo(KirinSpellsAPI kirinSpells, KirinMove kirinPositions)
         {
-            GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
+            GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
             Debug.Log("Init " + Phases.PhaseTwo);
             /*kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(2, true, kirinSpells.fireBullet, 70));
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(3, true, kirinSpells.fireBullet, 80));
@@ -69,7 +69,7 @@ namespace Kirin
         
         public void InitPhaseThree(KirinSpellsAPI kirinSpells, KirinMove kirinPositions)
         {
-            GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
+            GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
             Debug.Log("Init " + Phases.PhaseThree);
             /*kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(2, true, kirinSpells.fireBullet, 70));
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(3, true, kirinSpells.fireBullet, 80));
@@ -97,7 +97,7 @@ namespace Kirin
         
         public void InitPhaseFour(KirinSpellsAPI kirinSpells, KirinMove kirinPositions)
         {
-            GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
+            GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
             Debug.Log("Init " + Phases.PhaseFour);
             /*kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(2, true, kirinSpells.fireBullet, 70));
             kirinSpells.StartCoroutine(kirinSpells.CircleSpellCast(3, true, kirinSpells.fireBullet, 80));

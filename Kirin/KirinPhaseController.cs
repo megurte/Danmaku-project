@@ -1,17 +1,23 @@
 ﻿using DefaultNamespace;
 using UnityEngine;
+using Zenject;
 
 namespace Kirin
 {
     public class KirinPhaseController : MonoBehaviour
     {
-        public KirinSO kirinSo;
-        
+        private KirinSO _kirinSo;
         private KirinSpellsAPI _kirinSpells;
         private KirinMove _kirinPositions;
         private KirinPhases _kirinPhases;
         private int _phaseNumber = 1;
         private bool _isPhaseActive = default;
+
+        [Inject]
+        public void Construct(KirinSO settings)
+        {
+            _kirinSo = settings;
+        }
 
         private void Awake()
         {
@@ -19,16 +25,17 @@ namespace Kirin
             _kirinPhases = GetComponent<KirinPhases>();
             _kirinPositions = GetComponent<KirinMove>();
             
-            GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
+            GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
         }
 
         private void Update()
         {
             if (_isPhaseActive) return;
+            
             switch (_phaseNumber)
             {
                 case (int) Phases.PhaseOne:
-                    _kirinPhases.InitPhaseOne(_kirinSpells, _kirinPositions, kirinSo.phaseSpellSettings, kirinSo.phaseMovementPositions);
+                    _kirinPhases.InitPhaseOne(_kirinSpells, _kirinPositions, _kirinSo.phaseSpellSettings, _kirinSo.phaseMovementPositions);
                     _isPhaseActive = true;
                     break;
                 case (int) Phases.PhaseTwo:

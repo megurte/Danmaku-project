@@ -41,8 +41,8 @@ namespace UI
             UpdateHealthFiller(player.playerSo.health);
             UpdateSpecialFiller(player.playerSo.special);
             
-            GlobalEventManager.OnHealthChange.AddListener(UpdateHealthFiller);
-            GlobalEventManager.OnSpecialChange.AddListener(UpdateSpecialFiller);
+            GlobalEvents.OnHealthChange.AddListener(UpdateHealthFiller);
+            GlobalEvents.OnSpecialChange.AddListener(UpdateSpecialFiller);
         }
 
         private void FixedUpdate()

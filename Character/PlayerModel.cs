@@ -128,7 +128,7 @@ namespace Character
             _specialTimer = _specialCooldown;
             _specialTimer -= Time.deltaTime;
             
-            GlobalEventManager.SpecialChanged(special);
+            GlobalEvents.SpecialChanged(special);
 
             Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
         }
@@ -212,11 +212,11 @@ namespace Character
                     break;
                 case DropType.HealthDrop:
                     health += health + value <= maxSpecials ? value : 0;
-                    GlobalEventManager.HealthChanged(health);
+                    GlobalEvents.HealthChanged(health);
                     break;
                 case DropType.SpecialDrop:
                     special += special + value <= maxSpecials ? value : 0;
-                    GlobalEventManager.SpecialChanged(special);
+                    GlobalEvents.SpecialChanged(special);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, $"Drop index out of range: {type}");

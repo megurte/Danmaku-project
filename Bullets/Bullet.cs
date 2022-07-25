@@ -28,7 +28,7 @@ namespace Bullets
             if (collision.CompareTag("Player"))
             {
                 PlayerModel.TakeDamage(1);
-                GlobalEventManager.HealthChanged(collision.GetComponent<PlayerModel>().health);
+                GlobalEvents.HealthChanged(collision.GetComponent<PlayerModel>().health);
                 Destroy(gameObject);
             }
             

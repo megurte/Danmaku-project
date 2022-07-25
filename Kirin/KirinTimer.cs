@@ -31,7 +31,7 @@ namespace Kirin
         {
             _text = textObj.GetComponent<Text>();
             
-            GlobalEventManager.OnPhaseChange.AddListener(OnPhaseChange);
+            GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
         }
         
         private void FixedUpdate()
@@ -67,7 +67,7 @@ namespace Kirin
                 timeRemaining = 0;
                 timerIsRunning = false;
                 
-                GlobalEventManager.ChangePhase();
+                GlobalEvents.ChangePhase();
             }
         }
 

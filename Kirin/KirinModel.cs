@@ -3,30 +3,34 @@ using DefaultNamespace;
 using Enemy;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Kirin
 {
-    public class KirinStats : EnemyFactory
+    public class KirinModel : EnemyFactory
     {
-        public KirinSO kirinSo;
+        private KirinSO _kirinSo;
         
-        public float lerpSpeed;
+        private float _lerpSpeed;
         
         public Image bar;
 
         private float MaxHp { get; set; }
         
-        private bool _ultimatePhase = false;
-
-        private void Awake()
+        [Inject]
+        public void Construct(KirinSO settings)
         {
-            MaxHp = kirinSo.maxHp;
-            lerpSpeed = kirinSo.lerpSpeed;
+            _kirinSo = settings;
+            MaxHp = _kirinSo.maxHp;
+            _lerpSpeed = _kirinSo.lerpSpeed;
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
-            
+        }
+        
+        private void Awake()
+        {
             OnTakingDamageEvent.AddListener(OnTakingDamage);
-            GlobalEventManager.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
+            GlobalEvents.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
         }
 
         private void Update()
@@ -35,22 +39,16 @@ namespace Kirin
             
             if (CurrentHp <= 0)
             {
-                _ultimatePhase = false;
                 CurrentHp = MaxHp;
                 
-                GlobalEventManager.ChangePhase();
-            }
-
-            if (CurrentHp / MaxHp < 0.3f)
-            {
-                _ultimatePhase = true;
+                GlobalEvents.ChangePhase();
             }
         }
 
         private  void HandleBar()
         {
             if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
-                bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * lerpSpeed);
+                bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * _lerpSpeed);
         }
         
         private void OnTakingDamage(float damage, int enemyID)
