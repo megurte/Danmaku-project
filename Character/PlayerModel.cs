@@ -12,20 +12,14 @@ namespace Character
     public class PlayerModel : MonoBehaviour
     {
         public PlayerSO playerSo;
-
-        [Header("Stats")]
         public int health;
         public int maxHealth;
-        [Space(5f)]
         public int level;
         public float maxLevel;
         public int exp;
-        [Space(5f)]
         public int special;
         public float maxSpecials;
-        [Space(5f)]
         public int points;
-        [Space(5f)] 
         public bool isInvulnerable;
 
         private float _playerSpeed;

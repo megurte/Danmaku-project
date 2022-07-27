@@ -6,6 +6,7 @@ namespace Bullets
     public class PlayerBullet : MonoBehaviour
     {
         public float startSpeed;
+        
         public Vector2 direction;
 
         private void FixedUpdate()
