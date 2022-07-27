@@ -37,9 +37,12 @@ namespace Spawner
         {
             var instObject = Instantiate(EnemySpawnPropertiesList[_iteration].enemyPrefab,
                 transform.position, Quaternion.identity);
-        
-            instObject.GetComponent<EnemyFactory>().targetPosition 
-                = EnemySpawnPropertiesList[_iteration].targetPosition;
+
+            if (instObject.GetComponent<CommonEnemy>().enemySo.moveSet != MoveSet.MoveAround)
+            {
+                instObject.GetComponent<EnemyFactory>().targetPosition 
+                    = EnemySpawnPropertiesList[_iteration].targetPosition;
+            }
         }
 
         private void SpawnCycle()

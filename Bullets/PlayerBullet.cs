@@ -1,5 +1,8 @@
 using Enemy;
+using Enviroment;
+using Kirin;
 using UnityEngine;
+using Utils;
 
 namespace Bullets
 {
@@ -21,20 +24,19 @@ namespace Bullets
     
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Enemy"))
+            collision.gameObject.HasComponent<EnemyFactory>(component =>
             {
                 EnemyFactory.TakeDamage(1, collision.gameObject.GetInstanceID());
                 Destroy(gameObject);
-            }
-            
-            if (collision.CompareTag("Boss"))
+            });
+
+            collision.gameObject.HasComponent<KirinModel>(component =>
             {
                 EnemyFactory.TakeDamage(1, collision.gameObject.GetInstanceID());
                 Destroy(gameObject);
-            }
-            
-            if (collision.CompareTag("Border"))
-                Destroy(gameObject);
+            });
+
+            collision.gameObject.HasComponent<Border>(component => Destroy(gameObject));
         }
     }
 }

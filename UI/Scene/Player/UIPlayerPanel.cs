@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 
-namespace UI
+namespace UI.Scene.Player
 {
     public class UIPlayerPanel : MonoBehaviour
     {

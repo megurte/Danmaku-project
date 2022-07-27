@@ -1,10 +1,12 @@
 ﻿using System;
 using Character;
+using Enviroment;
 using UnityEngine;
+using Utils;
 
 namespace Drop
 {
-    public class ExpDrop: MonoBehaviour
+    public class Drop: MonoBehaviour
     {
         public DropSO dropSo;
 
@@ -13,14 +15,13 @@ namespace Drop
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.CompareTag("Player"))
+            other.gameObject.HasComponent<PlayerModel>(component =>
             {
                 PlayerModel.GetDrop(DropType, Value);
                 Destroy(gameObject);
-            }
+            });
             
-            if (other.CompareTag("Border"))
-                Destroy(gameObject);
+            other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
         }
     }
 }

@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Character;
+using Enviroment;
 using UnityEngine;
 using UnityEngine.Events;
+using Utils;
 using Random = System.Random;
 
 namespace Enemy
@@ -97,15 +99,8 @@ namespace Enemy
         
         protected void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.CompareTag("Player"))
-            {
-                PlayerModel.TakeDamage(1);
-            }
-
-            if (other.CompareTag("Border"))
-            {
-                Destroy(gameObject);
-            }
+            other.gameObject.HasComponent<PlayerModel>(component => PlayerModel.TakeDamage(1));
+            other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
         }
 
         private void DropItems(List<LootSettings> lootSettings)
@@ -139,18 +134,5 @@ namespace Enemy
         {
             OnTakingDamageEvent.Invoke(damage, enemyID);
         }
-    }
-}
-
-public static class RandomExtend
-{
-    public static double NextDouble (this Random @this, double min, double max)
-    {
-        return @this.NextDouble() * (max - min) + min;
-    }
-
-    public static float NextFloat (this Random @this, float min, float max)
-    {
-        return (float)@this.NextDouble(min, max);
     }
 }
