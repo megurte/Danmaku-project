@@ -5,7 +5,7 @@ namespace Utils
 {
     public static class GameObjectExtensions
     {
-        public static void HasComponent<T>(this GameObject gameObject, Action<T> callback = null)
+        public static void IfHasComponent<T>(this GameObject gameObject, Action<T> callback = null)
         {
             var component = gameObject.GetComponent<T>();
 

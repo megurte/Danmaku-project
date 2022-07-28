@@ -2,13 +2,13 @@ using Bullets;
 using UnityEngine;
 using Utils;
 
-namespace Enviroment
+namespace Environment
 {
     public class Border : MonoBehaviour
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.HasComponent<Bullet>(component => Destroy(collision.gameObject));
+            collision.gameObject.IfHasComponent<Bullet>(component => Destroy(collision.gameObject));
         }
     }
 }

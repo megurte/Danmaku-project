@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UI.Scene.Special
 {
-    public class ClockSpecialScript : MonoBehaviour
+    public class ClockSpecial : MonoBehaviour
     {
         public GameObject hourArrow;
     

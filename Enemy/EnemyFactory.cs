@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Character;
-using Enviroment;
+using Environment;
 using UnityEngine;
 using UnityEngine.Events;
 using Utils;
@@ -99,8 +99,8 @@ namespace Enemy
         
         protected void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.HasComponent<PlayerModel>(component => PlayerModel.TakeDamage(1));
-            other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
+            other.gameObject.IfHasComponent<PlayerModel>(component => PlayerModel.TakeDamage(1));
+            other.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
         }
 
         private void DropItems(List<LootSettings> lootSettings)

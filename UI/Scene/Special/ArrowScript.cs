@@ -1,7 +1,7 @@
 ﻿using Bullets;
 using Character;
 using Enemy;
-using Enviroment;
+using Environment;
 using Kirin;
 using UnityEngine;
 using Utils;
@@ -21,11 +21,10 @@ namespace UI.Scene.Special
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.HasComponent<KirinModel>(component => 
+            other.gameObject.IfHasComponent<KirinModel>(component => 
                 EnemyFactory.TakeDamage(40, other.gameObject.GetInstanceID())); // TODO: fix dependency
-
-            other.gameObject.HasComponent<Bullet>(component => Destroy(other.gameObject));
-            other.gameObject.HasComponent<EnemyFactory>(component => Destroy(other.gameObject));
+            other.gameObject.IfHasComponent<Bullet>(component => Destroy(other.gameObject));
+            other.gameObject.IfHasComponent<CommonEnemy>(component => Destroy(other.gameObject));
         }
     }
 }

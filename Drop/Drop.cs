@@ -1,6 +1,6 @@
 ﻿using System;
 using Character;
-using Enviroment;
+using Environment;
 using UnityEngine;
 using Utils;
 
@@ -15,13 +15,13 @@ namespace Drop
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.HasComponent<PlayerModel>(component =>
+            other.gameObject.IfHasComponent<PlayerModel>(component =>
             {
                 PlayerModel.GetDrop(DropType, Value);
                 Destroy(gameObject);
             });
             
-            other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
+            other.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
         }
     }
 }

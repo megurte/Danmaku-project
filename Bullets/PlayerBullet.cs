@@ -1,5 +1,5 @@
 using Enemy;
-using Enviroment;
+using Environment;
 using Kirin;
 using UnityEngine;
 using Utils;
@@ -9,8 +9,12 @@ namespace Bullets
     public class PlayerBullet : MonoBehaviour
     {
         public float startSpeed;
+
+        public GameObject destroyEffect;
         
         public Vector2 direction;
+
+        private const int DamageToEnemy = 1;
 
         private void FixedUpdate()
         {
@@ -24,19 +28,20 @@ namespace Bullets
     
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.HasComponent<EnemyFactory>(component =>
+            collision.gameObject.IfHasComponent<EnemyFactory>(component =>
             {
-                EnemyFactory.TakeDamage(1, collision.gameObject.GetInstanceID());
+                EnemyFactory.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
+                Instantiate(destroyEffect, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             });
 
-            collision.gameObject.HasComponent<KirinModel>(component =>
+            collision.gameObject.IfHasComponent<KirinModel>(component =>
             {
-                EnemyFactory.TakeDamage(1, collision.gameObject.GetInstanceID());
+                EnemyFactory.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
                 Destroy(gameObject);
             });
 
-            collision.gameObject.HasComponent<Border>(component => Destroy(gameObject));
+            collision.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
         }
     }
 }

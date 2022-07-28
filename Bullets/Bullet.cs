@@ -1,6 +1,6 @@
 ﻿using Character;
 using DefaultNamespace;
-using Enviroment;
+using Environment;
 using Unity.Mathematics;
 using UnityEngine;
 using Utils;
@@ -27,14 +27,14 @@ namespace Bullets
         
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.HasComponent<PlayerModel>(component =>
+            collision.gameObject.IfHasComponent<PlayerModel>(component =>
             {
                 PlayerModel.TakeDamage(1);
                 GlobalEvents.HealthChanged(collision.GetComponent<PlayerModel>().health);
                 Destroy(gameObject);
             });
 
-            collision.gameObject.HasComponent<Border>(component => Destroy(gameObject));
+            collision.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
         }
 
         public void OnDestroy()
