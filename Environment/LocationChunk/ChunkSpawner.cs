@@ -9,10 +9,7 @@ namespace Environment.LocationChunk
         [SerializeField] private GameObject chunkPool;
         [SerializeField] private float spawnDelay;
         [SerializeField] private bool isAlive;
-        
-        private CustomSnapPoint[] _allPoints;
-        private CustomSnapPoint[] _targetPoints;
-        
+
         private void Start()
         {
             StartCoroutine(SpawnRoutine());
@@ -26,7 +23,7 @@ namespace Environment.LocationChunk
 
                 var newChunk = Instantiate(chunkPrefab, transform.position, Quaternion.identity);
 
-                MoveToSnap(newChunk.transform, transform.position);
+                SnapToOtherChunkPoint(newChunk.transform, transform.position);
                 newChunk.transform.parent = chunkPool.transform;
                 
                 yield return StartCoroutine(SpawnRoutine());
@@ -37,19 +34,18 @@ namespace Environment.LocationChunk
             }
         }
         
-        private void MoveToSnap(Transform targetTransform, Vector3 newPosition)
+        private void SnapToOtherChunkPoint(Transform targetTransform, Vector3 newPosition)
         {
             var bestPosition = newPosition;
             var closestDistance = float.PositiveInfinity;
-            
-            _allPoints = FindObjectsOfType<CustomSnapPoint>();
-            _targetPoints = targetTransform.GetComponentsInChildren<CustomSnapPoint>();
+            var allPoints = FindObjectsOfType<CustomSnapPoint>();
+            var targetPoints = targetTransform.GetComponentsInChildren<CustomSnapPoint>();
 
-            foreach (var point in _allPoints)
+            foreach (var point in allPoints)
             {
                 if (point.transform.parent == targetTransform) continue;
 
-                foreach (var ownPoint in _targetPoints)
+                foreach (var ownPoint in targetPoints)
                 {
                     var targetPos = point.transform.position - (ownPoint.transform.position - targetTransform.position);
                     var distance = Vector3.Distance(targetPos, newPosition);
