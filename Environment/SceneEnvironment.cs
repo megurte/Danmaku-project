@@ -15,7 +15,7 @@ namespace Environment
         
         private void Move()
         {
-            transform.Translate(direction.normalized * speed, Space.World);
+            environmentPrefab.transform.Translate(direction.normalized * speed, Space.World);
         }
     }
 }
