@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Spells;
@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class CommonEnemy : EnemyFactory, IShootable
+    public class BookEnemy : EnemyFactory, IShootable
     {
         public EnemySO enemySo;
         private float Cooldown => enemySo.cooldown;
@@ -18,11 +18,18 @@ namespace Enemy
         
         private float _innerTimer;
         
+        [SerializeField] private bool shootingIsAvailable;
+        
+        private Animator _animator;
+
+        private static readonly int IsCasting = Animator.StringToHash("isCasting");
+
         private void Awake()
         {
             CurrentHp = enemySo.maxHp;
             _innerTimer = Cooldown;
-            
+
+            _animator = GetComponent<Animator>();
             OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
@@ -41,6 +48,11 @@ namespace Enemy
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+
+            if (Spell == Spells.DirectTarget)
+            {
+                StartCoroutine(Shoot());
             }
         }
 
@@ -63,8 +75,8 @@ namespace Enemy
                         CommonSpells.RandomShooting(new CommonSpellSettings(Bullet, transform.position, 1));
                         break;
                     case Spells.DirectTarget:
-                        CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
-                            1,GetDirection(GetNewTargetPosition(), transform.position)));
+                        /*CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
+                            1,GetDirection(GetNewTargetPosition(), transform.position)));*/
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -73,10 +85,10 @@ namespace Enemy
                 _innerTimer = Cooldown;
             }
         }
-        
+
         public IEnumerator Shoot()
         {
-            /*if (shootingIsAvailable)
+            if (shootingIsAvailable)
             {
                 _animator.SetBool(IsCasting, false);
 
@@ -93,9 +105,7 @@ namespace Enemy
                 }
 
                 yield return Shoot();
-            }*/
-            
-            yield return new WaitForSeconds(Cooldown);
+            }
         }
 
         private void OnTakingDamage(float damage, int enemyID)

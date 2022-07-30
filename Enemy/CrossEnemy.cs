@@ -31,7 +31,7 @@ namespace Enemy
         {
 
             CheckHealth(enemySo.lootSettings, enemySo.destroyEffect);
-            CommonSpells.RandomShooting(_bulletPrefab, transform.position, 1);
+            //CommonSpells.RandomShooting(_bulletPrefab, transform.position, 1);
         
             if (!_isCharging)
                 MovementToPosition(targetPosition, _speed);

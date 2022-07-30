@@ -8,7 +8,7 @@ namespace Environment.LocationChunk
         [SerializeField] private GameObject chunkPrefab;
         [SerializeField] private GameObject chunkPool;
         [SerializeField] private float spawnDelay;
-        [SerializeField] private bool isAlive;
+        [SerializeField] private bool spawnAvailable;
 
         private void Start()
         {
@@ -17,7 +17,7 @@ namespace Environment.LocationChunk
 
         private IEnumerator SpawnRoutine()
         {
-            if (isAlive)
+            if (spawnAvailable)
             {
                 yield return new WaitForSeconds(spawnDelay);
 
