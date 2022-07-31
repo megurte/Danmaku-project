@@ -53,7 +53,7 @@ namespace Enemy
 
             for (var i = 0; i < 12; i++)
             {
-                _playersPosition = GetNewTargetPosition();
+                _playersPosition = GetNewPlayerPosition();
             
                 var position = transform.position;
                 var newBullet = Instantiate(_bulletPrefab, new Vector3(
@@ -71,7 +71,7 @@ namespace Enemy
             yield return new WaitForSeconds(3);
             _speed = 0.5f;
             _isCharged = true;
-            targetPosition = GetNewTargetPosition();
+            targetPosition = GetNewPlayerPosition();
             _direction = GetDirection(targetPosition, transform.position);
         }
         

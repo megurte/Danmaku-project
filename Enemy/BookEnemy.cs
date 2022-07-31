@@ -101,7 +101,7 @@ namespace Enemy
                     yield return new WaitForSeconds(0.1f);
                     
                     CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
-                        1,GetDirection(GetNewTargetPosition(), transform.position)));
+                        1,GetDirection(GetNewPlayerPosition(), transform.position)));
                 }
 
                 yield return Shoot();

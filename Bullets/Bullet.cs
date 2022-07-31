@@ -34,7 +34,7 @@ namespace Bullets
                 Destroy(gameObject);
             });
 
-            collision.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
+            // collision.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
         }
 
         public void OnDestroy()

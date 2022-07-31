@@ -56,7 +56,9 @@ namespace Character
 
         private void FixedUpdate()
         {
-            Moving();
+            if (Input.anyKey)
+                Moving();
+            
             CheckLevelUp();
 
             if (Input.GetKey(KeyCode.Space))
@@ -90,10 +92,8 @@ namespace Character
             var moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             
             _moveVector = moveInput.normalized * _playerSpeed;
-            _rigidBody.velocity = _moveVector * Time.deltaTime;
-        
-            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W))
-                _rigidBody.velocity = new Vector2(0, 0);
+            transform.Translate(_moveVector);
+            //_rigidBody.velocity = _moveVector * Time.deltaTime;
         }
 
         private void CheckLevelUp()

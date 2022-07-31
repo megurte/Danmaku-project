@@ -64,7 +64,7 @@ namespace Enemy
                         break;
                     case Spells.DirectTarget:
                         CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
-                            1,GetDirection(GetNewTargetPosition(), transform.position)));
+                            1,GetDirection(GetNewPlayerPosition(), transform.position)));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

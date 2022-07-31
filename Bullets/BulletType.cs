@@ -5,5 +5,6 @@
         Other,
         Fireball,
         Fire,
+        Chain,
     }
 }

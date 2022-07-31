@@ -8,7 +8,12 @@ namespace Environment
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.IfHasComponent<Bullet>(component => Destroy(collision.gameObject));
+            collision.gameObject.IfHasComponent<Bullet>(component =>
+            {
+                if (gameObject.GetComponent<Chain>()) return;
+                
+                // Destroy(collision.gameObject);
+            });
         }
     }
 }

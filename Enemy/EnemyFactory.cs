@@ -74,12 +74,12 @@ namespace Enemy
             return new Vector3(position.x - radius , position.y, position.z);
         }
 
-        protected static Vector3 GetNewTargetPosition()
+        public static Vector3 GetNewPlayerPosition()
         {
             return GameObject.FindGameObjectWithTag("Player").transform.position;
         }
         
-        protected static Vector3 GetDirection(Vector3 targetPos, Vector3 objectPosition)
+        public static Vector3 GetDirection(Vector3 targetPos, Vector3 objectPosition)
         {
             var heading = targetPos - objectPosition;
             var distance = heading.magnitude;
