@@ -1,10 +1,11 @@
-﻿using DefaultNamespace;
+﻿using Boss;
+using DefaultNamespace;
 using UnityEngine;
 using Zenject;
 
 namespace Kirin
 {
-    public class KirinPhaseController : MonoBehaviour
+    public class KirinPhaseChanger : MonoBehaviour
     {
         private KirinSO _kirinSo;
         private KirinSpellsAPI _kirinSpells;

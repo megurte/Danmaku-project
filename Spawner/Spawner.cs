@@ -40,7 +40,7 @@ namespace Spawner
 
             if (instObject.GetComponent<CommonEnemy>().enemySo.moveSet != MoveSet.MoveAround)
             {
-                instObject.GetComponent<EnemyFactory>().targetPosition 
+                instObject.GetComponent<EnemyBase>().targetPosition 
                     = EnemySpawnPropertiesList[_iteration].targetPosition;
             }
         }

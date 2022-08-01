@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Bullets;
-using Enemy;
 using UnityEngine;
 using Random = System.Random;
 
@@ -10,6 +8,7 @@ namespace Boss.Camilla
 {
     public class ChainSpawner: MonoBehaviour
     {
+        public int index;
         public GameObject chainPrefab;
         
         private void Start()
@@ -36,8 +35,8 @@ namespace Boss.Camilla
             
             SpawnChain();
         }
-        
-        public IEnumerator ClearChains()
+
+        private static IEnumerator ClearChains()
         {
             yield return new WaitForSeconds(16);
 

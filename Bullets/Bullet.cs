@@ -27,10 +27,10 @@ namespace Bullets
         
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.IfHasComponent<PlayerModel>(component =>
+            collision.gameObject.IfHasComponent<PlayerBase>(component =>
             {
-                PlayerModel.TakeDamage(1);
-                GlobalEvents.HealthChanged(collision.GetComponent<PlayerModel>().health);
+                PlayerBase.TakeDamage(1);
+                GlobalEvents.HealthChanged(collision.GetComponent<PlayerBase>().health);
                 Destroy(gameObject);
             });
 

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using DefaultNamespace;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Kirin
+namespace Boss
 {
-    public class KirinTimer : MonoBehaviour
+    public class BossTimer : MonoBehaviour
     {
-        public GameObject textObj;
-        
-        private Text _text;
+        public TextMeshProUGUI textUI;
         
         public float timeRemaining = default;
         
@@ -29,8 +27,6 @@ namespace Kirin
         
         private void Start()
         {
-            _text = textObj.GetComponent<Text>();
-            
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
         }
         
@@ -38,9 +34,9 @@ namespace Kirin
         {
             var timer = timers[0];
             
-            if (_text.text == "00:00")
+            if (textUI.text == "00:00")
             {
-                _text.text = $"{timer.seconds}:{timer.milSec}0";
+                textUI.text = $"{timer.seconds}:{timer.milSec}0";
                 TimerInit(timer);
             }
                 
@@ -75,12 +71,12 @@ namespace Kirin
         {
             if (seconds < 0 || milliseconds < 0)
             {
-                throw new Exception("KirinTimer.UpdateTimerText(): seconds or milliseconds lower then 0");
+                throw new Exception("BossTimer.UpdateTimerText(): seconds or milliseconds lower then 0");
             }
             
             seconds = Mathf.FloorToInt(timeRemaining % 100);  
-            milliseconds = (timeRemaining % 1) * 1000;
-            _text.text = $"{seconds:00}:{milliseconds:00}";
+            milliseconds = (timeRemaining % 1) * 100;
+            textUI.text = $"{seconds:00}:{milliseconds:00}";
         }
 
         private void OnPhaseChange(int phase)

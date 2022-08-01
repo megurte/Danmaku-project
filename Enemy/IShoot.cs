@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Enemy
 {
-    public interface IShootable
+    public interface IShoot
     {
         public IEnumerator Shoot();
     }

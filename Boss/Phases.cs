@@ -1,4 +1,4 @@
-﻿namespace Kirin
+﻿namespace Boss
 {
     public enum Phases: uint
     {

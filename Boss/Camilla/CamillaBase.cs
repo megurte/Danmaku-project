@@ -5,11 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Kirin
+namespace Boss.Camilla
 {
-    public class KirinModel : EnemyFactory
+    public class CamillaBase: EnemyBase
     {
-        private KirinSO _kirinSo;
+        private CamillaSO _camillaSo;
         
         private float _lerpSpeed;
         
@@ -18,11 +18,11 @@ namespace Kirin
         private float MaxHp { get; set; }
         
         [Inject]
-        public void Construct(KirinSO settings)
+        public void Construct(CamillaSO settings)
         {
-            _kirinSo = settings;
-            MaxHp = _kirinSo.maxHp;
-            _lerpSpeed = _kirinSo.lerpSpeed;
+            _camillaSo = settings;
+            MaxHp = _camillaSo.maxHp;
+            _lerpSpeed = _camillaSo.lerpSpeed;
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
         }

@@ -28,16 +28,16 @@ namespace Bullets
     
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.IfHasComponent<EnemyFactory>(component =>
+            collision.gameObject.IfHasComponent<EnemyBase>(component =>
             {
-                EnemyFactory.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
+                EnemyBase.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
                 Instantiate(destroyEffect, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             });
 
-            collision.gameObject.IfHasComponent<KirinModel>(component =>
+            collision.gameObject.IfHasComponent<KirinBase>(component =>
             {
-                EnemyFactory.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
+                EnemyBase.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
                 Destroy(gameObject);
             });
 

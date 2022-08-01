@@ -8,7 +8,7 @@ namespace UI.Scene.Player
 {
     public class UIPlayerPanel : MonoBehaviour
     {
-        public PlayerModel player;
+        public PlayerBase player;
     
         public GameObject health;
 
@@ -31,7 +31,7 @@ namespace UI.Scene.Player
         public GameObject iconSpecialEmpty;
 
         [Inject]
-        public void Construct(PlayerModel settings)
+        public void Construct(PlayerBase settings)
         {
             player = settings;
         }

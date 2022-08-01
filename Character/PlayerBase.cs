@@ -9,7 +9,7 @@ using Zenject;
 
 namespace Character
 {
-    public class PlayerModel : MonoBehaviour
+    public class PlayerBase : MonoBehaviour
     {
         public PlayerSO playerSo;
         public int health;
@@ -93,7 +93,6 @@ namespace Character
             
             _moveVector = moveInput.normalized * _playerSpeed;
             transform.Translate(_moveVector);
-            //_rigidBody.velocity = _moveVector * Time.deltaTime;
         }
 
         private void CheckLevelUp()
@@ -106,9 +105,13 @@ namespace Character
             for (var index = 0; index < keyMap.keys.Count; index++)
             {
                 if (keyMap.keys[index] == level)
+                {
                     if (index + 1 < keyMap.values.Count)
+                    {
                         if (exp >= keyMap.values[index + 1])
-                            level++;
+                            level++;  
+                    }
+                }
             }
         }
 
@@ -228,12 +231,10 @@ namespace Character
             }
 
             if (!isInvulnerable && health <= 0)
+            {
+                Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity);
                 Destroy(gameObject);
-        }
-        
-        public void OnDestroy()
-        {
-            Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity);
+            }
         }
 
         private IEnumerator Invulnerable()
@@ -242,6 +243,7 @@ namespace Character
             yield return new WaitForSeconds(2);
             isInvulnerable = false;
         }
+        
         private void SetPlayersParametersFromSettings(PlayerSO settings)
         {
             health = settings.health;

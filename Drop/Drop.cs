@@ -15,9 +15,9 @@ namespace Drop
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<PlayerModel>(component =>
+            other.gameObject.IfHasComponent<PlayerBase>(component =>
             {
-                PlayerModel.GetDrop(DropType, Value);
+                PlayerBase.GetDrop(DropType, Value);
                 Destroy(gameObject);
             });
             

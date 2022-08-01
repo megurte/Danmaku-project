@@ -21,8 +21,8 @@ namespace UI.Scene.Special
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<KirinModel>(component => 
-                EnemyFactory.TakeDamage(40, other.gameObject.GetInstanceID())); // TODO: fix dependency
+            other.gameObject.IfHasComponent<KirinBase>(component => 
+                EnemyBase.TakeDamage(40, other.gameObject.GetInstanceID())); // TODO: fix dependency
             other.gameObject.IfHasComponent<Bullet>(component => Destroy(other.gameObject));
             other.gameObject.IfHasComponent<CommonEnemy>(component => Destroy(other.gameObject));
         }

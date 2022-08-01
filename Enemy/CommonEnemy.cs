@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Spells;
 using UnityEngine;
+using Utils;
 
 namespace Enemy
 {
-    public class CommonEnemy : EnemyFactory, IShootable
+    public class CommonEnemy : EnemyBase, IShoot
     {
         public EnemySO enemySo;
         private float Cooldown => enemySo.cooldown;
@@ -64,7 +65,7 @@ namespace Enemy
                         break;
                     case Spells.DirectTarget:
                         CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
-                            1,GetDirection(GetNewPlayerPosition(), transform.position)));
+                            1, UtilsBase.GetDirection(UtilsBase.GetNewPlayerPosition(), transform.position)));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

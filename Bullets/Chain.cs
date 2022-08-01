@@ -19,9 +19,7 @@ namespace Bullets
         private void FixedUpdate()
         {
             if (_isMoving)
-            {
                 Moving();
-            }
         }
 
         private IEnumerator ChainMove()
@@ -29,9 +27,9 @@ namespace Bullets
             yield return StartCoroutine(ChargeAnimation());
             yield return new WaitForSeconds(1.5f);
             
-            var targetPosition = EnemyFactory.GetNewPlayerPosition();
+            var targetPosition = UtilsBase.GetNewPlayerPosition();
             
-            direction = EnemyFactory.GetDirection(targetPosition, transform.position);
+            direction = UtilsBase.GetDirection(targetPosition, transform.position);
 
             var degree = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                 

@@ -14,12 +14,12 @@ namespace Character
             Container.Bind<PlayerSO>().FromInstance(playerSettings).AsSingle().NonLazy();
 
             var playerInstance =
-                Container.InstantiatePrefabForComponent<PlayerModel>(characterPrefab, 
+                Container.InstantiatePrefabForComponent<PlayerBase>(characterPrefab, 
                     spawnPoint.position, 
                     Quaternion.identity, 
                     null);
             
-            Container.Bind<PlayerModel>().FromInstance(playerInstance).AsSingle().NonLazy();
+            Container.Bind<PlayerBase>().FromInstance(playerInstance).AsSingle().NonLazy();
         }
     }
 }

@@ -2,11 +2,12 @@ using System.Collections;
 using Bullets;
 using Spells;
 using UnityEngine;
+using Utils;
 using Random = System.Random;
 
 namespace Enemy
 {
-    public class CrossEnemy : EnemyFactory
+    public class CrossEnemy : EnemyBase
     {
         public EnemySO enemySo;
 
@@ -53,7 +54,7 @@ namespace Enemy
 
             for (var i = 0; i < 12; i++)
             {
-                _playersPosition = GetNewPlayerPosition();
+                _playersPosition = UtilsBase.GetNewPlayerPosition();
             
                 var position = transform.position;
                 var newBullet = Instantiate(_bulletPrefab, new Vector3(
@@ -61,7 +62,7 @@ namespace Enemy
                         position.y + rnd.Next(0, 3), position.z), 
                     Quaternion.Euler(_playersPosition));
 
-                newBullet.GetComponent<Bullet>().direction = GetDirection(_playersPosition, 
+                newBullet.GetComponent<Bullet>().direction = UtilsBase.GetDirection(_playersPosition, 
                     newBullet.transform.position);
             }
         }
@@ -71,8 +72,8 @@ namespace Enemy
             yield return new WaitForSeconds(3);
             _speed = 0.5f;
             _isCharged = true;
-            targetPosition = GetNewPlayerPosition();
-            _direction = GetDirection(targetPosition, transform.position);
+            targetPosition = UtilsBase.GetNewPlayerPosition();
+            _direction = UtilsBase.GetDirection(targetPosition, transform.position);
         }
         
         private void OnTakingDamage(float damage, int enemyID)

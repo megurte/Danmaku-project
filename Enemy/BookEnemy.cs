@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Spells;
 using UnityEngine;
+using Utils;
 
 namespace Enemy
 {
-    public class BookEnemy : EnemyFactory, IShootable
+    public class BookEnemy : EnemyBase, IShoot
     {
         public EnemySO enemySo;
         private float Cooldown => enemySo.cooldown;
@@ -101,7 +102,7 @@ namespace Enemy
                     yield return new WaitForSeconds(0.1f);
                     
                     CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
-                        1,GetDirection(GetNewPlayerPosition(), transform.position)));
+                        1, UtilsBase.GetDirection(UtilsBase.GetNewPlayerPosition(), transform.position)));
                 }
 
                 yield return Shoot();
@@ -112,12 +113,6 @@ namespace Enemy
         {
             if (enemyID == gameObject.GetInstanceID())
                 CurrentHp -= damage;
-        }
-        
-                
-        public void OnDestroy()
-        {
-            Instantiate(enemySo.destroyEffect, transform.position, Quaternion.identity);
         }
     }
 }

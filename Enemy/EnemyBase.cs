@@ -10,7 +10,7 @@ using Random = System.Random;
 
 namespace Enemy
 {
-    public abstract class EnemyFactory: MonoBehaviour
+    public abstract class EnemyBase: MonoBehaviour
     {
         protected float CurrentHp { get; set; }
 
@@ -48,7 +48,7 @@ namespace Enemy
             {
                 _circleCenterPoint = transform.position;
                 
-                _circleCenterPoint = GetCircleCenter(_circleCenterPoint, radius);
+                _circleCenterPoint = UtilsBase.GetCircleCenter(_circleCenterPoint, radius);
                 yield return StartCoroutine(MoveAround(_circleCenterPoint, radius, angularSpeed));
             }
         }
@@ -69,24 +69,6 @@ namespace Enemy
             }
         }
 
-        private static Vector3 GetCircleCenter(Vector3 position, float radius)
-        {
-            return new Vector3(position.x - radius , position.y, position.z);
-        }
-
-        public static Vector3 GetNewPlayerPosition()
-        {
-            return GameObject.FindGameObjectWithTag("Player").transform.position;
-        }
-        
-        public static Vector3 GetDirection(Vector3 targetPos, Vector3 objectPosition)
-        {
-            var heading = targetPos - objectPosition;
-            var distance = heading.magnitude;
-
-            return heading / distance;
-        }
-
         protected void CheckHealth(List<LootSettings> lootSettings, GameObject deathEffect)
         {
             if (CurrentHp <= 0)
@@ -99,7 +81,7 @@ namespace Enemy
         
         protected void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<PlayerModel>(component => PlayerModel.TakeDamage(1));
+            other.gameObject.IfHasComponent<PlayerBase>(component => PlayerBase.TakeDamage(1));
             other.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
         }
 
