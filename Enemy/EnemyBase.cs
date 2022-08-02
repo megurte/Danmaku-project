@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Character;
+using DefaultNamespace;
 using Environment;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,7 +11,7 @@ using Random = System.Random;
 
 namespace Enemy
 {
-    public abstract class EnemyBase: MonoBehaviour
+    public abstract class EnemyBase: MonoBehaviour, IDamageable
     {
         protected float CurrentHp { get; set; }
 
@@ -81,7 +82,11 @@ namespace Enemy
         
         protected void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<PlayerBase>(component => PlayerBase.TakeDamage(1));
+            other.gameObject.IfHasComponent<PlayerBase>(component =>
+            {
+                PlayerBase.TakeDamage(1);
+                GlobalEvents.HealthChanged(component.health);
+            });
             other.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
         }
 
@@ -115,6 +120,12 @@ namespace Enemy
         public static void TakeDamage(float damage, int enemyID)
         {
             OnTakingDamageEvent.Invoke(damage, enemyID);
+        }
+        
+        public void OnTakingDamage(float damage, int enemyID)
+        {
+            if (enemyID == gameObject.GetInstanceID())
+                CurrentHp -= damage;
         }
     }
 }

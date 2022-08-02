@@ -1,13 +1,14 @@
 ﻿using Character;
 using DefaultNamespace;
 using Environment;
+using UI.Scene.Special;
 using Unity.Mathematics;
 using UnityEngine;
 using Utils;
 
 namespace Bullets
 {
-    public class Bullet : MonoBehaviour
+    public class Bullet : MonoBehaviour, IDestroyable
     {
         public float startSpeed = 0.1f;
         public BulletType bulletType;
@@ -30,16 +31,21 @@ namespace Bullets
             collision.gameObject.IfHasComponent<PlayerBase>(component =>
             {
                 PlayerBase.TakeDamage(1);
-                GlobalEvents.HealthChanged(collision.GetComponent<PlayerBase>().health);
-                Destroy(gameObject);
+                GlobalEvents.HealthChanged(component.health);
+                DestroySelf();
             });
 
-            // collision.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
+            collision.gameObject.IfHasComponent<Border>(component =>
+            {
+                if (bulletType != BulletType.Chain)
+                    Destroy(gameObject);
+            });
         }
 
-        public void OnDestroy()
+        public void DestroySelf()
         {
             Instantiate(destroyEffect, transform.position, quaternion.identity);
+            Destroy(gameObject);
         }
     }
 }

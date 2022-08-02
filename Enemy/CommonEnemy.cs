@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Bullets;
 using Spells;
+using Unity.Mathematics;
 using UnityEngine;
 using Utils;
 
 namespace Enemy
 {
-    public class CommonEnemy : EnemyBase, IShoot
+    public class CommonEnemy : EnemyBase, IShoot, IDestroyable
     {
         public EnemySO enemySo;
         private float Cooldown => enemySo.cooldown;
@@ -99,16 +101,10 @@ namespace Enemy
             yield return new WaitForSeconds(Cooldown);
         }
 
-        private void OnTakingDamage(float damage, int enemyID)
+        public void DestroySelf()
         {
-            if (enemyID == gameObject.GetInstanceID())
-                CurrentHp -= damage;
-        }
-        
-                
-        public void OnDestroy()
-        {
-            Instantiate(enemySo.destroyEffect, transform.position, Quaternion.identity);
+            Instantiate(enemySo.destroyEffect, transform.position, quaternion.identity);
+            Destroy(gameObject);
         }
     }
 }

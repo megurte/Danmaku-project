@@ -1,11 +1,12 @@
 ﻿using System;
 using DefaultNamespace;
 using Enemy;
+using Kirin;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Kirin
+namespace Boss.Kirin
 {
     public class KirinBase : EnemyBase
     {
@@ -49,12 +50,6 @@ namespace Kirin
         {
             if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
                 bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * _lerpSpeed);
-        }
-        
-        private void OnTakingDamage(float damage, int enemyID)
-        {
-            if (enemyID == gameObject.GetInstanceID())
-                CurrentHp -= damage;
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using Bullets;
+﻿using Boss.Camilla;
+using Bullets;
 using Character;
 using Enemy;
-using Environment;
-using Kirin;
 using UnityEngine;
 using Utils;
 using Zenject;
@@ -21,10 +20,9 @@ namespace UI.Scene.Special
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<KirinBase>(component => 
-                EnemyBase.TakeDamage(40, other.gameObject.GetInstanceID())); // TODO: fix dependency
-            other.gameObject.IfHasComponent<Bullet>(component => Destroy(other.gameObject));
-            other.gameObject.IfHasComponent<CommonEnemy>(component => Destroy(other.gameObject));
+            other.gameObject.IfHasComponent<IDestroyable>(component => component.DestroySelf());
+            other.gameObject.IfHasComponent<IDamageable>(component => 
+                EnemyBase.TakeDamage(damageToBoss, other.gameObject.GetInstanceID()));
         }
     }
 }

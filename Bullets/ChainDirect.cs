@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections;
-using Enemy;
+﻿using System.Collections;
+using Boss.Camilla;
 using Environment;
 using UnityEngine;
 using Utils;
 
 namespace Bullets
 {
-    public class Chain: Bullet
+    public class ChainDirect : Bullet
     {
         private bool _isMoving;
+        public SpawnerType spawnerType;
 
         private void Start()
         {
@@ -40,7 +40,9 @@ namespace Bullets
         private IEnumerator ChargeAnimation()
         {
             var position = transform.position;
-            var targetPos = new Vector3(position.x, position.y - 4, position.z);
+            var targetPos = spawnerType == SpawnerType.Down 
+                ? new Vector3(position.x, position.y + 2, position.z) 
+                : new Vector3(position.x, position.y - 2, position.z);
             
             while (transform.position != targetPos) 
             {

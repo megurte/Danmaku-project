@@ -10,7 +10,7 @@ namespace Environment
         {
             collision.gameObject.IfHasComponent<Bullet>(component =>
             {
-                if (gameObject.GetComponent<Chain>()) return;
+                if (gameObject.GetComponent<ChainTarget>()) return;
                 
                 // Destroy(collision.gameObject);
             });

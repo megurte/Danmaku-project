@@ -36,7 +36,7 @@ namespace Boss.Camilla
         private void Update()
         {
             HandleBar();
-            
+
             if (CurrentHp <= 0)
             {
                 CurrentHp = MaxHp;
@@ -49,12 +49,6 @@ namespace Boss.Camilla
         {
             if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
                 bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * _lerpSpeed);
-        }
-        
-        private void OnTakingDamage(float damage, int enemyID)
-        {
-            if (enemyID == gameObject.GetInstanceID())
-                CurrentHp -= damage;
         }
     }
 }

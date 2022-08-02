@@ -9,6 +9,8 @@ namespace DefaultNamespace
         public static UnityEvent<int> OnSpecialChange = new UnityEvent<int>();
         
         public static UnityEvent<int> OnHealthChange = new UnityEvent<int>();
+        
+
 
         public static int phaseNumber = 1;
 

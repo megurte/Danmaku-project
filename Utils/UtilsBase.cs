@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Bullets;
+using Enemy;
+using UnityEngine;
 
 namespace Utils
 {
@@ -20,6 +24,26 @@ namespace Utils
             var distance = heading.magnitude;
 
             return heading / distance;
+        }
+        
+        public static void ClearBullets<T>() where T : Bullet
+        {
+            var bullets = Object.FindObjectsOfType<T>();
+
+            foreach (var type in bullets)
+            {
+                type.gameObject.GetComponent<T>().DestroySelf();
+            }
+        }
+        
+        public static void ClearEnemies<T>() where T : EnemyBase
+        {
+            var enemies = Object.FindObjectsOfType<T>();
+
+            foreach (var type in enemies)
+            {
+                Object.Destroy(type.gameObject);
+            }
         }
     }
 }

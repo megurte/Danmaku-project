@@ -75,13 +75,7 @@ namespace Enemy
             targetPosition = UtilsBase.GetNewPlayerPosition();
             _direction = UtilsBase.GetDirection(targetPosition, transform.position);
         }
-        
-        private void OnTakingDamage(float damage, int enemyID)
-        {
-            if (enemyID == gameObject.GetInstanceID())
-                CurrentHp -= damage;
-        }
-        
+
         public void OnDestroy()
         {
             Instantiate(enemySo.destroyEffect, transform.position, Quaternion.identity);

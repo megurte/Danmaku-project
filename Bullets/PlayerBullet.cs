@@ -1,3 +1,4 @@
+using Boss.Kirin;
 using Enemy;
 using Environment;
 using Kirin;
@@ -28,16 +29,10 @@ namespace Bullets
     
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.IfHasComponent<EnemyBase>(component =>
+            collision.gameObject.IfHasComponent<IDamageable>(component =>
             {
                 EnemyBase.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
                 Instantiate(destroyEffect, transform.position, Quaternion.identity);
-                Destroy(gameObject);
-            });
-
-            collision.gameObject.IfHasComponent<KirinBase>(component =>
-            {
-                EnemyBase.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
                 Destroy(gameObject);
             });
 
