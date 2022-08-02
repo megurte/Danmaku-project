@@ -6,10 +6,9 @@ using Utils;
 
 namespace Bullets
 {
-    public class ChainTarget : Bullet
+    public class ChainTarget : ChainBase
     {
         private bool _isMoving;
-        public SpawnerType spawnerType;
 
         private void Start()
         {
@@ -35,25 +34,6 @@ namespace Bullets
                 
             transform.rotation = Quaternion.AngleAxis(degree, Vector3.forward);
             _isMoving = true;
-        }
-        
-        private IEnumerator ChargeAnimation()
-        {
-            var position = transform.position;
-            var targetPos = spawnerType == SpawnerType.Down 
-                ? new Vector3(position.x, position.y + 2, position.z) 
-                : new Vector3(position.x, position.y - 2, position.z);
-            
-            while (transform.position != targetPos) 
-            {
-                transform.position = Vector3.MoveTowards(transform.position, targetPos, 3 * Time.deltaTime);
-                yield return null;
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            other.gameObject.IfHasComponent<Border>(component => startSpeed = 0);
         }
     }
 }

@@ -1,13 +1,16 @@
 ﻿using System.Collections;
+using Bullets;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.Events;
+using Utils;
 
 namespace Boss.Camilla
 {
     public class CamillaPhases : MonoBehaviour
     {
-        public static UnityEvent<int, int> OnChainSpawn = new UnityEvent<int, int>();
+        public static UnityEvent<int, int> RandomSpawnersActivate = new UnityEvent<int, int>();
+        public static UnityEvent<int, int, bool> WaveChainsSpawn = new UnityEvent<int, int, bool>();
 
         private const int StartIndexDown = 1;
         private const int EndIndexDown = 14;
@@ -20,10 +23,16 @@ namespace Boss.Camilla
             Debug.Log("Init " + Phases.PhaseOne);
             
             yield return new WaitForSeconds(2);
-            OnChainSpawn.Invoke(StartIndexUp, EndIndexUp);
+            WaveChainsSpawn.Invoke(StartIndexUp, EndIndexUp, true);
 
-            yield return new WaitForSeconds(10);
-            OnChainSpawn.Invoke(StartIndexDown, EndIndexDown);
+            yield return new WaitForSeconds(14);
+            UtilsBase.ClearBullets<ChainBase>();
+            
+            WaveChainsSpawn.Invoke(StartIndexUp, EndIndexUp, true);
+            
+            RandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown);
+            yield return new WaitForSeconds(14);
+            UtilsBase.ClearBullets<ChainBase>();
             
             Debug.Log("Done");
         }
@@ -31,6 +40,7 @@ namespace Boss.Camilla
         public IEnumerator InitPhaseTwo()
         {
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
+            UtilsBase.ClearBullets<Bullet>();
             Debug.Log("Init " + Phases.PhaseTwo);
             
             yield return new WaitForSeconds(2);

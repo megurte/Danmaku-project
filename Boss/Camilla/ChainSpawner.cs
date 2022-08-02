@@ -4,7 +4,6 @@ using Bullets;
 using DefaultNamespace;
 using UnityEngine;
 using Utils;
-using Object = UnityEngine.Object;
 using Random = System.Random;
 
 namespace Boss.Camilla
@@ -17,10 +16,25 @@ namespace Boss.Camilla
 
         private void Start()
         {
-            CamillaPhases.OnChainSpawn.AddListener(OnActionSpawn);
+            CamillaPhases.RandomSpawnersActivate.AddListener(RandomSpawnersActivate);
+            CamillaPhases.WaveChainsSpawn.AddListener(WaveChainSpawn);
+            CamillaPhases.WaveChainsSpawn.AddListener(WaveChainSpawn);
         }
 
-        public void OnActionSpawn(int startIndex, int endIndex)
+        public void WaveChainSpawn(int startIndex, int endIndex, bool fromLeft = true)
+        {
+            var delay = 0.2f;
+            var start = fromLeft ? startIndex : endIndex;
+            var end = fromLeft ? endIndex - 1 : startIndex - 1;
+
+            for (var spawnerIndex = start; spawnerIndex < end; spawnerIndex++)
+            {
+                ActivateChainSpawner(spawnerIndex, delay);
+                delay++;
+            }
+        }
+        
+        public void RandomSpawnersActivate(int startIndex, int endIndex)
         {
             for (var spawnerIndex = startIndex; spawnerIndex <= endIndex; spawnerIndex++)
             {
@@ -31,12 +45,11 @@ namespace Boss.Camilla
             }
         }
         
-        private void ActivateChainSpawner(int spawnerIndex, float randomDelay)
+        private void ActivateChainSpawner(int spawnerIndex, float delay)
         {
             if (spawnerIndex != index) return;
-            StartCoroutine(Spawn(randomDelay));
-            StartCoroutine(ClearChains<ChainTarget>());
-            StartCoroutine(ClearChains<ChainDirect>());
+            StartCoroutine(Spawn(delay));
+            // StartCoroutine(ClearChains<ChainBase>());
         }
 
         private void SpawnChain()
@@ -57,7 +70,7 @@ namespace Boss.Camilla
             }
 
             var chain = Instantiate(chainPrefab, newPosition, Quaternion.Euler(newRotation));
-            chain.GetComponent<ChainTarget>().spawnerType = spawnerType;
+            chain.GetComponent<ChainBase>().spawnerType = spawnerType;
         }
 
         private IEnumerator Spawn(float delay)
@@ -67,17 +80,11 @@ namespace Boss.Camilla
             SpawnChain();
         }
 
-        private static IEnumerator ClearChains<T>() where T : Bullet
+        public static IEnumerator ClearChains<T>(float time) where T : Bullet
         {
-            yield return new WaitForSeconds(16);
+            yield return new WaitForSeconds(time);
 
             UtilsBase.ClearBullets<T>();
         }
-    }
-
-    public enum SpawnerType
-    {
-        Down,
-        Up,
     }
 }
