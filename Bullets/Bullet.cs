@@ -1,10 +1,11 @@
-﻿using Character;
+﻿using System;
+using Character;
 using DefaultNamespace;
 using Environment;
-using UI.Scene.Special;
 using Unity.Mathematics;
 using UnityEngine;
 using Utils;
+using Random = System.Random;
 
 namespace Bullets
 {
@@ -40,6 +41,11 @@ namespace Bullets
                 if (bulletType != BulletType.Chain)
                     Destroy(gameObject);
             });
+        }
+
+        public void SetColor(Color color)
+        {
+            GetComponent<SpriteRenderer>().color = color;
         }
 
         public void DestroySelf()

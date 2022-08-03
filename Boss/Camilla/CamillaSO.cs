@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Boss.Camilla
 {
@@ -7,5 +8,7 @@ namespace Boss.Camilla
     {
         public float maxHp;
         public float lerpSpeed;
+
+        public List<GameObject> bullets = new List<GameObject>();
     }
 }

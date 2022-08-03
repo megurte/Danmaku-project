@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Bullets;
-using DefaultNamespace;
 using UnityEngine;
-using Utils;
-using Random = System.Random;
 
 namespace Boss.Camilla
 {
@@ -13,44 +9,6 @@ namespace Boss.Camilla
         public int index;
         public GameObject chainPrefab;
         public SpawnerType spawnerType;
-
-        private void Start()
-        {
-            CamillaPhases.RandomSpawnersActivate.AddListener(RandomSpawnersActivate);
-            CamillaPhases.WaveChainsSpawn.AddListener(WaveChainSpawn);
-            CamillaPhases.WaveChainsSpawn.AddListener(WaveChainSpawn);
-        }
-
-        public void WaveChainSpawn(int startIndex, int endIndex, bool fromLeft = true)
-        {
-            var delay = 0.2f;
-            var start = fromLeft ? startIndex : endIndex;
-            var end = fromLeft ? endIndex - 1 : startIndex - 1;
-
-            for (var spawnerIndex = start; spawnerIndex < end; spawnerIndex++)
-            {
-                ActivateChainSpawner(spawnerIndex, delay);
-                delay++;
-            }
-        }
-        
-        public void RandomSpawnersActivate(int startIndex, int endIndex)
-        {
-            for (var spawnerIndex = startIndex; spawnerIndex <= endIndex; spawnerIndex++)
-            {
-                var rnd = new Random(Guid.NewGuid().GetHashCode());
-                var randomDelay = rnd.NextFloat(0, 10);
-            
-                ActivateChainSpawner(spawnerIndex, randomDelay);
-            }
-        }
-        
-        private void ActivateChainSpawner(int spawnerIndex, float delay)
-        {
-            if (spawnerIndex != index) return;
-            StartCoroutine(Spawn(delay));
-            // StartCoroutine(ClearChains<ChainBase>());
-        }
 
         private void SpawnChain()
         {
@@ -73,18 +31,13 @@ namespace Boss.Camilla
             chain.GetComponent<ChainBase>().spawnerType = spawnerType;
         }
 
-        private IEnumerator Spawn(float delay)
+        public IEnumerator Spawn(int spawnerIndex, float delay = 0)
         {
+            if (spawnerIndex != index) yield break;
+
             yield return new WaitForSeconds(delay);
             
             SpawnChain();
-        }
-
-        public static IEnumerator ClearChains<T>(float time) where T : Bullet
-        {
-            yield return new WaitForSeconds(time);
-
-            UtilsBase.ClearBullets<T>();
         }
     }
 }
