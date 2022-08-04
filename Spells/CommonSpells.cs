@@ -87,6 +87,21 @@ namespace Spells
         }
     }
     
+    public class SpellSettingsWithDirectionAndAngle: SpellSettingsWithCount
+    {
+        public readonly bool RightDirection;
+        public readonly float Angle;
+        public readonly float Delay;
+
+        public SpellSettingsWithDirectionAndAngle(GameObject bullet, Vector3 centerPos, float distance, int count, bool rightDirection, float angle, float delay) 
+            : base(bullet, centerPos, distance, count)
+        {
+            RightDirection = rightDirection;
+            Angle = angle;
+            Delay = delay;
+        }
+    }
+    
     public class CommonSpellSettingsWithTarget: CommonSpellSettings
     {
         public readonly Vector3 TargetDirection;

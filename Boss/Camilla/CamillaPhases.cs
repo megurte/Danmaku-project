@@ -11,9 +11,13 @@ namespace Boss.Camilla
 {
     public class CamillaPhases : MonoBehaviour
     {
+        public static readonly UnityEvent<SpellSettingsWithDirectionAndAngle> ForTest = new UnityEvent<SpellSettingsWithDirectionAndAngle>();
+
         public static readonly UnityEvent<int, int> AllRandomSpawnersActivate = new UnityEvent<int, int>();
         public static readonly UnityEvent<int, int, int> RandomSpawnersActivate = new UnityEvent<int, int, int>();
         public static readonly UnityEvent<int, int, bool> WaveChainsSpawn = new UnityEvent<int, int, bool>();
+        public static readonly UnityEvent<SpellSettingsWithDirectionAndAngle> SpiralBulletSpawn = new UnityEvent<SpellSettingsWithDirectionAndAngle>();
+        public static readonly UnityEvent<SpellSettingsWithDirectionAndAngle> ReverseBulletSpawn = new UnityEvent<SpellSettingsWithDirectionAndAngle>();
         public static readonly UnityEvent<SpellSettingsWithCount> CircleBulletWithRandomColorsSpawn = new UnityEvent<SpellSettingsWithCount>();
         
         private CamillaSO _camillaSettings;
@@ -36,16 +40,22 @@ namespace Boss.Camilla
 
 
             yield return new WaitForSeconds(2);
-            CircleBulletWithRandomColorsSpawn.Invoke(new SpellSettingsWithCount(_camillaSettings.bullets[4],transform.position,2,70));
-
+            ReverseBulletSpawn.Invoke(new SpellSettingsWithDirectionAndAngle(_camillaSettings.bullets[1],
+                transform.position, 2, 70, false, 90, 0.09f));
+            
             yield return new WaitForSeconds(1);
-            CircleBulletWithRandomColorsSpawn.Invoke(new SpellSettingsWithCount(_camillaSettings.bullets[0],transform.position,2,70));
-
+            ReverseBulletSpawn.Invoke(new SpellSettingsWithDirectionAndAngle(_camillaSettings.bullets[1],
+                transform.position, 2, 70, true, 90, 0.09f));
+            
+            
             yield return new WaitForSeconds(1);
-            CircleBulletWithRandomColorsSpawn.Invoke(new SpellSettingsWithCount(_camillaSettings.bullets[4],transform.position,2,70));
-
-            UtilsBase.ClearBullets<ChainBase>();
-
+            SpiralBulletSpawn.Invoke(new SpellSettingsWithDirectionAndAngle(_camillaSettings.bullets[1],
+                transform.position, 2, 70, false, 90, 0.09f));
+            
+            yield return new WaitForSeconds(0.5f);
+            SpiralBulletSpawn.Invoke(new SpellSettingsWithDirectionAndAngle(_camillaSettings.bullets[1],
+                transform.position, 2, 70, true, 90, 0.09f));
+            
             
             yield return new WaitForSeconds(14);
             UtilsBase.ClearBullets<ChainBase>();
