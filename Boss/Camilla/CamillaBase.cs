@@ -9,13 +9,13 @@ namespace Boss.Camilla
 {
     public class CamillaBase: EnemyBase
     {
+        [SerializeField] private Image bar;
+
         private CamillaSO _camillaSo;
         
-        private float _lerpSpeed;
-        
-        public Image bar;
-
         private float MaxHp { get; set; }
+        
+        private float _lerpSpeed;
         
         [Inject]
         public void Construct(CamillaSO settings)
