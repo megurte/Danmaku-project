@@ -28,9 +28,9 @@ namespace Bullets
             
             var targetPosition = UtilsBase.GetNewPlayerPosition();
             
-            direction = UtilsBase.GetDirection(targetPosition, transform.position);
+            Direction = UtilsBase.GetDirection(targetPosition, transform.position);
 
-            var degree = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            var degree = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;
                 
             transform.rotation = Quaternion.AngleAxis(degree, Vector3.forward);
             _isMoving = true;

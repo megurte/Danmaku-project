@@ -16,13 +16,16 @@ namespace Boss.Camilla
         {
             _chainSpawners = FindObjectsOfType<ChainSpawner>();
 
-            CamillaPhases.CircleBulletWithRandomColorsSpawn.AddListener(CircleBulletWithRandomColorsSpawn);
-            CamillaPhases.AllRandomSpawnersActivate.AddListener(AllRandomSpawnersActivate);
-            CamillaPhases.RandomSpawnersActivate.AddListener(RandomSpawnersActivate);
+            CamillaPhases.StopAllSpells.AddListener(StopAllSpells);
+            CamillaPhases.RandomShooting.AddListener(RandomShooting);
             CamillaPhases.WaveChainsSpawn.AddListener(WaveChainSpawn);
             CamillaPhases.SpiralBulletSpawn.AddListener(SpiralBulletSpawn);
             CamillaPhases.ReverseBulletSpawn.AddListener(ReverseBulletSpawn);
-            CamillaPhases.ForTest.AddListener(Test);
+            CamillaPhases.PropellerBulletSpawn.AddListener(PropellerBulletSpawn);
+            CamillaPhases.RandomSpawnersActivate.AddListener(RandomSpawnersActivate);
+            CamillaPhases.AllRandomSpawnersActivate.AddListener(AllRandomSpawnersActivate);
+            CamillaPhases.CircleBulletWithRandomColorsSpawn.AddListener(CircleBulletWithRandomColorsSpawn);
+            CamillaPhases.ForTest.AddListener(Test); // TODO: Remove
         }
 
         private void WaveChainSpawn(int startIndex, int endIndex, bool fromLeft = true)
@@ -77,7 +80,7 @@ namespace Boss.Camilla
             }
         }
         
-        private void CircleBulletWithRandomColorsSpawn(SpellSettingsWithCount  settings)
+        private void CircleBulletWithRandomColorsSpawn(SpellSettingsWithCount settings)
         {
             const float angle = 360 * Mathf.Deg2Rad;
             var direction = new Vector2(-1, 1);
@@ -86,17 +89,21 @@ namespace Boss.Camilla
             for (var i = 1; i <= settings.Count; i++)
             {
                 var degree = angle / settings.Count * i;
-                position.y = settings.CenterPos.y + Mathf.Cos(degree) * settings.Distance;
-                position.x = settings.CenterPos.x + Mathf.Sin(degree) * settings.Distance;
+                position.y = settings.CenterPosition.y + Mathf.Cos(degree) * settings.Distance;
+                position.x = settings.CenterPosition.x + Mathf.Sin(degree) * settings.Distance;
 
                 direction.y = Mathf.Cos(degree);
                 direction.x = Mathf.Sin(degree);
 
                 var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
-                //var rnd = new Random(Guid.NewGuid().GetHashCode());
-                //instObject.GetComponent<Bullet>().SetColor(rnd.GetRandomColor());
-                instObject.GetComponent<Bullet>().direction = direction;
+
+                instObject.GetComponent<Bullet>().Direction = direction;
             }
+        }
+        
+        private void RandomShooting(CommonSpellSettingsWithDelay settings)
+        {
+            StartCoroutine(RandomShootingRoutine(settings));
         }
 
         private void SpiralBulletSpawn(SpellSettingsWithDirectionAndAngle settings)
@@ -109,6 +116,39 @@ namespace Boss.Camilla
             StartCoroutine(ReverseBulletSpawnRoutine(settings));
         }
         
+        private void PropellerBulletSpawn(PropellerSpellSettings settings)
+        {
+            StartCoroutine(PropellerBulletSpawnRoutine(settings));
+        }
+        
+        private void StopAllSpells()
+        {
+            StopAllCoroutines();
+        }
+        
+        private IEnumerator RandomShootingRoutine(CommonSpellSettingsWithDelay settings)
+        {
+            while (true)
+            {
+                var seed = Guid.NewGuid().GetHashCode();
+
+                var degree = new Random(seed).Next(0, 360);
+                var direction = new Vector2(0, 0);
+                var position = new Vector3
+                {
+                    y = settings.CenterPosition.y + Mathf.Cos(degree) * settings.Distance,
+                    x = settings.CenterPosition.x + Mathf.Sin(degree) * settings.Distance
+                };
+
+                direction.y = Mathf.Cos(degree);
+                direction.x = Mathf.Sin(degree);
+
+                yield return new WaitForSeconds(settings.Delay);
+                var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
+                instObject.GetComponent<Bullet>().Direction = direction;
+            }
+        }
+        
         private IEnumerator SpiralBulletSpawnRoutine(SpellSettingsWithDirectionAndAngle settings)
         {
             const float angle = 360 * Mathf.Deg2Rad;
@@ -119,9 +159,9 @@ namespace Boss.Camilla
             {
                 var element = settings.RightDirection ? i : settings.Count - i;
                 var degree = angle / settings.Count * element;
-                position.y = settings.CenterPos.y 
+                position.y = settings.CenterPosition.y 
                              + Mathf.Cos(degree + settings.Angle * Mathf.Deg2Rad) * settings.Distance;
-                position.x = settings.CenterPos.x 
+                position.x = settings.CenterPosition.x 
                              + Mathf.Sin(degree+ settings.Angle * Mathf.Deg2Rad) * settings.Distance;
 
                 direction.y = Mathf.Cos(degree);
@@ -129,16 +169,17 @@ namespace Boss.Camilla
 
                 yield return new WaitForSeconds(0.01f);
                 var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
-                instObject.GetComponent<Bullet>().direction = direction;
+                instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
         
-                
+        //TODO: remove after
         private void Test(SpellSettingsWithDirectionAndAngle settings)
         {
             StartCoroutine(TestRoutine(settings));
         }
         
+        //TODO: remove after
         private IEnumerator TestRoutine(SpellSettingsWithDirectionAndAngle settings)
         {
             yield return null;
@@ -154,9 +195,9 @@ namespace Boss.Camilla
             {
                 var element = settings.RightDirection ? i : settings.Count - i;
                 var degree = angle / settings.Count * element;
-                position.y = settings.CenterPos.y 
+                position.y = settings.CenterPosition.y 
                              + Mathf.Cos(degree + settings.Angle * Mathf.Deg2Rad) * settings.Distance;
-                position.x = settings.CenterPos.x 
+                position.x = settings.CenterPosition.x 
                              + Mathf.Sin(degree+ settings.Angle * Mathf.Deg2Rad) * settings.Distance;
 
                 direction.x = Mathf.Cos(degree);
@@ -164,7 +205,32 @@ namespace Boss.Camilla
 
                 yield return new WaitForSeconds(0.01f);
                 var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
-                instObject.GetComponent<Bullet>().direction = direction;
+                instObject.GetComponent<Bullet>().Direction = direction;
+            }
+        }
+        
+        private IEnumerator PropellerBulletSpawnRoutine(PropellerSpellSettings settings)
+        {
+            var direction = new Vector2();
+            var position = new Vector3();
+            var duration = settings.Duration;
+            var currentAngle = settings.StartAngle;
+
+            while (duration > 0)
+            {
+                position.y = settings.CenterPosition.y + Mathf.Cos(currentAngle) * settings.Distance;
+                position.x = settings.CenterPosition.x + Mathf.Sin(currentAngle) * settings.Distance;
+
+                direction.y = Mathf.Cos(currentAngle);
+                direction.x = Mathf.Sin(currentAngle);
+
+                yield return new WaitForSeconds(settings.Delay);
+                
+                var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
+                instObject.GetComponent<Bullet>().Direction = direction;
+
+                currentAngle += settings.StepAngle * Mathf.Deg2Rad;
+                duration -= Time.deltaTime;
             }
         }
     }

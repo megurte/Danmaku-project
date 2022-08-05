@@ -27,7 +27,7 @@ namespace Bullets
 
         protected void OnTriggerExit2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<Border>(component => startSpeed = 0);
+            other.gameObject.IfHasComponent<Border>(component => StartSpeed = 0);
         }
     }
 }

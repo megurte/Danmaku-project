@@ -11,11 +11,17 @@ namespace Bullets
 {
     public class Bullet : MonoBehaviour, IDestroyable
     {
-        public float startSpeed = 0.1f;
-        public BulletType bulletType;
-        public GameObject destroyEffect;
-        public Vector3 direction;
-        public float angle = 180;
+        [SerializeField] private GameObject destroyEffect;
+        
+        [SerializeField] private BulletType bulletType;
+        
+        protected float startSpeed = 0.1f;
+        
+        protected BulletType BulletType { get => bulletType; set => bulletType = value; }
+        
+        protected float StartSpeed { get; set; }
+        
+        public Vector3 Direction { get; set; }
 
         private void FixedUpdate()
         {
@@ -24,7 +30,7 @@ namespace Bullets
 
         protected void Moving()
         {
-            transform.Translate(direction.normalized * startSpeed, Space.World);
+            transform.Translate(Direction.normalized * startSpeed, Space.World);
         }
         
         private void OnTriggerEnter2D(Collider2D collision)

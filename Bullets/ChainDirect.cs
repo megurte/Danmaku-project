@@ -25,7 +25,7 @@ namespace Bullets
             yield return StartCoroutine(ChargeAnimation());
             yield return new WaitForSeconds(1.5f);
 
-            direction = spawnerType == SpawnerType.Down 
+            Direction = spawnerType == SpawnerType.Down 
                 ? new Vector3(0, 1, 0) 
                 : new Vector3(0, -1, 0);
             

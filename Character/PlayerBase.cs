@@ -22,7 +22,7 @@ namespace Character
         public int points;
         public bool isInvulnerable;
 
-        private float _playerSpeed;
+        [SerializeField] private float _playerSpeed;
         private float _specialTimer;
         private float _specialCooldown;
         private GameObject _playerBullet;
@@ -33,7 +33,7 @@ namespace Character
         private Rigidbody2D _rigidBody;
         private Vector2 _moveVector;
         private float _innerTimer;
-        
+        [SerializeField] private bool _slowMode = false;
         private static UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
         private static UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
 
@@ -58,8 +58,9 @@ namespace Character
         {
             if (Input.anyKey)
                 Moving();
-            
-            CheckLevelUp();
+
+            SpeedUpdate();
+            LevelUpdate();
 
             if (Input.GetKey(KeyCode.Space))
             {
@@ -84,7 +85,6 @@ namespace Character
                 level = 3;
             if (Input.GetKey(KeyCode.F4))
                 level = 4;
-            
         }
 
         private void Moving()
@@ -95,7 +95,23 @@ namespace Character
             transform.Translate(_moveVector);
         }
 
-        private void CheckLevelUp()
+        // TODO: Fix
+        private void SpeedUpdate()
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !_slowMode)
+            {
+                _playerSpeed /= 6;
+                _slowMode = true;
+            }
+
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                _playerSpeed = playerSo.speed;
+                _slowMode = false;
+            }
+        }
+
+        private void LevelUpdate()
         {
             var keyMap = playerSo.levelUpMap;
             

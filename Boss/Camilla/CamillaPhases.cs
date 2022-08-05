@@ -18,7 +18,10 @@ namespace Boss.Camilla
         public static readonly UnityEvent<int, int, bool> WaveChainsSpawn = new UnityEvent<int, int, bool>();
         public static readonly UnityEvent<SpellSettingsWithDirectionAndAngle> SpiralBulletSpawn = new UnityEvent<SpellSettingsWithDirectionAndAngle>();
         public static readonly UnityEvent<SpellSettingsWithDirectionAndAngle> ReverseBulletSpawn = new UnityEvent<SpellSettingsWithDirectionAndAngle>();
+        public static readonly UnityEvent<PropellerSpellSettings> PropellerBulletSpawn = new UnityEvent<PropellerSpellSettings>();
         public static readonly UnityEvent<SpellSettingsWithCount> CircleBulletWithRandomColorsSpawn = new UnityEvent<SpellSettingsWithCount>();
+        public static readonly UnityEvent<CommonSpellSettingsWithDelay> RandomShooting = new UnityEvent<CommonSpellSettingsWithDelay>();
+        public static readonly UnityEvent StopAllSpells = new UnityEvent();
         
         private CamillaSO _camillaSettings;
 
@@ -35,11 +38,20 @@ namespace Boss.Camilla
 
         public IEnumerator InitPhaseOne()
         {
+            UtilsBase.ClearBullets<Bullet>();
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
             Debug.Log("Init " + Phases.PhaseOne);
 
-
             yield return new WaitForSeconds(2);
+            PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_camillaSettings.bullets[1],
+                transform.position, 2, 30, 10, 0.001f, 30));
+            RandomShooting.Invoke(new CommonSpellSettingsWithDelay(_camillaSettings.bullets[1],
+                transform.position, 1, 0.01f));
+            
+            yield return new WaitForSeconds(3);
+            //AllRandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown);
+
+            /*yield return new WaitForSeconds(2);
             ReverseBulletSpawn.Invoke(new SpellSettingsWithDirectionAndAngle(_camillaSettings.bullets[1],
                 transform.position, 2, 70, false, 90, 0.09f));
             
@@ -54,11 +66,8 @@ namespace Boss.Camilla
             
             yield return new WaitForSeconds(0.5f);
             SpiralBulletSpawn.Invoke(new SpellSettingsWithDirectionAndAngle(_camillaSettings.bullets[1],
-                transform.position, 2, 70, true, 90, 0.09f));
+                transform.position, 2, 70, true, 90, 0.09f));*/
             
-            
-            yield return new WaitForSeconds(14);
-            UtilsBase.ClearBullets<ChainBase>();
             
             //WaveChainsSpawn.Invoke(StartIndexUp, EndIndexUp, true);
             
@@ -100,6 +109,7 @@ namespace Boss.Camilla
         private void OnPhaseChange(int phase)
         {
             StopAllCoroutines();
+            StopAllSpells.Invoke();
         }
     }
 }

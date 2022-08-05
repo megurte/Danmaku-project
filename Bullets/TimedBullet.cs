@@ -4,14 +4,11 @@ namespace Bullets
 {
     public class TimedBullet: Bullet
     {
-        [SerializeField]
-        private float seconds;
+        [SerializeField] private float seconds;
         
-        [SerializeField]
-        public float acceleratingSpeed;
+        [SerializeField] private float acceleratingSpeed;
         
-        [SerializeField]
-        public float delay;
+        [SerializeField] private float delay;
 
         private void Start()
         {
@@ -22,21 +19,21 @@ namespace Bullets
         {
             Moving();
 
-            if (bulletType != BulletType.Fire) return;
+            if (BulletType != BulletType.Fire) return;
             
-            var degree = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            var degree = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;
             
             transform.rotation = Quaternion.AngleAxis(degree, Vector3.forward);
         }
 
         private new void Moving()
         {
-            transform.Translate(direction.normalized * Time.deltaTime * startSpeed, Space.World);
+            transform.Translate(Direction.normalized * Time.deltaTime * startSpeed, Space.World);
         }
 
         private void Accelerate()
         {
-            startSpeed += acceleratingSpeed;
+            StartSpeed += acceleratingSpeed;
         }
     }
 }

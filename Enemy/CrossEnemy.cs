@@ -62,7 +62,7 @@ namespace Enemy
                         position.y + rnd.Next(0, 3), position.z), 
                     Quaternion.Euler(_playersPosition));
 
-                newBullet.GetComponent<Bullet>().direction = UtilsBase.GetDirection(_playersPosition, 
+                newBullet.GetComponent<Bullet>().Direction = UtilsBase.GetDirection(_playersPosition, 
                     newBullet.transform.position);
             }
         }

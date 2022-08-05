@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using Random = System.Random;
+﻿using UnityEngine;
 
 namespace Bullets
 {
@@ -10,9 +8,9 @@ namespace Bullets
         {
             Moving();
 
-            if (bulletType != BulletType.Fire) return;
+            if (BulletType != BulletType.Fire) return;
             
-            var degree = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            var degree = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;
                 
             transform.rotation = Quaternion.AngleAxis(degree, Vector3.forward);
         }

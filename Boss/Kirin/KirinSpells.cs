@@ -100,11 +100,10 @@ namespace Kirin
         private void BulletSpawn(Vector2 pos, Vector2 dir, float degree, bool leftToRight, GameObject bullet)
         {
             _instObject = Instantiate(bullet, pos, Quaternion.identity);
-            _instObject.GetComponent<Bullet>().angle = degree;
             if (leftToRight)
-                _instObject.GetComponent<Bullet>().direction = dir;
+                _instObject.GetComponent<Bullet>().Direction = dir;
             else
-                _instObject.GetComponent<Bullet>().direction = -dir;
+                _instObject.GetComponent<Bullet>().Direction = -dir;
         }
 
         protected IEnumerator SpiralSpellFireball(float delay, bool change, GameObject bullet, float count)
