@@ -255,12 +255,12 @@ namespace Character
 
         private IEnumerator Invulnerable()
         {
-            var component = GetComponent<CircleCollider2D>();
+            //var component = GetComponent<CircleCollider2D>();
 
             isInvulnerable = true;
-            component.enabled = false;
+            //component.enabled = false;
             yield return new WaitForSeconds(2);
-            component.enabled = true;
+            //component.enabled = true;
             isInvulnerable = false;
         }
         

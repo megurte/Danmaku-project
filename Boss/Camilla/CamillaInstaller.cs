@@ -17,7 +17,7 @@ namespace Boss.Camilla
         {
             Container.Bind<CamillaSO>().FromInstance(camillaSettings).AsCached().NonLazy();
             
-            StartCoroutine(CamillaInit());
+            // StartCoroutine(CamillaInit());
         }
 
         private IEnumerator CamillaInit()
