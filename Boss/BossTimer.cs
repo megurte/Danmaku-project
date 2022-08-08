@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using DefaultNamespace;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Boss
 {
     public class BossTimer : MonoBehaviour
     {
-        public TextMeshProUGUI textUI;
+        [SerializeField] private TextMeshProUGUI textUI;
+
+        [SerializeField] private int pointsForEachSecondLeft;
+
+        private float _timeRemaining = default;
         
-        public float timeRemaining = default;
-        
-        public bool timerIsRunning = default;
+        private bool _timerIsRunning = default;
         
         private int _phaseIndex = default;
+
+        private int _scoreSeconds;
         
         [Serializable]
         public struct PhaseTimer
@@ -23,11 +27,16 @@ namespace Boss
             public float milSec;
         }
 
-        public List<PhaseTimer> timers;
+        [SerializeField] private List<PhaseTimer> timers;
         
+        private Dictionary<int, int> _phasesScore = new Dictionary<int, int>();
+
+        public static readonly UnityEvent<Dictionary<int, int>> TranslateTimerData = new UnityEvent<Dictionary<int, int>>(); 
+
         private void Start()
         {
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
+            GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
         }
         
         private void FixedUpdate()
@@ -46,22 +55,22 @@ namespace Boss
 
         private void TimerInit(PhaseTimer timer)
         {
-            timeRemaining = timer.seconds;
-            timerIsRunning = true;
+            _timeRemaining = timer.seconds;
+            _timerIsRunning = true;
         }
         
         private void TimerRun()
         {
-            if (!timerIsRunning) return;
+            if (!_timerIsRunning) return;
             
-            if (timeRemaining > 0)
+            if (_timeRemaining > 0)
             {
-                timeRemaining -= Time.deltaTime;
+                _timeRemaining -= Time.deltaTime;
             }
             else
             {
-                timeRemaining = 0;
-                timerIsRunning = false;
+                _timeRemaining = 0;
+                _timerIsRunning = false;
                 
                 GlobalEvents.ChangePhase();
             }
@@ -74,21 +83,35 @@ namespace Boss
                 throw new Exception("BossTimer.UpdateTimerText(): seconds or milliseconds lower then 0");
             }
             
-            seconds = Mathf.FloorToInt(timeRemaining % 100);  
-            milliseconds = (timeRemaining % 1) * 100;
+            seconds = Mathf.FloorToInt(_timeRemaining % 100);
+            milliseconds = (_timeRemaining % 1) * 100;
+            _scoreSeconds = (int)seconds;
             textUI.text = $"{seconds:00}:{milliseconds:00}";
+        }
+
+        private int CalculatePointsForTimeRemaining()
+        {
+            return _scoreSeconds * pointsForEachSecondLeft;
         }
 
         private void OnPhaseChange(int phase)
         {
             if (phase <= timers.Count)
             {
+                _phasesScore.Add(_scoreSeconds, CalculatePointsForTimeRemaining());
+                
                 _phaseIndex = phase - 1;
                 
                 TimerInit(timers[_phaseIndex]);
             }
             else
-                timerIsRunning = false;
+                _timerIsRunning = false;
+        }
+
+        private void OnBossFightFinished()
+        {
+            _phasesScore.Add(_scoreSeconds, CalculatePointsForTimeRemaining());
+            TranslateTimerData.Invoke(_phasesScore);
         }
     }
 }

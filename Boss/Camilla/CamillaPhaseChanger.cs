@@ -1,12 +1,13 @@
-﻿using DefaultNamespace;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace Boss.Camilla
 {
     public class CamillaPhaseChanger: MonoBehaviour
     {
+        [Inject] private CamillaSO _camillaSettings;
         private CamillaPhases _camillaPhases;
+
         private int _phaseNumber = 1;
         private bool _isPhaseActive = default;
 
@@ -19,6 +20,11 @@ namespace Boss.Camilla
 
         private void Update()
         {
+            if (_camillaSettings.maxPhases < _phaseNumber)
+            {
+                GlobalEvents.OnBossFightFinished();
+            }
+            
             if (_isPhaseActive) return;
             
             switch (_phaseNumber)

@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Spawner
 {
-    [CreateAssetMenu(fileName = "new SMConfig", menuName = "SMConfig")]
-    public class SpawnerManagerConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "new SIConfig", menuName = "SIConfig")]
+    public class SpawnerIteratorConfig : ScriptableObject
     {
         public List<EnemyWave> enemyWaves;
     }

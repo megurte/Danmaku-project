@@ -4,15 +4,15 @@ using UnityEngine.Events;
 
 namespace Spawner
 {
-    public class SpawnerManager : MonoBehaviour
+    public class SpawnerIterator : MonoBehaviour
     {
-        public SpawnerManagerConfig spawnerManagerConfig;
+        public SpawnerIteratorConfig spawnerIteratorConfig;
         
         public static readonly UnityEvent<int> AwakeSpawner = new UnityEvent<int>();
 
         private void Start()
         {
-            foreach (var enemyWave in spawnerManagerConfig.enemyWaves)
+            foreach (var enemyWave in spawnerIteratorConfig.enemyWaves)
             {
                 StartCoroutine(AwakeSpawnerInTime(enemyWave));
             }

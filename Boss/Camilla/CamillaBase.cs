@@ -1,5 +1,4 @@
 ﻿using System;
-using DefaultNamespace;
 using Enemy;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,16 +6,20 @@ using Zenject;
 
 namespace Boss.Camilla
 {
-    public class CamillaBase: EnemyBase
+    public class CamillaBase : EnemyBase, IBoss
     {
         [SerializeField] private Image bar;
+        
+        [SerializeField] private GameObject bossTimerUI;
+        
+        [SerializeField] private GameObject bossBarUI;
 
         private CamillaSO _camillaSo;
-        
+
         private float MaxHp { get; set; }
-        
+
         private float _lerpSpeed;
-        
+
         [Inject]
         public void Construct(CamillaSO settings)
         {
@@ -26,10 +29,11 @@ namespace Boss.Camilla
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
         }
-        
+
         private void Awake()
         {
             OnTakingDamageEvent.AddListener(OnTakingDamage);
+            GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
             GlobalEvents.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
         }
 
@@ -40,15 +44,28 @@ namespace Boss.Camilla
             if (CurrentHp <= 0)
             {
                 CurrentHp = MaxHp;
-                
+
                 GlobalEvents.ChangePhase();
             }
         }
 
-        private  void HandleBar()
+        private void HandleBar()
         {
             if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
                 bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * _lerpSpeed);
+        }
+
+        public void OnBossFightFinished()
+        {
+            // Dialog init
+            BossUI(false);
+            Destroy(gameObject);
+        }
+        
+        private void BossUI(bool isActive)
+        {
+            bossBarUI.SetActive(isActive);
+            bossTimerUI.SetActive(isActive);
         }
     }
 }

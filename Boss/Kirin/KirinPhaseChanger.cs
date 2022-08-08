@@ -1,5 +1,4 @@
 ﻿using Boss;
-using DefaultNamespace;
 using UnityEngine;
 using Zenject;
 

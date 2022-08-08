@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Bullets;
-using DefaultNamespace;
 using Spells;
 using UnityEngine;
 using UnityEngine.Events;

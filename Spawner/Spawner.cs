@@ -25,7 +25,7 @@ namespace Spawner
         {
             SetIterationData();
         
-            SpawnerManager.AwakeSpawner.AddListener(OnSpawnerAwake);
+            SpawnerIterator.AwakeSpawner.AddListener(OnSpawnerAwake);
         }
 
         private void FixedUpdate()

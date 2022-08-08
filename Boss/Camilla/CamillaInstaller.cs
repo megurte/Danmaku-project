@@ -17,12 +17,12 @@ namespace Boss.Camilla
         {
             Container.Bind<CamillaSO>().FromInstance(camillaSettings).AsCached().NonLazy();
             
-            // StartCoroutine(CamillaInit());
+            StartCoroutine(CamillaInit());
         }
 
         private IEnumerator CamillaInit()
         {
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(2);
             camillaPrefab.SetActive(true);
             bossBarUI.SetActive(true);
             bossTimerUI.SetActive(true);

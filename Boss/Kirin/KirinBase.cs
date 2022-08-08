@@ -1,5 +1,4 @@
 ﻿using System;
-using DefaultNamespace;
 using Enemy;
 using Kirin;
 using UnityEngine;

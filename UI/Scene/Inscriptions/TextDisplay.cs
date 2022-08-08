@@ -6,9 +6,11 @@ using Zenject;
 
 namespace UI.Scene.Inscriptions
 {
-    public class InscriptionDisplay: MonoBehaviour
+    public class TextDisplay: MonoBehaviour
     {
-        public TextMeshProUGUI inscriptionText; // TODO: set location
+        [SerializeField] private TextMeshProUGUI targetText; // TODO: set location
+        [SerializeField] private float fadeInTime;
+        [SerializeField] private float fadeOutTime;
 
         private Animator _animator;
         private static readonly int FadeIn = Animator.StringToHash("FadeIn");
@@ -23,7 +25,7 @@ namespace UI.Scene.Inscriptions
 
         private IEnumerator InscriptionFadeIn()
         {
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(fadeInTime);
             
             _animator.SetTrigger(FadeIn);
             
@@ -32,7 +34,7 @@ namespace UI.Scene.Inscriptions
         
         private IEnumerator InscriptionFadeOut()
         {
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(fadeOutTime);
             
             _animator.SetTrigger(FadeOut);
         }

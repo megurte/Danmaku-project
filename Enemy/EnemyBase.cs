@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Character;
-using DefaultNamespace;
 using Environment;
 using UnityEngine;
 using UnityEngine.Events;

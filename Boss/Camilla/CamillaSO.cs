@@ -8,6 +8,7 @@ namespace Boss.Camilla
     {
         public float maxHp;
         public float lerpSpeed;
+        public int maxPhases;
 
         public List<GameObject> bullets = new List<GameObject>();
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using Character;
-using DefaultNamespace;
 using Environment;
 using Unity.Mathematics;
 using UnityEngine;

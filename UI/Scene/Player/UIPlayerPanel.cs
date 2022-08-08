@@ -1,5 +1,4 @@
 using Character;
-using DefaultNamespace;
 using TMPro;
 using UnityEngine;
 using Zenject;
