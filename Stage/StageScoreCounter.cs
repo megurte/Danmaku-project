@@ -17,15 +17,15 @@ namespace Stage
 
         
         [SerializeField] private GameObject additionalPointsUIPrefab;
-        [SerializeField] private Canvas _canvas;
+        [SerializeField] private Canvas canvas;
 
-        private int accomulateValue;
-        private bool specialUsed = false;
+        private int _cumulativeValue;
+        private bool _specialUsed = false;
 
         private void Start()
         {
             BossTimer.TranslateTimerData.AddListener(SetScoreForTimeRemaining);
-            GlobalEvents.OnSpecialChange.AddListener((int x) => specialUsed = true); // Rewrite it to OnSpecialUsed
+            GlobalEvents.OnSpecialChange.AddListener((int x) => _specialUsed = true); // Rewrite it to OnSpecialUsed
         }
 
         private void SetScoreForTimeRemaining(Dictionary<int, int> phasesTime)
@@ -44,7 +44,6 @@ namespace Stage
             List<GameObject> additionalPointsList = new List<GameObject>();
             
             yield return new WaitForSeconds(2);
-            accomulateValue = stagePoints;
 
             foreach (var item in phasesTime)
             {
@@ -55,7 +54,7 @@ namespace Stage
                 yield return new WaitForSeconds(1);
             }
 
-            if (!specialUsed)
+            if (!_specialUsed)
             {
                 var newHolder = CreateAdditionalPointsHolder();
                 newHolder.gameObject.GetComponent<TextMeshProUGUI>().text = $"+{noSpecialUsePoints}: no special";
@@ -73,22 +72,22 @@ namespace Stage
         private IEnumerator AddAdditionalPoints(Dictionary<int, int> phasesTime)
         {
             yield return new WaitForSeconds(2);
-            accomulateValue = stagePoints;
+            _cumulativeValue = stagePoints;
             
             yield return new WaitForSeconds(1);
 
             foreach (var item in phasesTime)
             {
                 yield return new WaitForSeconds(1);
-                accomulateValue += phasesTime[item.Key];
-                stagePointsTextUI.text = $"{accomulateValue}";
+                _cumulativeValue += phasesTime[item.Key];
+                stagePointsTextUI.text = $"{_cumulativeValue}";
             }
 
-            if (!specialUsed)
+            if (!_specialUsed)
             {
                 yield return new WaitForSeconds(1);
-                accomulateValue += noSpecialUsePoints;
-                stagePointsTextUI.text = $"{accomulateValue}";
+                _cumulativeValue += noSpecialUsePoints;
+                stagePointsTextUI.text = $"{_cumulativeValue}";
             }
         }
 
@@ -96,7 +95,7 @@ namespace Stage
         {
             var newHolder = Instantiate(additionalPointsUIPrefab, 
                 additionalPointsUIPrefab.transform.position, Quaternion.identity);
-            newHolder.transform.SetParent(_canvas.transform, false);
+            newHolder.transform.SetParent(canvas.transform, false);
             
             return newHolder;
         }
