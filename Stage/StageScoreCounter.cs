@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Boss;
+using Character;
 using TMPro;
 using UnityEngine;
 
@@ -14,13 +15,12 @@ namespace Stage
         [SerializeField] private int stageNumber;
         [SerializeField] private int stagePoints;
         [SerializeField] private int noSpecialUsePoints;
-
         
         [SerializeField] private GameObject additionalPointsUIPrefab;
         [SerializeField] private Canvas canvas;
 
-        private int _cumulativeValue;
-        private bool _specialUsed = false;
+        private int _cumulativeValue = default;
+        private bool _specialUsed = default;
 
         private void Start()
         {
@@ -59,8 +59,10 @@ namespace Stage
                 var newHolder = CreateAdditionalPointsHolder();
                 newHolder.gameObject.GetComponent<TextMeshProUGUI>().text = $"+{noSpecialUsePoints}: no special";
                 additionalPointsList.Add(newHolder);
+                
+                yield return new WaitForSeconds(1);
             }
-            
+
             yield return new WaitForSeconds(2);
 
             foreach (var item in additionalPointsList)

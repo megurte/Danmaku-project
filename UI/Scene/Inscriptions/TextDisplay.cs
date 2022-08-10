@@ -8,7 +8,6 @@ namespace UI.Scene.Inscriptions
 {
     public class TextDisplay: MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI targetText; // TODO: set location
         [SerializeField] private float fadeInTime;
         [SerializeField] private float fadeOutTime;
 

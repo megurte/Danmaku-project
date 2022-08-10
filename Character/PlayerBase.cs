@@ -22,6 +22,7 @@ namespace Character
         public bool isInvulnerable;
 
         [SerializeField] private float _playerSpeed;
+        [SerializeField] private bool _slowMode = false;
         private float _specialTimer;
         private float _specialCooldown;
         private GameObject _playerBullet;
@@ -32,16 +33,15 @@ namespace Character
         private Rigidbody2D _rigidBody;
         private Vector2 _moveVector;
         private float _innerTimer;
-        [SerializeField] private bool _slowMode = false;
-        private static UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
-        private static UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
+        
+        public static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
+        private static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
+        private static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
 
         [Inject]
         public void Construct(PlayerSO playerSettings)
         {
-            playerSo = playerSettings;
-            
-            SetPlayersParametersFromSettings(playerSettings);
+            InitPlayer(playerSettings);
         }
         private void Start()
         {
@@ -51,6 +51,8 @@ namespace Character
             
             OnGetDrop.AddListener(OnDrop);
             OnTakeDamage.AddListener(OnDamage);
+            GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
+
         }
 
         private void FixedUpdate()
@@ -74,6 +76,10 @@ namespace Character
 
             if (Input.GetKey(KeyCode.X))
                 UseSpecial();
+            
+            // Test
+            if (Input.GetKey(KeyCode.F12))
+                points += 100;
 
             if (_specialTimer - _specialCooldown < 0)
                 _specialTimer -= Time.deltaTime;
@@ -247,9 +253,15 @@ namespace Character
 
             if (!isInvulnerable && health <= 0)
             {
-                Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity);
+                TranslateCurrentStageScore.Invoke(points);
+                Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity); 
                 Destroy(gameObject);
             }
+        }
+
+        private void OnBossFightFinished()
+        {
+            TranslateCurrentStageScore.Invoke(points);
         }
 
         private IEnumerator Invulnerable()
@@ -263,8 +275,9 @@ namespace Character
             isInvulnerable = false;
         }
         
-        private void SetPlayersParametersFromSettings(PlayerSO settings)
+        private void InitPlayer(PlayerSO settings)
         {
+            playerSo = settings;
             health = settings.health;
             maxHealth = settings.maxHealth;
             maxSpecials = settings.maxValue;

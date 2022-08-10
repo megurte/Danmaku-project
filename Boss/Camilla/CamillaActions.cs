@@ -218,6 +218,11 @@ namespace Boss.Camilla
 
             while (duration > 0)
             {
+                if (currentAngle > 360)
+                {
+                    currentAngle = settings.StartAngle + 3;
+                }
+                
                 position.y = settings.CenterPosition.y + Mathf.Cos(currentAngle) * settings.Distance;
                 position.x = settings.CenterPosition.x + Mathf.Sin(currentAngle) * settings.Distance;
 

@@ -23,17 +23,20 @@ namespace Boss.Camilla
         public static readonly UnityEvent StopAllSpells = new UnityEvent();
         
         private CamillaSO _camillaSettings;
+                
+        #region Spawner Indexes
+        private const int StartIndexDown = 1;
+        private const int EndIndexDown = 14;
+        private const int StartIndexUp = 15;
+        private const int EndIndexUp = 25;
+        #endregion
 
         [Inject] 
         public void Construct(CamillaSO settings)
         {
             _camillaSettings = settings;
         }
-        
-        private const int StartIndexDown = 1;
-        private const int EndIndexDown = 14;
-        private const int StartIndexUp = 15;
-        private const int EndIndexUp = 25;
+
 
         public IEnumerator InitPhaseOne()
         {
@@ -42,10 +45,9 @@ namespace Boss.Camilla
             Debug.Log("Init " + Phases.PhaseOne);
 
             yield return new WaitForSeconds(2);
-            PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_camillaSettings.bullets[1],
-                transform.position, 2, 30, 10, 0.001f, 30));
-            RandomShooting.Invoke(new CommonSpellSettingsWithDelay(_camillaSettings.bullets[1],
-                transform.position, 1, 0.01f));
+            /*PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_camillaSettings.bullets[1],
+                transform.position, 2, 30, 10, 0.001f, 30));*/
+
             
             yield return new WaitForSeconds(3);
             //AllRandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown);
@@ -71,44 +73,52 @@ namespace Boss.Camilla
             //WaveChainsSpawn.Invoke(StartIndexUp, EndIndexUp, true);
             
             //AllRandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown);
-            yield return new WaitForSeconds(14);
-            UtilsBase.ClearBullets<ChainBase>();
-            
-            Debug.Log("Done");
+            yield return null;
         }
 
         public IEnumerator InitPhaseTwo()
         {
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
-            UtilsBase.ClearBullets<Bullet>();
-            Debug.Log("Init " + Phases.PhaseTwo);
             
-            yield return new WaitForSeconds(2);
-            Debug.Log("Done");
+            PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_camillaSettings.bullets[1],
+                transform.position, 2, 30, 10, 0.001f, 30));
+            RandomShooting.Invoke(new CommonSpellSettingsWithDelay(_camillaSettings.bullets[1],
+                transform.position, 1, 0.001f));
+
+            yield return null;
         }
 
         public IEnumerator InitPhaseThree()
         {
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
-            Debug.Log("Init " + Phases.PhaseThree);
             
-            yield return new WaitForSeconds(2);
-            Debug.Log("Done");
+            yield return null;
         }
 
         public IEnumerator InitPhaseFour()
         {
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
-            Debug.Log("Init " + Phases.PhaseFour);
             
-            yield return new WaitForSeconds(2);
-            Debug.Log("Done");
+            PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_camillaSettings.bullets[1],
+                transform.position, 2, 30, 10, 0.1f, 30));
+            RandomShooting.Invoke(new CommonSpellSettingsWithDelay(_camillaSettings.bullets[1],
+                transform.position, 1, 0.01f));
+            AllRandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown);
+            
+            yield return new WaitForSeconds(14);
+            UtilsBase.ClearBullets<ChainBase>();
         }
 
         private void OnPhaseChange(int phase)
         {
             StopAllCoroutines();
             StopAllSpells.Invoke();
+            UtilsBase.ClearBullets<Bullet>();
+
+            if (_camillaSettings.maxPhases <= phase)
+            {
+                Debug.Log("Init " + phase + " Phase");
+            }
         }
     }
 }
