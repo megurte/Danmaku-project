@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Boss;
-using Character;
 using TMPro;
 using UnityEngine;
 
@@ -41,11 +41,11 @@ namespace Stage
 
         private IEnumerator SpawnAdditionalPointsText(Dictionary<int, int> phasesTime)
         {
-            List<GameObject> additionalPointsList = new List<GameObject>();
+            var additionalPointsList = new List<GameObject>();
             
             yield return new WaitForSeconds(2);
 
-            foreach (var item in phasesTime)
+            foreach (var item in phasesTime.Where(item => item.Key > 0))
             {
                 var newHolder = CreateAdditionalPointsHolder();
                 newHolder.gameObject.GetComponent<TextMeshProUGUI>().text = $"+{item.Value}: {item.Key} sec";
@@ -73,14 +73,14 @@ namespace Stage
         
         private IEnumerator AddAdditionalPoints(Dictionary<int, int> phasesTime)
         {
-            yield return new WaitForSeconds(2);
             _cumulativeValue = stagePoints;
             
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3);
 
-            foreach (var item in phasesTime)
+            foreach (var item in phasesTime.Where(item => item.Key > 0))
             {
                 yield return new WaitForSeconds(1);
+                    
                 _cumulativeValue += phasesTime[item.Key];
                 stagePointsTextUI.text = $"{_cumulativeValue}";
             }
@@ -88,6 +88,7 @@ namespace Stage
             if (!_specialUsed)
             {
                 yield return new WaitForSeconds(1);
+                
                 _cumulativeValue += noSpecialUsePoints;
                 stagePointsTextUI.text = $"{_cumulativeValue}";
             }

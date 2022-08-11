@@ -14,7 +14,7 @@ namespace Bullets
         
         [SerializeField] private BulletType bulletType;
         
-        protected float startSpeed = 0.1f;
+        [SerializeField] protected float startSpeed = 0.1f;
         
         protected BulletType BulletType { get => bulletType; set => bulletType = value; }
         

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Bullets;
 using Spells;
 using UnityEngine;
+using Utils;
 using Random = System.Random;
 
 namespace Boss.Camilla
@@ -22,10 +23,10 @@ namespace Boss.Camilla
             CamillaPhases.SpiralBulletSpawn.AddListener(SpiralBulletSpawn);
             CamillaPhases.ReverseBulletSpawn.AddListener(ReverseBulletSpawn);
             CamillaPhases.PropellerBulletSpawn.AddListener(PropellerBulletSpawn);
+            CamillaPhases.TargetPositionShooting.AddListener(TargetPositionShooting);
             CamillaPhases.RandomSpawnersActivate.AddListener(RandomSpawnersActivate);
             CamillaPhases.AllRandomSpawnersActivate.AddListener(AllRandomSpawnersActivate);
             CamillaPhases.CircleBulletWithRandomColorsSpawn.AddListener(CircleBulletWithRandomColorsSpawn);
-            CamillaPhases.ForTest.AddListener(Test); // TODO: Remove
         }
 
         private void WaveChainSpawn(int startIndex, int endIndex, bool fromLeft = true)
@@ -173,16 +174,9 @@ namespace Boss.Camilla
             }
         }
         
-        //TODO: remove after
-        private void Test(SpellSettingsWithDirectionAndAngle settings)
+        private void TargetPositionShooting(CommonSpellSettingsWithTarget settings, float delay)
         {
-            StartCoroutine(TestRoutine(settings));
-        }
-        
-        //TODO: remove after
-        private IEnumerator TestRoutine(SpellSettingsWithDirectionAndAngle settings)
-        {
-            yield return null;
+            StartCoroutine(TargetPositionShootingRoutine(settings, delay));
         }
         
         private IEnumerator ReverseBulletSpawnRoutine(SpellSettingsWithDirectionAndAngle settings)
@@ -236,6 +230,24 @@ namespace Boss.Camilla
 
                 currentAngle += settings.StepAngle * Mathf.Deg2Rad;
                 duration -= Time.deltaTime;
+            }
+        }
+
+        private IEnumerator TargetPositionShootingRoutine(CommonSpellSettingsWithTarget settings, float delay)
+        {
+            while (true)
+            {
+                var seed = Guid.NewGuid().GetHashCode();
+                var rnd = new Random(seed);
+                var startPos = settings.CenterPosition;
+                var randomXOffset = rnd.NextFloat(-2, 2);
+                var randomYOffset = rnd.NextFloat(-2, 2);
+                var newPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
+                var direction = UtilsBase.GetDirection(UtilsBase.GetNewPlayerPosition(), startPos);
+                var instObject = Instantiate(settings.Bullet, newPosition, Quaternion.identity);
+                instObject.GetComponent<Bullet>().Direction = direction;
+                
+                yield return new WaitForSeconds(delay);
             }
         }
     }

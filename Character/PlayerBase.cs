@@ -55,12 +55,16 @@ namespace Character
 
         }
 
+        private void Update()
+        {
+            SpeedUpdate();
+        }
+
         private void FixedUpdate()
         {
             if (Input.anyKey)
                 Moving();
 
-            SpeedUpdate();
             LevelUpdate();
 
             if (Input.GetKey(KeyCode.Space))
@@ -100,7 +104,6 @@ namespace Character
             transform.Translate(_moveVector);
         }
 
-        // TODO: Fix
         private void SpeedUpdate()
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && !_slowMode)
