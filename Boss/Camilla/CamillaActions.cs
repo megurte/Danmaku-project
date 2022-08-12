@@ -174,9 +174,9 @@ namespace Boss.Camilla
             }
         }
         
-        private void TargetPositionShooting(CommonSpellSettingsWithTarget settings, float delay)
+        private void TargetPositionShooting(CommonSpellSettingsWithTarget settings)
         {
-            StartCoroutine(TargetPositionShootingRoutine(settings, delay));
+            StartCoroutine(TargetPositionShootingRoutine(settings));
         }
         
         private IEnumerator ReverseBulletSpawnRoutine(SpellSettingsWithDirectionAndAngle settings)
@@ -214,7 +214,9 @@ namespace Boss.Camilla
             {
                 if (currentAngle > 360)
                 {
-                    currentAngle = settings.StartAngle + 3;
+                    currentAngle = settings.IsReverse 
+                        ? settings.StartAngle - 3 
+                        : settings.StartAngle + 3;
                 }
                 
                 position.y = settings.CenterPosition.y + Mathf.Cos(currentAngle) * settings.Distance;
@@ -228,12 +230,14 @@ namespace Boss.Camilla
                 var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
                 instObject.GetComponent<Bullet>().Direction = direction;
 
-                currentAngle += settings.StepAngle * Mathf.Deg2Rad;
+                currentAngle = settings.IsReverse
+                    ? currentAngle - settings.StepAngle * Mathf.Deg2Rad 
+                    : currentAngle + settings.StepAngle;
                 duration -= Time.deltaTime;
             }
         }
 
-        private IEnumerator TargetPositionShootingRoutine(CommonSpellSettingsWithTarget settings, float delay)
+        private IEnumerator TargetPositionShootingRoutine(CommonSpellSettingsWithTarget settings)
         {
             while (true)
             {
@@ -247,7 +251,7 @@ namespace Boss.Camilla
                 var instObject = Instantiate(settings.Bullet, newPosition, Quaternion.identity);
                 instObject.GetComponent<Bullet>().Direction = direction;
                 
-                yield return new WaitForSeconds(delay);
+                yield return new WaitForSeconds(settings.Delay);
             }
         }
     }

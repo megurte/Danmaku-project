@@ -18,14 +18,11 @@ namespace Boss.Camilla
 
         private float MaxHp { get; set; }
 
-        private float _lerpSpeed;
-
         [Inject]
         public void Construct(CamillaSO settings)
         {
             _camillaSo = settings;
             MaxHp = _camillaSo.maxHp;
-            _lerpSpeed = _camillaSo.lerpSpeed;
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
         }
@@ -52,7 +49,7 @@ namespace Boss.Camilla
         private void HandleBar()
         {
             if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
-                bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * _lerpSpeed);
+                bar.fillAmount = CurrentHp / MaxHp;
         }
 
         public void OnBossFightFinished()

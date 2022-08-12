@@ -41,9 +41,10 @@ namespace Spells
         public readonly float StepAngle;
         public readonly float Delay;
         public readonly float Duration;
+        public readonly bool IsReverse;
 
         public PropellerSpellSettings(GameObject bullet, Vector3 centerPosition, float distance, float startAngle,
-            float stepAngle,float delay, float duration)
+            float stepAngle,float delay, float duration, bool isReverse)
         {
             Duration = duration;
             Delay = delay;
@@ -52,6 +53,7 @@ namespace Spells
             Distance = distance;
             CenterPosition = centerPosition;
             Bullet = bullet;
+            IsReverse = isReverse;
         }
     }
     
@@ -100,14 +102,16 @@ namespace Spells
         public readonly Vector3 CenterPosition;
         public readonly float Distance;
         public readonly Vector3 TargetDirection;
+        public readonly float Delay;
 
         public CommonSpellSettingsWithTarget(GameObject bullet, Vector3 centerPosition, float distance, 
-            Vector3 targetDirection)
+            Vector3 targetDirection, float delay)
         {
             Bullet = bullet;
             CenterPosition = centerPosition;
             Distance = distance;
             TargetDirection = targetDirection;
+            Delay = delay;
         }
     }
 }
