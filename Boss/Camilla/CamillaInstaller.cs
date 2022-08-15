@@ -9,7 +9,6 @@ namespace Boss.Camilla
     {
         [SerializeField] private CamillaSO camillaSettings;
         [SerializeField] private GameObject camillaPrefab;
-        [SerializeField] private Transform spawnPoint;
         [SerializeField] private GameObject bossTimerUI;
         [SerializeField] private GameObject bossBarUI;
 

@@ -55,6 +55,7 @@ namespace Boss.Camilla
         public void OnBossFightFinished()
         {
             // Dialog init
+            DropItems(_camillaSo.lootSettings);
             BossUI(false);
             Destroy(gameObject);
         }

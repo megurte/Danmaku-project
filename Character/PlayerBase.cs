@@ -226,7 +226,7 @@ namespace Character
                     if (level < maxLevel)
                         exp += value;
                     else
-                        points += value * 100;
+                        points += value * 1000;
                     break;
                 case DropType.PointDrop:
                     points += value;

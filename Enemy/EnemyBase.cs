@@ -55,7 +55,7 @@ namespace Enemy
         
         private IEnumerator MoveAround(Vector3 centerPoint, float radius, float angularSpeed)
         {
-            while (angularSpeed > 0)
+            while (true)
             {
                 var positionX = centerPoint.x + Mathf.Cos(_angle) * radius;
                 var positionY = centerPoint.y + Mathf.Sin(_angle) * radius;
@@ -83,13 +83,15 @@ namespace Enemy
         {
             other.gameObject.IfHasComponent<PlayerBase>(component =>
             {
+                if (component.isInvulnerable) return;
+                
                 PlayerBase.TakeDamage(1);
                 GlobalEvents.HealthChanged(component.health);
             });
             other.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
         }
 
-        private void DropItems(List<LootSettings> lootSettings)
+        protected void DropItems(List<LootSettings> lootSettings)
         {
             foreach (var loot in lootSettings)
             {
@@ -108,8 +110,8 @@ namespace Enemy
             {
                 var rnd = new Random(seed);
                 var startPos = transform.position;
-                var randomXOffset = rnd.NextFloat(0, 2);
-                var randomYOffset = rnd.NextFloat(0, 2);
+                var randomXOffset = rnd.NextFloat(-1, 1);
+                var randomYOffset = rnd.NextFloat(-1, 1);
                 var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
                 
                 Instantiate(drop, dropPosition, Quaternion.identity);
@@ -121,6 +123,7 @@ namespace Enemy
             OnTakingDamageEvent.Invoke(damage, enemyID);
         }
         
+        // TODO
         public void OnTakingDamage(float damage, int enemyID)
         {
             if (enemyID == gameObject.GetInstanceID())

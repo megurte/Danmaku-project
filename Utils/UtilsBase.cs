@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Bullets;
+using Drop;
 using Enemy;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -46,6 +47,16 @@ namespace Utils
             foreach (var type in enemies)
             {
                 Object.Destroy(type.gameObject);
+            }
+        }
+
+        public static void CollectDrop()
+        {
+            var dropItems = Object.FindObjectsOfType<DropBase>();
+
+            foreach (var item in dropItems)
+            {
+                item.AttractToPlayer();
             }
         }
     }
