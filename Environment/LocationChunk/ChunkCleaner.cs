@@ -7,7 +7,7 @@ namespace Environment.LocationChunk
     {
         private void OnTriggerEnter(Collider other)
         {
-            other.gameObject.IfHasComponent<CustomSnap>(component => Destroy(other.gameObject));
+            other.gameObject.HasComponent<CustomSnap>(component => Destroy(other.gameObject));
         }
     }
 }

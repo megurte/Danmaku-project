@@ -14,11 +14,16 @@ namespace Drop
         
         private DropType DropType => dropSo.dropType;
 
-        private const float Speed = 3f;
+        private float _speed = 3f;
+
+        private bool _tossing = true;
 
         private void Start()
         {
-            StartCoroutine(DropFalling());
+            if (_tossing)
+            {
+                StartCoroutine(FallingWithTossing());
+            }
         }
 
         public void AttractToPlayer()
@@ -27,18 +32,25 @@ namespace Drop
             StartCoroutine(FollowPlayer());
         }
 
+        public void FallingWithoutTossing()
+        {
+            _tossing = false;
+            _speed *= 3f;
+            StartCoroutine(Fall());
+        }
+
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<PlayerBase>(component =>
+            other.gameObject.HasComponent<PlayerBase>(component =>
             {
                 PlayerBase.GetDrop(DropType, Value);
                 Destroy(gameObject);
             });
             
-            other.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
+            other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
         }
 
-        private IEnumerator DropFalling()
+        private IEnumerator FallingWithTossing()
         {
             var position = transform.position;
             var targetPos = new Vector3(position.x, position.y + 4, position.z);
@@ -65,7 +77,7 @@ namespace Drop
                 var position = transform.position;
                 var newTargetPos = new Vector3(position.x, position.y - 20, position.z);
                 
-                transform.position = Vector3.MoveTowards(transform.position, newTargetPos, Speed 
+                transform.position = Vector3.MoveTowards(transform.position, newTargetPos, _speed 
                     * Time.deltaTime);
                 yield return null;
             }
@@ -76,14 +88,9 @@ namespace Drop
             while (transform.position != UtilsBase.GetNewPlayerPosition())
             {
                 transform.position = Vector3.MoveTowards(transform.position,
-                    UtilsBase.GetNewPlayerPosition(), Speed * 7 * Time.deltaTime);
+                    UtilsBase.GetNewPlayerPosition(), _speed * 7 * Time.deltaTime);
                 yield return null;
             }
-        }
-
-        private float EasingInverseSquared(float x)
-        {
-            return 1 - (1 - x) * (1 - x);
         }
     }
 }

@@ -20,8 +20,8 @@ namespace UI.Scene.Special
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<IDestroyable>(component => component.DestroySelf());
-            other.gameObject.IfHasComponent<IDamageable>(component => 
+            other.gameObject.HasComponent<IDestroyable>(component => component.DestroySelf());
+            other.gameObject.HasComponent<IDamageable>(component => 
                 EnemyBase.TakeDamage(damageToBoss, other.gameObject.GetInstanceID()));
         }
     }

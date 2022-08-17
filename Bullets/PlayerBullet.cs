@@ -29,14 +29,14 @@ namespace Bullets
     
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.IfHasComponent<IDamageable>(component =>
+            collision.gameObject.HasComponent<IDamageable>(component =>
             {
                 EnemyBase.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
                 Instantiate(destroyEffect, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             });
 
-            collision.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
+            collision.gameObject.HasComponent<Border>(component => Destroy(gameObject));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Environment
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.IfHasComponent<Bullet>(component =>
+            collision.gameObject.HasComponent<Bullet>(component =>
             {
                 if (gameObject.GetComponent<ChainTarget>()) return;
                 

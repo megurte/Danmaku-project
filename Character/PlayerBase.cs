@@ -4,7 +4,9 @@ using Drop;
 using SubEffects;
 using UnityEngine;
 using UnityEngine.Events;
+using Utils;
 using Zenject;
+using Random = System.Random;
 
 namespace Character
 {
@@ -207,6 +209,31 @@ namespace Character
                 : new Vector2(position.x + xOffset, position.y + yOffset);
             Instantiate(prefab, bulletPosition, Quaternion.identity);
         }
+
+        private void LoseExperienceCrystals()
+        {
+            var prefab = Resources.Load<GameObject>("Prefab/Drops/expDrop");
+            var seed = Guid.NewGuid().GetHashCode();
+            var maxVisualCrystals = new Random(seed).Next(6, 12);
+
+            for (var i = 0; i < maxVisualCrystals; i++)
+            {
+                seed = Guid.NewGuid().GetHashCode();
+                
+                var rnd = new Random(seed);
+                var startPos = transform.position;
+                var randomXOffset = rnd.NextFloat(-1, 1);
+                var randomYOffset = rnd.NextFloat(-1, 1);
+                var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
+                var newObject = Instantiate(prefab, dropPosition, Quaternion.identity);
+                
+                newObject.gameObject.HasComponent<Collider2D>(component => component.enabled = false);
+                newObject.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
+                newObject.gameObject.HasComponent<DropBase>(component => component.FallingWithoutTossing());
+            }
+            
+            exp -= 50;
+        }
         
         public static void TakeDamage(int damageValue)
         {
@@ -251,6 +278,7 @@ namespace Character
                 health -= damageValue;
                 
                 _flashEffect.FlashEffect();
+                LoseExperienceCrystals();
                 StartCoroutine(Invulnerable());
             }
 
@@ -269,12 +297,10 @@ namespace Character
 
         private IEnumerator Invulnerable()
         {
-            //var component = GetComponent<CircleCollider2D>();
-
             isInvulnerable = true;
-            //component.enabled = false;
+            
             yield return new WaitForSeconds(2);
-            //component.enabled = true;
+            
             isInvulnerable = false;
         }
         

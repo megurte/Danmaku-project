@@ -8,7 +8,7 @@ namespace Environment
     {
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<PlayerBase>(component =>
+            other.gameObject.HasComponent<PlayerBase>(component =>
             {
                 UtilsBase.CollectDrop();
             });

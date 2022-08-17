@@ -34,7 +34,7 @@ namespace Bullets
         
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.gameObject.IfHasComponent<PlayerBase>(component =>
+            collision.gameObject.HasComponent<PlayerBase>(component =>
             {
                 if (component.isInvulnerable) return;
                 
@@ -43,7 +43,7 @@ namespace Bullets
                 DestroySelf();
             });
 
-            collision.gameObject.IfHasComponent<Border>(component =>
+            collision.gameObject.HasComponent<Border>(component =>
             {
                 if (bulletType != BulletType.Chain)
                     Destroy(gameObject);

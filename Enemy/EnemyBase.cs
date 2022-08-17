@@ -81,14 +81,14 @@ namespace Enemy
         
         protected void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.IfHasComponent<PlayerBase>(component =>
+            other.gameObject.HasComponent<PlayerBase>(component =>
             {
                 if (component.isInvulnerable) return;
                 
                 PlayerBase.TakeDamage(1);
                 GlobalEvents.HealthChanged(component.health);
             });
-            other.gameObject.IfHasComponent<Border>(component => Destroy(gameObject));
+            other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
         }
 
         protected void DropItems(List<LootSettings> lootSettings)
