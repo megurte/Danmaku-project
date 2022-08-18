@@ -118,16 +118,10 @@ namespace Enemy
             }
         }
 
-        public static void TakeDamage(float damage, int enemyID)
+        public void TakeDamage(float damage)
         {
-            OnTakingDamageEvent.Invoke(damage, enemyID);
-        }
-        
-        // TODO
-        public void OnTakingDamage(float damage, int enemyID)
-        {
-            if (enemyID == gameObject.GetInstanceID())
-                CurrentHp -= damage;
+            /*if (enemyID == gameObject.GetInstanceID())*/
+            CurrentHp -= damage;
         }
     }
 }

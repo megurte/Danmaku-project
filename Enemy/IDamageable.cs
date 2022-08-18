@@ -2,6 +2,6 @@
 {
     public interface IDamageable
     {
-        void OnTakingDamage(float damage, int enemyID);
+        void TakeDamage(float damage);
     }
 }

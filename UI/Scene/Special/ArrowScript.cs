@@ -21,8 +21,7 @@ namespace UI.Scene.Special
         private void OnTriggerEnter2D(Collider2D other)
         {
             other.gameObject.HasComponent<IDestroyable>(component => component.DestroySelf());
-            other.gameObject.HasComponent<IDamageable>(component => 
-                EnemyBase.TakeDamage(damageToBoss, other.gameObject.GetInstanceID()));
+            other.gameObject.HasComponent<IDamageable>(component => component.TakeDamage(damageToBoss));
         }
     }
 }

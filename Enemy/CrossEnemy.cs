@@ -24,8 +24,6 @@ namespace Enemy
             _bulletPrefab = enemySo.bullet;
             _speed = enemySo.speed;
             CurrentHp = enemySo.maxHp;
-
-            OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
         private void FixedUpdate()

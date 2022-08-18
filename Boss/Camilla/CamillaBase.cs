@@ -29,7 +29,6 @@ namespace Boss.Camilla
 
         private void Awake()
         {
-            OnTakingDamageEvent.AddListener(OnTakingDamage);
             GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
             GlobalEvents.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
         }

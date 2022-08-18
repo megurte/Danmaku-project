@@ -33,7 +33,6 @@ namespace Enemy
             _innerTimer = Cooldown;
 
             _animator = GetComponent<Animator>();
-            OnTakingDamageEvent.AddListener(OnTakingDamage);
         }
 
         private void Start()

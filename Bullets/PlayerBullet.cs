@@ -31,7 +31,7 @@ namespace Bullets
         {
             collision.gameObject.HasComponent<IDamageable>(component =>
             {
-                EnemyBase.TakeDamage(DamageToEnemy, collision.gameObject.GetInstanceID());
+                component.TakeDamage(DamageToEnemy);
                 Instantiate(destroyEffect, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             });

@@ -29,7 +29,6 @@ namespace Boss.Kirin
         
         private void Awake()
         {
-            OnTakingDamageEvent.AddListener(OnTakingDamage);
             GlobalEvents.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
         }
 
