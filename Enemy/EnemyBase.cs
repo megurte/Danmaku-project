@@ -20,8 +20,6 @@ namespace Enemy
 
         private Vector3 _circleCenterPoint = default;
 
-        protected static readonly UnityEvent<float, int> OnTakingDamageEvent = new UnityEvent<float, int>();
-
         protected IEnumerator MovementToPosition(Vector3 targetPos, float speed)
         {
             while (transform.position != targetPos) 
@@ -69,12 +67,14 @@ namespace Enemy
             }
         }
 
-        protected void CheckHealth(List<LootSettings> lootSettings, GameObject deathEffect)
+        protected void CheckHealth(List<LootSettings> lootSettings = null, GameObject deathEffect = null)
         {
             if (CurrentHp <= 0)
             {
+                if (deathEffect != null)
+                    Instantiate(deathEffect, transform.position, Quaternion.identity);
+                
                 DropItems(lootSettings);
-                Instantiate(deathEffect, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
         }
@@ -93,6 +93,8 @@ namespace Enemy
 
         protected void DropItems(List<LootSettings> lootSettings)
         {
+            if (lootSettings == null) return;
+
             foreach (var loot in lootSettings)
             {
                 for (var i = 0; i < loot.dropNumber; i++)
@@ -120,7 +122,6 @@ namespace Enemy
 
         public void TakeDamage(float damage)
         {
-            /*if (enemyID == gameObject.GetInstanceID())*/
             CurrentHp -= damage;
         }
     }

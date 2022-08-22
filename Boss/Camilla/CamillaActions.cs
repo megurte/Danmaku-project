@@ -23,10 +23,18 @@ namespace Boss.Camilla
             CamillaPhases.SpiralBulletSpawn.AddListener(SpiralBulletSpawn);
             CamillaPhases.ReverseBulletSpawn.AddListener(ReverseBulletSpawn);
             CamillaPhases.PropellerBulletSpawn.AddListener(PropellerBulletSpawn);
+            CamillaPhases.CreateMagicalBarrier.AddListener(CreateMagicalBarrier);
             CamillaPhases.TargetPositionShooting.AddListener(TargetPositionShooting);
             CamillaPhases.RandomSpawnersActivate.AddListener(RandomSpawnersActivate);
             CamillaPhases.AllRandomSpawnersActivate.AddListener(AllRandomSpawnersActivate);
             CamillaPhases.CircleBulletWithRandomColorsSpawn.AddListener(CircleBulletWithRandomColorsSpawn);
+        }
+
+        private void CreateMagicalBarrier()
+        {
+            var barrier = Resources.Load<GameObject> ("Prefab/Effects/Barrier");
+
+            Instantiate(barrier, transform.position, Quaternion.identity);
         }
 
         private void WaveChainSpawn(int startIndex, int endIndex, bool fromLeft = true)

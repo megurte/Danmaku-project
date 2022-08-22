@@ -20,6 +20,7 @@ namespace Boss.Camilla
         public static readonly UnityEvent<CommonSpellSettingsWithTarget> TargetPositionShooting = new UnityEvent<CommonSpellSettingsWithTarget>();
         public static readonly UnityEvent<SpellSettingsWithDirectionAndAngle> SpiralBulletSpawn = new UnityEvent<SpellSettingsWithDirectionAndAngle>();
         public static readonly UnityEvent<SpellSettingsWithDirectionAndAngle> ReverseBulletSpawn = new UnityEvent<SpellSettingsWithDirectionAndAngle>();
+        public static readonly UnityEvent CreateMagicalBarrier = new UnityEvent();
         public static readonly UnityEvent StopAllSpells = new UnityEvent();
         
         private CamillaSO _camillaSettings;
@@ -139,6 +140,8 @@ namespace Boss.Camilla
         public IEnumerator InitPhaseFour()
         {
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
+            
+            CreateMagicalBarrier.Invoke();
             
             yield return new WaitForSeconds(2);
 

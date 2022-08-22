@@ -11,8 +11,6 @@ namespace Boss.Kirin
     {
         private KirinSO _kirinSo;
         
-        private float _lerpSpeed;
-        
         public Image bar;
 
         private float MaxHp { get; set; }
@@ -22,7 +20,6 @@ namespace Boss.Kirin
         {
             _kirinSo = settings;
             MaxHp = _kirinSo.maxHp;
-            _lerpSpeed = _kirinSo.lerpSpeed;
             bar.fillAmount = 100;
             CurrentHp = MaxHp;
         }
@@ -47,7 +44,7 @@ namespace Boss.Kirin
         private  void HandleBar()
         {
             if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
-                bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime * _lerpSpeed);
+                bar.fillAmount = Mathf.Lerp(bar.fillAmount, CurrentHp / MaxHp, Time.deltaTime);
         }
     }
 }

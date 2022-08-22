@@ -16,6 +16,8 @@ namespace Boss.Camilla
 
         private CamillaSO _camillaSo;
 
+        private bool _isBarrierActive;
+
         private float MaxHp { get; set; }
 
         [Inject]
@@ -29,6 +31,7 @@ namespace Boss.Camilla
 
         private void Awake()
         {
+            CamillaPhases.CreateMagicalBarrier.AddListener(()=> _isBarrierActive = true);
             GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
             GlobalEvents.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
         }
@@ -37,6 +40,11 @@ namespace Boss.Camilla
         {
             HandleBar();
 
+            if (_isBarrierActive)
+            {
+                Debug.Log(_isBarrierActive);
+            }
+            
             if (CurrentHp <= 0)
             {
                 CurrentHp = MaxHp;
