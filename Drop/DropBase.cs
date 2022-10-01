@@ -16,7 +16,7 @@ namespace Drop
 
         private float _speed = 3f;
 
-        private bool _tossing = true; //test
+        private bool _tossing = true;
 
         private void Start()
         {
