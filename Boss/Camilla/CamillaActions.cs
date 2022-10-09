@@ -33,8 +33,10 @@ namespace Boss.Camilla
         private void CreateMagicalBarrier()
         {
             var barrier = Resources.Load<GameObject> ("Prefab/Effects/Barrier");
-
-            Instantiate(barrier, transform.position, Quaternion.identity);
+            var newBarrierInstance = Instantiate(barrier);
+            
+            // fix spawn position
+            newBarrierInstance.transform.parent = gameObject.transform;
         }
 
         private void WaveChainSpawn(int startIndex, int endIndex, bool fromLeft = true)
