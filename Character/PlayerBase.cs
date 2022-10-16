@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections;
+using Bullets;
 using Drop;
+using Enemy;
 using SubEffects;
 using UnityEngine;
 using UnityEngine.Events;
 using Utils;
 using Zenject;
 using Random = System.Random;
+using TMPro;
+using UnityEngine.Serialization;
 
 namespace Character
 {
@@ -22,9 +26,9 @@ namespace Character
         public float maxSpecials;
         public int points;
         public bool isInvulnerable;
-
-        [SerializeField] private float _playerSpeed;
-        [SerializeField] private bool _slowMode = false;
+        
+        private float _playerSpeed;
+        private bool _slowMode = false;
         private float _specialTimer;
         private float _specialCooldown;
         private GameObject _playerBullet;
@@ -35,10 +39,11 @@ namespace Character
         private Rigidbody2D _rigidBody;
         private Vector2 _moveVector;
         private float _innerTimer;
-        
-        public static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
+
+        private static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
         private static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
         private static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
+        public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
 
         [Inject]
         public void Construct(PlayerSO playerSettings)
@@ -53,8 +58,8 @@ namespace Character
             
             OnGetDrop.AddListener(OnDrop);
             OnTakeDamage.AddListener(OnDamage);
+            OnDeath.AddListener(PlayerDeath);
             GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
-
         }
 
         private void Update()
@@ -286,8 +291,8 @@ namespace Character
             if (!isInvulnerable && health <= 0)
             {
                 TranslateCurrentStageScore.Invoke(points);
-                Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity); 
-                Destroy(gameObject);
+                Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity);
+                OnDeath.Invoke(points);
             }
         }
 
@@ -303,6 +308,19 @@ namespace Character
             yield return new WaitForSeconds(2);
             
             isInvulnerable = false;
+        }
+
+        private void PlayerDeath(int score)
+        {
+            var spawners = GameObject.FindGameObjectsWithTag("Spawner");
+
+            foreach (var spawner in spawners)
+                spawner.SetActive(false);
+
+            UtilsBase.ClearBullets<Bullet>();
+            UtilsBase.ClearEnemies<EnemyBase>();
+            UtilsBase.ClearDrop<DropBase>();
+            Destroy(gameObject);
         }
         
         private void InitPlayer(PlayerSO settings)

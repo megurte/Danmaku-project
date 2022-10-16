@@ -49,6 +49,16 @@ namespace Utils
                 Object.Destroy(type.gameObject);
             }
         }
+        
+        public static void ClearDrop<T>() where T : DropBase
+        {
+            var drops = Object.FindObjectsOfType<T>();
+
+            foreach (var type in drops)
+            {
+                Object.Destroy(type.gameObject);
+            }
+        }
 
         public static void CollectDrop()
         {

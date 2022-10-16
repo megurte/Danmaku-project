@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Character;
+using UnityEngine;
 
 namespace Environment
 {
@@ -7,6 +9,11 @@ namespace Environment
         public GameObject environmentPrefab;
         public Vector3 direction;
         public float speed;
+
+        private void Start()
+        {
+            PlayerBase.OnDeath.AddListener((int a) => speed = 0);
+        }
 
         private void FixedUpdate()
         {

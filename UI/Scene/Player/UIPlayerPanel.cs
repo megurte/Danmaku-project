@@ -1,33 +1,30 @@
 using Character;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace UI.Scene.Player
 {
     public class UIPlayerPanel : MonoBehaviour
     {
-        public PlayerBase player;
+        [SerializeField] private PlayerBase player;
+        [SerializeField] private GameObject health;
+        [SerializeField] private GameObject specials;
     
-        public GameObject health;
+        [Header("Experience")][SerializeField] private TextMeshProUGUI levelText;
+        [SerializeField] private TextMeshProUGUI experienceText;
+        
+        [Space(20f)][SerializeField] private TextMeshProUGUI points;
+        [SerializeField] private TextMeshProUGUI scoreText;
 
-        public GameObject specials;
-    
-        [Header("Experience")] public TextMeshProUGUI levelText;
-    
-        public TextMeshProUGUI experienceText;
-    
-        [Space(20f)] public TextMeshProUGUI points;
-    
-        public TextMeshProUGUI score;
-
-        [Header("Prefabs")] public GameObject iconHealthFull;
+        [Header("Prefabs")][SerializeField] private GameObject iconHealthFull;
+        [SerializeField] private GameObject iconHealthEmpty;
+        [SerializeField] private GameObject iconSpecialFull;
+        [SerializeField] private GameObject iconSpecialEmpty;
         
-        public GameObject iconHealthEmpty;
-        
-        public GameObject iconSpecialFull;
-        
-        public GameObject iconSpecialEmpty;
+        [Space(20f)][SerializeField] private GameObject deathText;
+        [SerializeField] private GameObject scoreDeathText;
 
         [Inject]
         public void Construct(PlayerBase settings)
@@ -39,7 +36,8 @@ namespace UI.Scene.Player
         {
             UpdateHealthFiller(player.playerSo.health);
             UpdateSpecialFiller(player.playerSo.special);
-            
+
+            PlayerBase.OnDeath.AddListener(ShowDeathScreen);
             GlobalEvents.OnHealthChange.AddListener(UpdateHealthFiller);
             GlobalEvents.OnSpecialChange.AddListener(UpdateSpecialFiller);
         }
@@ -55,7 +53,7 @@ namespace UI.Scene.Player
         
             levelText.text = "Lv. " + player.level;
             points.text = player.points + "";
-            score.text = player.points + "";
+            scoreText.text = player.points + "";
 
             if (player.level + 1 < levelUpMap.keys.Count)
                 experienceText.text = player.exp + "/" + levelUpMap.values[player.level];
@@ -122,6 +120,12 @@ namespace UI.Scene.Player
                 prefab.transform.SetParent(specials.transform);
                 SetNormalScale(prefab);
             }
+        }
+
+        private void ShowDeathScreen(int score)
+        {
+            deathText.SetActive(true);
+            scoreDeathText.GetComponent<TextMeshProUGUI>().text = $"Score record: {score}";
         }
 
         private static void SetNormalScale(GameObject prefab)
