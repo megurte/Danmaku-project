@@ -40,10 +40,10 @@ namespace Enemy
             switch (MoveSet)
             {
                 case MoveSet.MoveAround:
-                    StartCoroutine(MoveAroundRoutine(targetPosition, enemySo.radius, Speed, enemySo.angularSpeed));
+                    StartCoroutine(MoveAroundRoutine(TargetPosition, enemySo.radius, Speed, enemySo.angularSpeed));
                     break;
                 case MoveSet.ToPosition:
-                    StartCoroutine(MovementToPosition(targetPosition, Speed));
+                    StartCoroutine(MovementToPosition(TargetPosition, Speed));
                     break;
                 case MoveSet.ToPoint:
                     //
@@ -103,7 +103,8 @@ namespace Enemy
                     yield return new WaitForSeconds(0.1f);
                     
                     CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
-                        1, UtilsBase.GetDirection(UtilsBase.GetNewPlayerPosition(), transform.position), 0.01f));
+                        0.5f, UtilsBase.GetDirection(UtilsBase.GetNewPlayerPosition(), transform.position),
+                        0.01f));
                 }
 
                 yield return Shoot();

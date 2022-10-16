@@ -62,6 +62,7 @@ namespace Character
             SpeedUpdate();
         }
 
+        // move to Update() method 
         private void FixedUpdate()
         {
             if (Input.anyKey)

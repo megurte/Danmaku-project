@@ -35,13 +35,13 @@ namespace Spawner
 
         private void SpawnEnemy()
         {
-            var instObject = Instantiate(EnemySpawnPropertiesList[_iteration].enemyPrefab,
+            var instance = Instantiate(EnemySpawnPropertiesList[_iteration].enemyPrefab,
                 transform.position, Quaternion.identity);
 
-            if (instObject.GetComponent<CommonEnemy>().enemySo.moveSet != MoveSet.MoveAround)
+            if (instance.GetComponent<CommonEnemy>().enemySo.moveSet != MoveSet.MoveAround)
             {
-                instObject.GetComponent<EnemyBase>().targetPosition 
-                    = EnemySpawnPropertiesList[_iteration].targetPosition;
+                instance.GetComponent<EnemyBase>()
+                    .SetTargetPosition(EnemySpawnPropertiesList[_iteration].targetPosition);
             }
         }
 

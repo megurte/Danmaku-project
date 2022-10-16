@@ -32,10 +32,10 @@ namespace Enemy
             switch (MoveSet)
             {
                 case MoveSet.MoveAround:
-                    StartCoroutine(MoveAroundRoutine(targetPosition, enemySo.radius, Speed, enemySo.angularSpeed));
+                    StartCoroutine(MoveAroundRoutine(TargetPosition, enemySo.radius, Speed, enemySo.angularSpeed));
                     break;
                 case MoveSet.ToPosition:
-                    StartCoroutine(MovementToPosition(targetPosition, Speed));
+                    StartCoroutine(MovementToPosition(TargetPosition, Speed));
                     break;
                 case MoveSet.ToPoint:
                     //

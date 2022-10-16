@@ -14,7 +14,7 @@ namespace Enemy
     {
         protected float CurrentHp { get; set; }
 
-        public Vector3 targetPosition;
+        protected Vector3 TargetPosition;
         
         private float _angle = default;
 
@@ -63,6 +63,7 @@ namespace Enemy
 
                 if (_angle >= 360f)
                     _angle = 0;
+                
                 yield return null;
             }
         }
@@ -123,6 +124,11 @@ namespace Enemy
         public void TakeDamage(float damage)
         {
             CurrentHp -= damage;
+        }
+
+        public void SetTargetPosition(Vector3 newPosition)
+        {
+            this.TargetPosition = newPosition;
         }
     }
 }

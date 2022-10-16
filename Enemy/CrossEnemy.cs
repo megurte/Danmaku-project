@@ -33,13 +33,13 @@ namespace Enemy
             //CommonSpells.RandomShooting(_bulletPrefab, transform.position, 1);
         
             if (!_isCharging)
-                MovementToPosition(targetPosition, _speed);
+                MovementToPosition(TargetPosition, _speed);
 
 
             if (_isCharged)
                 MoveToDirection(_direction, _speed);
 
-            if (gameObject.transform.position == targetPosition && !_isCharging)
+            if (gameObject.transform.position == TargetPosition && !_isCharging)
             {
                 _isCharging = true;
                 StartCoroutine(Charge());
@@ -70,8 +70,8 @@ namespace Enemy
             yield return new WaitForSeconds(3);
             _speed = 0.5f;
             _isCharged = true;
-            targetPosition = UtilsBase.GetNewPlayerPosition();
-            _direction = UtilsBase.GetDirection(targetPosition, transform.position);
+            TargetPosition = UtilsBase.GetNewPlayerPosition();
+            _direction = UtilsBase.GetDirection(TargetPosition, transform.position);
         }
 
         public void OnDestroy()
