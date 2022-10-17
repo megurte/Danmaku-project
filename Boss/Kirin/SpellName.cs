@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kirin
+namespace Boss.Kirin
 {
     [Serializable]
     public enum SpellName

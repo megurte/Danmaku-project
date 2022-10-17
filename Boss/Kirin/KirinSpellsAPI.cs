@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Kirin
+namespace Boss.Kirin
 {
     // TODO: refactor
     public class KirinSpellsAPI : KirinSpells

@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using System.ComponentModel;
+using UnityEngine;
 using Zenject;
 
-namespace Kirin
+namespace Boss.Kirin
 {
     public class KirinInstaller : MonoInstaller
     {

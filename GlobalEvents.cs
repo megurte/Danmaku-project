@@ -10,8 +10,6 @@ public static class GlobalEvents
         
     public static readonly UnityEvent OnBossFightFinish = new UnityEvent();
     
-    public static readonly UnityEvent OnPlayerDeath = new UnityEvent();
-
     private static int _phaseNumber = 1;
 
     public static void ChangePhase()

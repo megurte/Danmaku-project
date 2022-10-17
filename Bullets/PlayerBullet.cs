@@ -1,7 +1,6 @@
 using Boss.Kirin;
 using Enemy;
 using Environment;
-using Kirin;
 using UnityEngine;
 using Utils;
 

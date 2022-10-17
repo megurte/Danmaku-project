@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Boss;
 using UnityEngine;
 
-namespace Kirin 
+namespace Boss.Kirin 
 {
     public class KirinPhases : MonoBehaviour
     {

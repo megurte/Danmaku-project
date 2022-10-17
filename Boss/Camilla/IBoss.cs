@@ -1,4 +1,7 @@
-﻿public interface IBoss
+﻿namespace Boss.Camilla
 {
-    void OnBossFightFinished();
+    public interface IBoss
+    {
+        void OnBossFightFinished();
+    }
 }

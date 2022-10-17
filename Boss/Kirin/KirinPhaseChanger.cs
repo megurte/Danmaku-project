@@ -1,8 +1,7 @@
-﻿using Boss;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
-namespace Kirin
+namespace Boss.Kirin
 {
     public class KirinPhaseChanger : MonoBehaviour
     {

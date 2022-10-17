@@ -1,6 +1,7 @@
 ﻿using System;
 using Bullets;
 using UnityEngine;
+using Utils;
 using Random = System.Random;
 
 namespace Spells

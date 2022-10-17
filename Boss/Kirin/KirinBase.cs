@@ -1,6 +1,5 @@
 ﻿using System;
 using Enemy;
-using Kirin;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

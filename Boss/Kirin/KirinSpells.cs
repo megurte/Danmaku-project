@@ -2,7 +2,7 @@
 using Bullets;
 using UnityEngine;
 
-namespace Kirin
+namespace Boss.Kirin
 {
     // TODO: refactor
     public abstract class KirinSpells : MonoBehaviour

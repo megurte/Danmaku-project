@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Kirin
+namespace Boss.Kirin
 {
     [Serializable]
     public class KirinMoveSettings
