@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Bullets;
 using Enemy;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,7 +29,7 @@ namespace Spawner
                 new Vector3(-12.6f, 9.43f, 0)));
             StartCoroutine(BookSpawn(30, bookSpawners[1].transform,
                 new Vector3(-12.6f, 9.43f, 0)));
-            StartCoroutine(AddsPhaseEnd(80));
+            StartCoroutine(AddsPhaseEnd(40));
         }
 
         private static void OnSpawnerAwake(int index)
