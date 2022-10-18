@@ -11,11 +11,8 @@ namespace Drop
         public DropSO dropSo;
 
         private int Value => dropSo.value;
-        
         private DropType DropType => dropSo.dropType;
-
         private float _speed = 3f;
-
         private bool _tossing = true;
 
         private void Start()
@@ -77,7 +74,7 @@ namespace Drop
                 var position = transform.position;
                 var newTargetPos = new Vector3(position.x, position.y - 20, position.z);
                 
-                transform.position = Vector3.MoveTowards(transform.position, newTargetPos, _speed 
+                transform.position = Vector3.MoveTowards(position, newTargetPos, _speed 
                     * Time.deltaTime);
                 yield return null;
             }

@@ -7,7 +7,6 @@ namespace Boss.Camilla
     {
         [Inject] private CamillaSO _camillaSettings;
         private CamillaPhases _camillaPhases;
-
         private int _phaseNumber = 1;
         private bool _isPhaseActive = default;
 

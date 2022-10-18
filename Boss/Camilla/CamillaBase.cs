@@ -9,37 +9,33 @@ namespace Boss.Camilla
     public class CamillaBase : EnemyBase, IBoss
     {
         [SerializeField] private Image bar;
-        
         [SerializeField] private GameObject bossTimerUI;
-        
         [SerializeField] private GameObject bossBarUI;
-
         private CamillaSO _camillaSo;
-
         private bool _isBarrierActive;
-
-        private float MaxHp { get; set; }
+        private float _maxHp;
 
         [Inject]
         public void Construct(CamillaSO settings)
         {
             _camillaSo = settings;
-            MaxHp = _camillaSo.maxHp;
+            _maxHp = _camillaSo.maxHp;
             bar.fillAmount = 100;
-            CurrentHp = MaxHp;
+            CurrentHp = _maxHp;
         }
 
         private void Awake()
         {
             CamillaPhases.CreateMagicalBarrier.AddListener(()=> _isBarrierActive = true);
             GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
-            GlobalEvents.OnPhaseChange.AddListener((int i) => { CurrentHp = MaxHp; });
+            GlobalEvents.OnPhaseChange.AddListener((int i) => { CurrentHp = _maxHp; });
         }
 
         private void Update()
         {
             HandleBar();
 
+            // TODO: remove
             if (_isBarrierActive)
             {
                 Debug.Log(_isBarrierActive);
@@ -47,7 +43,7 @@ namespace Boss.Camilla
             
             if (CurrentHp <= 0)
             {
-                CurrentHp = MaxHp;
+                CurrentHp = _maxHp;
 
                 GlobalEvents.ChangePhase();
             }
@@ -55,8 +51,8 @@ namespace Boss.Camilla
 
         private void HandleBar()
         {
-            if (Math.Abs(CurrentHp / MaxHp - bar.fillAmount) >= 0)
-                bar.fillAmount = CurrentHp / MaxHp;
+            if (Math.Abs(CurrentHp / _maxHp - bar.fillAmount) >= 0)
+                bar.fillAmount = CurrentHp / _maxHp;
         }
 
         public void OnBossFightFinished()

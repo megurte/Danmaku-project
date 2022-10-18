@@ -28,6 +28,7 @@ namespace Boss.Camilla
             }
 
             var chain = Instantiate(chainPrefab, newPosition, Quaternion.Euler(newRotation));
+            
             chain.GetComponent<ChainBase>().spawnerType = spawnerType;
         }
 

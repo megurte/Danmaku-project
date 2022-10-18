@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Character;
 using Environment;
 using UnityEngine;
-using UnityEngine.Events;
 using Utils;
 using Random = System.Random;
 
@@ -13,11 +12,9 @@ namespace Enemy
     public abstract class EnemyBase: MonoBehaviour, IDamageable
     {
         protected float CurrentHp { get; set; }
-
         protected Vector3 TargetPosition;
         
         private float _angle = default;
-
         private Vector3 _circleCenterPoint = default;
 
         protected IEnumerator MovementToPosition(Vector3 targetPos, float speed)
@@ -84,10 +81,10 @@ namespace Enemy
         {
             other.gameObject.HasComponent<PlayerBase>(component =>
             {
-                if (component.isInvulnerable) return;
+                if (component.IsInvulnerable) return;
                 
                 PlayerBase.TakeDamage(1);
-                GlobalEvents.HealthChanged(component.health);
+                GlobalEvents.HealthChanged(component.Health);
             });
             other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
         }

@@ -51,12 +51,12 @@ namespace UI.Scene.Player
         {
             var levelUpMap = player.playerSo.levelUpMap;
         
-            levelText.text = "Lv. " + player.level;
-            points.text = player.points + "";
-            scoreText.text = player.points + "";
+            levelText.text = "Lv. " + player.Level;
+            points.text = player.Points + "";
+            scoreText.text = player.Points + "";
 
-            if (player.level + 1 < levelUpMap.keys.Count)
-                experienceText.text = player.exp + "/" + levelUpMap.values[player.level];
+            if (player.Level + 1 < levelUpMap.keys.Count)
+                experienceText.text = player.Experience + "/" + levelUpMap.values[player.Level];
             else
                 experienceText.text = levelUpMap.values[levelUpMap.values.Count - 1] + "/" 
                     + levelUpMap.values[levelUpMap.values.Count - 1];

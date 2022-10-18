@@ -9,27 +9,13 @@ namespace Boss
     public class BossTimer : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI textUI;
-
-        [SerializeField] private int pointsForEachSecondLeft;
-
-        private float _timeRemaining = default;
-        
-        private bool _timerIsRunning = default;
-        
-        private int _phaseIndex = default;
-
-        private int _scoreSeconds;
-        
-        [Serializable]
-        public struct PhaseTimer
-        {
-            public float seconds;
-            public float milSec;
-        }
-
         [SerializeField] private List<PhaseTimer> timers;
-        
+        [SerializeField] private int pointsForEachSecondLeft;
         private Dictionary<int, int> _phasesScore = new Dictionary<int, int>();
+        private float _timeRemaining = default;
+        private bool _timerIsRunning = default;
+        private int _phaseIndex = default;
+        private int _scoreSeconds;
 
         public static readonly UnityEvent<Dictionary<int, int>> TranslateTimerData = new UnityEvent<Dictionary<int, int>>(); 
 

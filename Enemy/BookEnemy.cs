@@ -18,12 +18,10 @@ namespace Enemy
         private float Speed => enemySo.speed;
         private Spells Spell => enemySo.spell;
         private MoveSet MoveSet => enemySo.moveSet;
-        
         private float _innerTimer;
-        
-        [SerializeField] private bool shootingIsAvailable;
-        
         private Animator _animator;
+
+        [SerializeField] private bool shootingIsAvailable;
 
         private static readonly int IsCasting = Animator.StringToHash("isCasting");
 
@@ -31,7 +29,6 @@ namespace Enemy
         {
             CurrentHp = enemySo.maxHp;
             _innerTimer = Cooldown;
-
             _animator = GetComponent<Animator>();
         }
 

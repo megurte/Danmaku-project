@@ -9,7 +9,7 @@ using Utils;
 
 namespace Enemy
 {
-    public class CommonEnemy : EnemyBase, IShoot, IDestroyable
+    public class CommonEnemy : EnemyBase, IDestroyable
     {
         public EnemySO enemySo;
         private float Cooldown => enemySo.cooldown;
@@ -18,7 +18,6 @@ namespace Enemy
         private float Speed => enemySo.speed;
         private Spells Spell => enemySo.spell;
         private MoveSet MoveSet => enemySo.moveSet;
-        
         private float _innerTimer;
         
         private void Awake()
@@ -73,30 +72,6 @@ namespace Enemy
                 
                 _innerTimer = Cooldown;
             }
-        }
-        
-        public IEnumerator Shoot()
-        {
-            /*if (shootingIsAvailable)
-            {
-                _animator.SetBool(IsCasting, false);
-
-                yield return new WaitForSeconds(Cooldown);
-
-                _animator.SetBool(IsCasting, true);
-                
-                for (var i = 0; i < BulletCount; i++)
-                {
-                    yield return new WaitForSeconds(0.1f);
-                    
-                    CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
-                        1,GetDirection(GetNewTargetPosition(), transform.position)));
-                }
-
-                yield return Shoot();
-            }*/
-            
-            yield return new WaitForSeconds(Cooldown);
         }
 
         public void DestroySelf()

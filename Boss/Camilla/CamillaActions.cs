@@ -35,7 +35,7 @@ namespace Boss.Camilla
             var barrier = Resources.Load<GameObject> ("Prefab/Effects/Barrier");
             var newBarrierInstance = Instantiate(barrier);
             
-            // fix spawn position
+            // TODO: fix spawn position
             newBarrierInstance.transform.parent = gameObject.transform;
         }
 
@@ -100,6 +100,7 @@ namespace Boss.Camilla
             for (var i = 1; i <= settings.Count; i++)
             {
                 var degree = angle / settings.Count * i;
+                
                 position.y = settings.CenterPosition.y + Mathf.Cos(degree) * settings.Distance;
                 position.x = settings.CenterPosition.x + Mathf.Sin(degree) * settings.Distance;
 
@@ -238,6 +239,7 @@ namespace Boss.Camilla
                 yield return new WaitForSeconds(settings.Delay);
                 
                 var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
+                
                 instObject.GetComponent<Bullet>().Direction = direction;
 
                 currentAngle = settings.IsReverse
@@ -259,6 +261,7 @@ namespace Boss.Camilla
                 var newPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
                 var direction = UtilsBase.GetDirection(UtilsBase.GetNewPlayerPosition(), startPos);
                 var instObject = Instantiate(settings.Bullet, newPosition, Quaternion.identity);
+                
                 instObject.GetComponent<Bullet>().Direction = direction;
                 
                 yield return new WaitForSeconds(settings.Delay);

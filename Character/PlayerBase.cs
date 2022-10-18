@@ -9,24 +9,22 @@ using UnityEngine.Events;
 using Utils;
 using Zenject;
 using Random = System.Random;
-using TMPro;
-using UnityEngine.Serialization;
 
 namespace Character
 {
     public class PlayerBase : MonoBehaviour
     {
         public PlayerSO playerSo;
-        public int health;
-        public int maxHealth;
-        public int level;
-        public float maxLevel;
-        public int exp;
-        public int special;
-        public float maxSpecials;
-        public int points;
-        public bool isInvulnerable;
+        public int Health { get; private set; }
+        public int Level { get; private set; }
+        public int Experience { get; private set; }
+        public int Points { get; private set; }
+        public bool IsInvulnerable { get; private set; }
         
+        private int _maxHealth;
+        private float _maxLevel;
+        private int _special;
+        private float _maxSpecials;
         private float _playerSpeed;
         private bool _slowMode = false;
         private float _specialTimer;
@@ -40,10 +38,11 @@ namespace Character
         private Vector2 _moveVector;
         private float _innerTimer;
 
+        public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
+
         private static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
         private static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
         private static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
-        public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
 
         [Inject]
         public void Construct(PlayerSO playerSettings)
@@ -77,11 +76,11 @@ namespace Character
 
             if (Input.GetKey(KeyCode.Space))
             {
-                ShootCommon(level);
+                ShootCommon(Level);
             
-                if (level >= 3)
+                if (Level >= 3)
                 {
-                    ShootTarget(level);
+                    ShootTarget(Level);
                     _innerTimer -= Time.deltaTime;
                 }
             }
@@ -91,17 +90,17 @@ namespace Character
             
             // Test
             if (Input.GetKey(KeyCode.F12))
-                points += 100;
+                Points += 100;
 
             if (_specialTimer - _specialCooldown < 0)
                 _specialTimer -= Time.deltaTime;
 
             if (Input.GetKey(KeyCode.F2))
-                level = 2;
+                Level = 2;
             if (Input.GetKey(KeyCode.F3))
-                level = 3;
+                Level = 3;
             if (Input.GetKey(KeyCode.F4))
-                level = 4;
+                Level = 4;
         }
 
         private void Moving()
@@ -136,12 +135,12 @@ namespace Character
 
             for (var index = 0; index < keyMap.keys.Count; index++)
             {
-                if (keyMap.keys[index] == level)
+                if (keyMap.keys[index] == Level)
                 {
                     if (index + 1 < keyMap.values.Count)
                     {
-                        if (exp >= keyMap.values[index + 1])
-                            level++;  
+                        if (Experience >= keyMap.values[index + 1])
+                            Level++;  
                     }
                 }
             }
@@ -149,15 +148,15 @@ namespace Character
 
         private void UseSpecial()
         {
-            if (!(_specialTimer <= 0) || special <= 0) return;
+            if (!(_specialTimer <= 0) || _special <= 0) return;
             
             var settings = playerSo.specialSettings[0];
                 
-            special--;
+            _special--;
             _specialTimer = _specialCooldown;
             _specialTimer -= Time.deltaTime;
             
-            GlobalEvents.SpecialChanged(special);
+            GlobalEvents.SpecialChanged(_special);
 
             Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
         }
@@ -238,7 +237,8 @@ namespace Character
                 newObject.gameObject.HasComponent<DropBase>(component => component.FallingWithoutTossing());
             }
             
-            exp -= 50;
+            // TODO: fix bug
+            // Experience -= 50;
         }
         
         public static void TakeDamage(int damageValue)
@@ -256,58 +256,58 @@ namespace Character
             switch (type)
             {
                 case DropType.ExpDrop:
-                    if (level < maxLevel)
-                        exp += value;
+                    if (Level < _maxLevel)
+                        Experience += value;
                     else
-                        points += value * 1000;
+                        Points += value * 1000;
                     break;
                 case DropType.PointDrop:
-                    points += value;
+                    Points += value;
                     break;
                 case DropType.HealthDrop:
-                    health += health + value <= maxSpecials ? value : 0;
-                    GlobalEvents.HealthChanged(health);
+                    Health += Health + value <= _maxSpecials ? value : 0;
+                    GlobalEvents.HealthChanged(Health);
                     break;
                 case DropType.SpecialDrop:
-                    special += special + value <= maxSpecials ? value : 0;
-                    GlobalEvents.SpecialChanged(special);
+                    _special += _special + value <= _maxSpecials ? value : 0;
+                    GlobalEvents.SpecialChanged(_special);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, $"Drop index out of range: {type}");
+                    throw new Exception($"DropType index out of range: {type}");
             }
         }
 
         private void OnDamage(int damageValue)
         {
-            if (health > 0 && !isInvulnerable)
+            if (Health > 0 && !IsInvulnerable)
             {
-                health -= damageValue;
+                Health -= damageValue;
                 
                 _flashEffect.FlashEffect();
                 LoseExperienceCrystals();
                 StartCoroutine(Invulnerable());
             }
 
-            if (!isInvulnerable && health <= 0)
+            if (!IsInvulnerable && Health <= 0)
             {
-                TranslateCurrentStageScore.Invoke(points);
+                TranslateCurrentStageScore.Invoke(Points);
                 Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity);
-                OnDeath.Invoke(points);
+                OnDeath.Invoke(Points);
             }
         }
 
         private void OnBossFightFinished()
         {
-            TranslateCurrentStageScore.Invoke(points);
+            TranslateCurrentStageScore.Invoke(Points);
         }
 
         private IEnumerator Invulnerable()
         {
-            isInvulnerable = true;
+            IsInvulnerable = true;
             
             yield return new WaitForSeconds(2);
             
-            isInvulnerable = false;
+            IsInvulnerable = false;
         }
 
         private void PlayerDeath(int score)
@@ -326,17 +326,17 @@ namespace Character
         private void InitPlayer(PlayerSO settings)
         {
             playerSo = settings;
-            health = settings.health;
-            maxHealth = settings.maxHealth;
-            maxSpecials = settings.maxValue;
+            Health = settings.health;
+            Level = settings.level;
+            Experience = settings.experience;
+            Points = settings.points;
+            _maxHealth = settings.maxHealth;
+            _maxSpecials = settings.maxValue;
             _specialTimer = 0;
             _specialCooldown = settings.specialCooldown;
-            maxLevel = settings.maxLevel;
-            special = settings.special;
+            _maxLevel = settings.maxLevel;
+            _special = settings.special;
             _playerSpeed = settings.speed;
-            level = settings.level;
-            exp = settings.exp;
-            points = settings.points;
             _playerBullet = settings.bullet;
             _targetBullet = settings.targetBullet;
             _destroyEffect = settings.destroyEffect;

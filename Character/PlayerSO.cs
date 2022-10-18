@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using Utils;
 
@@ -17,7 +18,7 @@ namespace Character
         public int special;
         public float specialCooldown;
         public float speed;
-        public int exp = default;
+        public int experience = default;
         public int points = default;
         public GameObject bullet;
         public GameObject targetBullet;

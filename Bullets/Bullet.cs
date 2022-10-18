@@ -36,10 +36,10 @@ namespace Bullets
         {
             collision.gameObject.HasComponent<PlayerBase>(component =>
             {
-                if (component.isInvulnerable) return;
+                if (component.IsInvulnerable) return;
                 
                 PlayerBase.TakeDamage(1);
-                GlobalEvents.HealthChanged(component.health);
+                GlobalEvents.HealthChanged(component.Health);
                 DestroySelf();
             });
 

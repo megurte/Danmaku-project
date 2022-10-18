@@ -34,7 +34,6 @@ namespace Boss.Camilla
         private GameObject _timedFireBullet;
         private GameObject _timedFireSmallBullet;
         private GameObject _timedFireSmallBulletBlue;
-
         #endregion
         
         #region Spawner Indexes
@@ -147,7 +146,6 @@ namespace Boss.Camilla
 
             PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_fireBulletOrange, _self, 2, 30, 
                 8, 0.06f, 30, true));
-            //RandomShooting.Invoke(new CommonSpellSettingsWithDelay(_fireBulletOrange, _self, 1, 0.01f));
             AllRandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown);
             
             yield return new WaitForSeconds(14);
