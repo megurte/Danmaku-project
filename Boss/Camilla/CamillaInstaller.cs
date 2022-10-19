@@ -19,7 +19,7 @@ namespace Boss.Camilla
         {
             Container.Bind<CamillaSO>().FromInstance(camillaSettings).AsCached().NonLazy();
             
-            StartCoroutine(CamillaInit(40));
+            StartCoroutine(CamillaInit(90));
         }
 
         private IEnumerator CamillaInit(float time)
@@ -28,8 +28,7 @@ namespace Boss.Camilla
             backgroundMusic.clip = bossMusic;
             backgroundMusic.Play();
             camillaPrefab.SetActive(true);
-            bossBarUI.SetActive(true);
-            bossTimerUI.SetActive(true);
+            camillaPrefab.GetComponent<CamillaBase>().BossUI(true);
         }
     }
 }

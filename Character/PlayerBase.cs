@@ -15,6 +15,7 @@ namespace Character
     public class PlayerBase : MonoBehaviour
     {
         public PlayerSO playerSo;
+        public bool godMod = default;
         public int Health { get; private set; }
         public int Level { get; private set; }
         public int Experience { get; private set; }
@@ -54,6 +55,12 @@ namespace Character
             _innerTimer = _targetBulletFrequency;
             _flashEffect = GetComponent<SimpleFlash>();
             _rigidBody = GetComponent<Rigidbody2D>();
+
+            if (godMod)
+            {
+                IsInvulnerable = true;
+                Experience = 10000;
+            }
             
             OnGetDrop.AddListener(OnDrop);
             OnTakeDamage.AddListener(OnDamage);

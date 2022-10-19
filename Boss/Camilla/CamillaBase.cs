@@ -35,12 +35,6 @@ namespace Boss.Camilla
         {
             HandleBar();
 
-            // TODO: remove
-            if (_isBarrierActive)
-            {
-                Debug.Log(_isBarrierActive);
-            }
-            
             if (CurrentHp <= 0)
             {
                 CurrentHp = _maxHp;
@@ -63,7 +57,7 @@ namespace Boss.Camilla
             Destroy(gameObject);
         }
         
-        private void BossUI(bool isActive)
+        public void BossUI(bool isActive)
         {
             bossBarUI.SetActive(isActive);
             bossTimerUI.SetActive(isActive);

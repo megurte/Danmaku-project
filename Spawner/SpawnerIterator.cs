@@ -25,11 +25,13 @@ namespace Spawner
                 StartCoroutine(AwakeSpawnerInTime(enemyWave));
             }
 
-            StartCoroutine(BookSpawn(15, bookSpawners[0].transform,
+            StartCoroutine(BookSpawn(30, bookSpawners[0].transform,
                 new Vector3(-12.6f, 9.43f, 0)));
-            StartCoroutine(BookSpawn(30, bookSpawners[1].transform,
+            StartCoroutine(BookSpawn(70, bookSpawners[1].transform,
+                new Vector3(1.11f,9.43f,0)));
+            StartCoroutine(BookSpawn(73, bookSpawners[0].transform,
                 new Vector3(-12.6f, 9.43f, 0)));
-            StartCoroutine(AddsPhaseEnd(40));
+            StartCoroutine(AddsPhaseEnd(89));
         }
 
         private static void OnSpawnerAwake(int index)
