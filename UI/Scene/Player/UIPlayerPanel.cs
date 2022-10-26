@@ -55,7 +55,7 @@ namespace UI.Scene.Player
             points.text = player.Points + "";
             scoreText.text = player.Points + "";
 
-            if (player.Level + 1 < levelUpMap.keys.Count)
+            if (player.Level + 1 <= levelUpMap.keys.Count)
                 experienceText.text = player.Experience + "/" + levelUpMap.values[player.Level];
             else
                 experienceText.text = levelUpMap.values[levelUpMap.values.Count - 1] + "/" 

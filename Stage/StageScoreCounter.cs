@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Boss;
+using Character;
 using TMPro;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace Stage
         private void Start()
         {
             BossTimer.TranslateTimerData.AddListener(SetScoreForTimeRemaining);
-            GlobalEvents.OnSpecialChange.AddListener((int x) => _specialUsed = true); // Rewrite it to OnSpecialUsed
+            PlayerBase.SpecialUsed.AddListener( () => _specialUsed = true);
         }
 
         private void SetScoreForTimeRemaining(Dictionary<int, int> phasesTime)

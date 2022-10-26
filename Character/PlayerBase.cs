@@ -39,17 +39,21 @@ namespace Character
         private Vector2 _moveVector;
         private float _innerTimer;
 
+        public static readonly UnityEvent SpecialUsed = new UnityEvent();
         public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
 
         private static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
         private static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
         private static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
 
+        private const int ExperienceLoseByDamage = 50;
+        
         [Inject]
         public void Construct(PlayerSO playerSettings)
         {
             InitPlayer(playerSettings);
         }
+        
         private void Start()
         {
             _innerTimer = _targetBulletFrequency;
@@ -79,7 +83,7 @@ namespace Character
             if (Input.anyKey)
                 Moving();
 
-            LevelUpdate();
+            // LevelUpdate();
 
             if (Input.GetKey(KeyCode.Space))
             {
@@ -142,14 +146,14 @@ namespace Character
 
             for (var index = 0; index < keyMap.keys.Count; index++)
             {
-                if (keyMap.keys[index] == Level)
-                {
-                    if (index + 1 < keyMap.values.Count)
-                    {
-                        if (Experience >= keyMap.values[index + 1])
-                            Level++;  
-                    }
-                }
+                if (keyMap.keys[index] != Level) continue;
+
+                if (index + 1 >= keyMap.values.Count) continue;
+
+                if (Experience < keyMap.values[index + 1]) continue;
+                
+                Level++;
+                Experience = 0;
             }
         }
 
@@ -163,12 +167,10 @@ namespace Character
             _specialTimer = _specialCooldown;
             _specialTimer -= Time.deltaTime;
             
-            GlobalEvents.SpecialChanged(_special);
-
+            SpecialUsed.Invoke();
             Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
         }
 
-        // TODO: parameters refactor
         private void ShootCommon(int characterLevel)
         {
             switch (characterLevel)
@@ -236,7 +238,7 @@ namespace Character
                 var startPos = transform.position;
                 var randomXOffset = rnd.NextFloat(-1, 1);
                 var randomYOffset = rnd.NextFloat(-1, 1);
-                var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
+                var dropPosition = new Vector3(randomXOffset, randomYOffset, 0) + startPos;
                 var newObject = Instantiate(prefab, dropPosition, Quaternion.identity);
                 
                 newObject.gameObject.HasComponent<Collider2D>(component => component.enabled = false);
@@ -244,8 +246,32 @@ namespace Character
                 newObject.gameObject.HasComponent<DropBase>(Destroy);
             }
             
-            // TODO: fix bug. Next
-            // Experience -= 50;
+            // FIX
+            if (Experience - ExperienceLoseByDamage < 0)
+            {
+                var keyMap = playerSo.levelUpMap;
+                var remainder = Mathf.Abs(Experience - ExperienceLoseByDamage);
+
+                for (var index = keyMap.keys.Count - 1; index >= 0; index--)
+                {
+                    if (Level < keyMap.keys[index]) continue;
+                    
+
+                    if (keyMap.keys[index] == 1)
+                        Experience = 0;
+                        
+                    remainder = keyMap.values[index] - remainder;
+                        
+                    if (remainder < 0) break;
+
+                    Experience = remainder;
+                    Level -= 1;
+                }
+            }
+            else
+                Experience -= ExperienceLoseByDamage;
+            
+            LevelUpdate();
         }
         
         public static void TakeDamage(int damageValue)
@@ -282,6 +308,8 @@ namespace Character
                 default:
                     throw new Exception($"DropType index out of range: {type}");
             }
+            
+            LevelUpdate();
         }
 
         private void OnDamage(int damageValue)
