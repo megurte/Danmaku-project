@@ -241,7 +241,7 @@ namespace Character
                 
                 newObject.gameObject.HasComponent<Collider2D>(component => component.enabled = false);
                 newObject.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
-                newObject.gameObject.HasComponent<DropBase>(component => component.FallingWithoutTossing());
+                newObject.gameObject.HasComponent<DropBase>(Destroy);
             }
             
             // TODO: fix bug
