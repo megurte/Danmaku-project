@@ -244,7 +244,7 @@ namespace Character
                 newObject.gameObject.HasComponent<DropBase>(Destroy);
             }
             
-            // TODO: fix bug
+            // TODO: fix bug. Next
             // Experience -= 50;
         }
         
