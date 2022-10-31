@@ -83,7 +83,7 @@ namespace Character
             if (Input.anyKey)
                 Moving();
 
-            // LevelUpdate();
+            LevelUpdate();
 
             if (Input.GetKey(KeyCode.Space))
             {
@@ -238,7 +238,7 @@ namespace Character
                 var startPos = transform.position;
                 var randomXOffset = rnd.NextFloat(-1, 1);
                 var randomYOffset = rnd.NextFloat(-1, 1);
-                var dropPosition = new Vector3(randomXOffset, randomYOffset, 0) + startPos;
+                var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
                 var newObject = Instantiate(prefab, dropPosition, Quaternion.identity);
                 
                 newObject.gameObject.HasComponent<Collider2D>(component => component.enabled = false);
@@ -246,26 +246,40 @@ namespace Character
                 newObject.gameObject.HasComponent<DropBase>(Destroy);
             }
             
-            // FIX
             if (Experience - ExperienceLoseByDamage < 0)
             {
                 var keyMap = playerSo.levelUpMap;
                 var remainder = Mathf.Abs(Experience - ExperienceLoseByDamage);
 
-                for (var index = keyMap.keys.Count - 1; index >= 0; index--)
+                while (remainder > 0)
                 {
-                    if (Level < keyMap.keys[index]) continue;
-                    
+                    for (var index = keyMap.keys.Count - 1; index >= 0; index--)
+                    {
+                        if (Level < keyMap.keys[index]) continue;
 
-                    if (keyMap.keys[index] == 1)
-                        Experience = 0;
-                        
-                    remainder = keyMap.values[index] - remainder;
-                        
-                    if (remainder < 0) break;
+                        if (keyMap.keys[index] == 1)
+                        {
+                            Experience = 0;
+                            remainder = 0;
+                            break;
+                        }
 
-                    Experience = remainder;
-                    Level -= 1;
+                        remainder = keyMap.values[index] - remainder;
+
+                        if (remainder < 0)
+                        {
+                            remainder = Mathf.Abs(remainder);
+                            Level -= 1;
+                            break;
+                        }
+                        
+                        if (keyMap.keys[index] > 1)
+                            Level -= 1;
+
+                        Experience = remainder;
+                        remainder = 0;
+                        break;
+                    }
                 }
             }
             else
@@ -308,8 +322,6 @@ namespace Character
                 default:
                     throw new Exception($"DropType index out of range: {type}");
             }
-            
-            LevelUpdate();
         }
 
         private void OnDamage(int damageValue)
