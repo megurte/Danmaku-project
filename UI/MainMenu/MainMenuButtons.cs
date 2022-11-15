@@ -1,4 +1,7 @@
+using Common;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 namespace UI.MainMenu
 {
@@ -6,6 +9,7 @@ namespace UI.MainMenu
     {
         public void Play()
         {            
+            SceneManager.LoadScene("StageOne");
             Debug.Log("Play");
         }
         
@@ -16,7 +20,7 @@ namespace UI.MainMenu
         
         public void ExitApplication()
         {
-            Debug.Log("Exit");
+            Application.Quit();
         }
     }
 }

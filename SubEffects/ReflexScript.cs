@@ -26,7 +26,7 @@ namespace SubEffects
 #if UNITY_EDITOR
     [CanEditMultipleObjects]
     [CustomEditor(typeof(ReflexScript))]
-    class ReflexScriptEditor : Editor
+    class ReflexScriptEditor : UnityEditor.Editor
     {
         SerializedProperty script;
         SerializedProperty method;

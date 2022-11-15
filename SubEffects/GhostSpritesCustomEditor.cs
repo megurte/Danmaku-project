@@ -5,17 +5,16 @@ namespace SubEffects
 {
 	[CustomEditor(typeof(GhostSprites))]
 	[CanEditMultipleObjects]
-	public class GhostSpritesCustomEditor : Editor {
+	public class GhostSpritesCustomEditor : UnityEditor.Editor {
 	
 		public override void OnInspectorGUI ()
 		{
 			DrawDefaultInspector();
 
-			if(GUILayout.Button ("Restore Defaults")){
-				GhostSprites sprites = (GhostSprites) target;
-				sprites.RestoreDefaults();
-			}
-
+			if (!GUILayout.Button("Restore Defaults")) return;
+			
+			GhostSprites sprites = (GhostSprites) target;
+			sprites.RestoreDefaults();
 		}
 	}
 }

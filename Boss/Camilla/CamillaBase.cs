@@ -12,7 +12,7 @@ namespace Boss.Camilla
         [SerializeField] private GameObject bossTimerUI;
         [SerializeField] private GameObject bossBarUI;
         private CamillaSO _camillaSo;
-        private bool _isBarrierActive;
+        // private bool _isInvulnerable;
         private float _maxHp;
 
         [Inject]
@@ -26,7 +26,6 @@ namespace Boss.Camilla
 
         private void Awake()
         {
-            CamillaPhases.CreateMagicalBarrier.AddListener(()=> _isBarrierActive = true);
             GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
             GlobalEvents.OnPhaseChange.AddListener((int i) => { CurrentHp = _maxHp; });
         }
