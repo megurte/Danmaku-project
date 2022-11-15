@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SubEffects
 {
-	[CustomEditor(typeof(GhostSprites))]
+	/*[CustomEditor(typeof(GhostSprites))]
 	[CanEditMultipleObjects]
 	public class GhostSpritesCustomEditor : UnityEditor.Editor {
 	
@@ -16,5 +16,5 @@ namespace SubEffects
 			GhostSprites sprites = (GhostSprites) target;
 			sprites.RestoreDefaults();
 		}
-	}
+	}*/
 }

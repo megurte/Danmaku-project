@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SubEffects
 {
-    public class ReflexScript : MonoBehaviour
+    /*public class ReflexScript : MonoBehaviour
     {
         public int choose;
         public string method;
@@ -18,12 +18,12 @@ namespace SubEffects
             var type = Type.GetType(script.name);
             var go = new GameObject(script.name, type);
             var component = go.GetComponent(type);
- 
+
             type.GetMethod(method).Invoke(component, null);
         }
-    }
- 
-#if UNITY_EDITOR
+    }*/
+}
+/*#if UNITY_EDITOR
     [CanEditMultipleObjects]
     [CustomEditor(typeof(ReflexScript))]
     class ReflexScriptEditor : UnityEditor.Editor
@@ -85,4 +85,4 @@ namespace SubEffects
         }
     }
 #endif
-}
+}*/

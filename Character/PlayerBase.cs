@@ -80,10 +80,10 @@ namespace Character
         {
             if (Input.anyKey)
                 Moving();
-
+            
             LevelUpdate();
 
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Z))
             {
                 ShootCommon(Level);
             
