@@ -38,6 +38,7 @@ namespace UI.Scene.Player
             UpdateSpecialFiller(player.playerSo.special);
 
             PlayerBase.OnDeath.AddListener(ShowDeathScreen);
+            PlayerBase.SpecialUsed.AddListener(UpdateSpecialFiller);
             GlobalEvents.OnHealthChange.AddListener(UpdateHealthFiller);
             GlobalEvents.OnSpecialChange.AddListener(UpdateSpecialFiller);
         }

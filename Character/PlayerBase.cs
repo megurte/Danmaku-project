@@ -35,11 +35,10 @@ namespace Character
         private GameObject _destroyEffect;
         private SimpleFlash _flashEffect;
         private float _targetBulletFrequency;
-        private Rigidbody2D _rigidBody;
         private Vector2 _moveVector;
         private float _innerTimer;
 
-        public static readonly UnityEvent SpecialUsed = new UnityEvent();
+        public static readonly UnityEvent<int> SpecialUsed = new UnityEvent<int>();
         public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
 
         private static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
@@ -58,7 +57,6 @@ namespace Character
         {
             _innerTimer = _targetBulletFrequency;
             _flashEffect = GetComponent<SimpleFlash>();
-            _rigidBody = GetComponent<Rigidbody2D>();
 
             if (godMod)
             {
@@ -167,7 +165,7 @@ namespace Character
             _specialTimer = _specialCooldown;
             _specialTimer -= Time.deltaTime;
             
-            SpecialUsed.Invoke();
+            SpecialUsed.Invoke(_special);
             Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
         }
 

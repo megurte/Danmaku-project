@@ -26,7 +26,7 @@ namespace Stage
         private void Start()
         {
             BossTimer.TranslateTimerData.AddListener(SetScoreForTimeRemaining);
-            PlayerBase.SpecialUsed.AddListener( () => _specialUsed = true);
+            PlayerBase.SpecialUsed.AddListener( (int x) => _specialUsed = true);
         }
 
         private void SetScoreForTimeRemaining(Dictionary<int, int> phasesTime)

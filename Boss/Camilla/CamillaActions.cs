@@ -33,9 +33,8 @@ namespace Boss.Camilla
         private void CreateMagicalBarrier()
         {
             var barrier = Resources.Load<GameObject> ("Prefab/Effects/Barrier");
-            var newBarrierInstance = Instantiate(barrier);
+            var newBarrierInstance = Instantiate(barrier, transform.position, Quaternion.identity);
             
-            // TODO: fix spawn position
             newBarrierInstance.transform.parent = gameObject.transform;
         }
 
