@@ -18,15 +18,16 @@ namespace Utils
     
         public static Color GetRandomColor(this Random @this)
         {
-            List<Color> colors = new List<Color>();
-            colors.Add(new Color(0.2202296f,0.8571917f, 0.9528302f, 1f));
-            colors.Add(new Color(1f,0.3384168f, 0.3254717f, 1f));
-            colors.Add(new Color(0.5603846f,1f, 0.4386792f, 1f));
-            colors.Add(new Color(1f,0.9662388f, 0.4392157f, 1f));
-            colors.Add(new Color(1f,1f, 1f, 1f));
-        
+            var colors = new List<Color>
+            {
+                new Color(0.2202296f, 0.8571917f, 0.9528302f, 1f),
+                new Color(1f, 0.3384168f, 0.3254717f, 1f),
+                new Color(0.5603846f,1f, 0.4386792f, 1f),
+                new Color(1f,0.9662388f, 0.4392157f, 1f),
+                new Color(1f,1f, 1f, 1f)
+            };
+
             return colors[@this.Next(0, colors.Count - 1)];
-            //return new Color(@this.NextFloat(0, 1f), @this.NextFloat(0, 1f), @this.NextFloat(0, 1f), 1f);
         }
     }
 }

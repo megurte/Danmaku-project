@@ -1,7 +1,4 @@
-using Common;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-
 
 namespace UI.MainMenu
 {
@@ -9,7 +6,7 @@ namespace UI.MainMenu
     {
         public void Play()
         {            
-            SceneManager.LoadScene("StageOne");
+            SceneTransition.SceneTransition.AsyncSceneLoading("StageOne");
             Debug.Log("Play");
         }
         
