@@ -9,14 +9,14 @@ namespace UI.MainMenu
 {
     public class JsonDataWriter : MonoBehaviour
     {
-        private static string _filePath = Application.streamingAssetsPath + "/RecordsData.json";
+        private static readonly string FilePath = Application.streamingAssetsPath + "/RecordsData.json";
         
         public static void SaveJsonData(int points)
         {
             var currentDate = DateTime.Now;
             var newData = new ScoreData(currentDate
-                .ToString().Remove(10, 9), "MEGURT", points.ToString()); // TODO: change name
-            var oldData = JsonHelper.FromJson<ScoreData>(File.ReadAllText(_filePath)).ToList();
+                .ToString().Remove(10, 9), "NAME", points.ToString()); // TODO: change name
+            var oldData = JsonHelper.FromJson<ScoreData>(File.ReadAllText(FilePath)).ToList();
             
             if (oldData.Count == 0)
             {
@@ -30,19 +30,18 @@ namespace UI.MainMenu
             {
                 oldData.RemoveAt(oldData.Count - 1);
             }
-            File.WriteAllText(_filePath, JsonHelper.ToJson(oldData.ToArray()));
+            File.WriteAllText(FilePath, JsonHelper.ToJson(oldData.ToArray()));
         }
         
         public static ScoreData[] LoadJsonData()
         {
-            if (!File.Exists(_filePath))
+            if (!File.Exists(FilePath))
             {
                 Debug.LogError("LoadJsonData: file RecordsData.json doesn't exist at path ${_filePath}");
                 return null;
             }
                 
-            return JsonHelper.FromJson<ScoreData>(File
-                .ReadAllText(_filePath));
+            return JsonHelper.FromJson<ScoreData>(File.ReadAllText(FilePath));
         }
     }
 
