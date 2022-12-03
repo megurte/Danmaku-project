@@ -57,10 +57,14 @@ namespace UI.Scene.Player
             scoreText.text = player.Points + "";
 
             if (player.Level + 1 <= levelUpMap.keys.Count)
+            {
                 experienceText.text = player.Experience + "/" + levelUpMap.values[player.Level];
+            }
             else
+            {
                 experienceText.text = levelUpMap.values[levelUpMap.values.Count - 1] + "/" 
                     + levelUpMap.values[levelUpMap.values.Count - 1];
+            }
         }
 
         private static void ClearFiller(GameObject filler) {
@@ -81,8 +85,7 @@ namespace UI.Scene.Player
 
         private void UpdateHealthFiller(int currentHealth)
         {
-            if (currentHealth < 0 || currentHealth > player.playerSo.maxHealth)
-                return;
+            if (currentHealth < 0 || currentHealth > player.playerSo.maxHealth) return;
             
             ClearFiller(health);
 

@@ -3,7 +3,9 @@ using System.Collections;
 using Bullets;
 using Drop;
 using Enemy;
+using Newtonsoft.Json;
 using SubEffects;
+using UI.MainMenu;
 using UnityEngine;
 using UnityEngine.Events;
 using Utils;
@@ -344,6 +346,7 @@ namespace Character
         private void OnBossFightFinished()
         {
             TranslateCurrentStageScore.Invoke(Points);
+            JsonDataWriter.SaveJsonData(Points);
         }
 
         private IEnumerator Invulnerable()
@@ -357,6 +360,8 @@ namespace Character
 
         private void PlayerDeath(int score)
         {
+            JsonDataWriter.SaveJsonData(Points);
+
             var spawners = GameObject.FindGameObjectsWithTag("Spawner");
 
             foreach (var spawner in spawners)
