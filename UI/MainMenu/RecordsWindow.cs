@@ -11,9 +11,15 @@ namespace UI.MainMenu
 
         public void UpdateRecordsData()
         {
-            var newData = JsonDataWriter.LoadJsonData();
-            
-            foreach (var dataItem in newData)
+            var loadedJsonData = JsonScoreDataWriter.LoadJsonData();
+
+            if (loadedJsonData is null) return;
+
+            dateText.text = "";
+            nameText.text = "";
+            scoreText.text = "";
+
+            foreach (var dataItem in loadedJsonData)
             {
                 dateText.text += dataItem.date + "\n";
                 nameText.text += dataItem.name + "\n";

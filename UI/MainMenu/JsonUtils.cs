@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UI.MainMenu
 {
-    public static class JsonHelper {
+    public static class JsonUtils {
         public static T[] FromJson<T>(string json) {
             Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
             return wrapper.Items;

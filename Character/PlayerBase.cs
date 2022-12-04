@@ -346,7 +346,7 @@ namespace Character
         private void OnBossFightFinished()
         {
             TranslateCurrentStageScore.Invoke(Points);
-            JsonDataWriter.SaveJsonData(Points);
+            JsonScoreDataWriter.SaveJsonData(Points);
         }
 
         private IEnumerator Invulnerable()
@@ -360,7 +360,7 @@ namespace Character
 
         private void PlayerDeath(int score)
         {
-            JsonDataWriter.SaveJsonData(Points);
+            JsonScoreDataWriter.SaveJsonData(Points);
 
             var spawners = GameObject.FindGameObjectsWithTag("Spawner");
 

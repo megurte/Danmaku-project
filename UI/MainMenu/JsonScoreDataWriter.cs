@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Linq;
-using UnityEngine.SocialPlatforms.Impl;
 
 namespace UI.MainMenu
 {
-    public class JsonDataWriter : MonoBehaviour
+    public class JsonScoreDataWriter : MonoBehaviour
     {
         private static readonly string FilePath = Application.streamingAssetsPath + "/RecordsData.json";
+        private static readonly int MaxDataElements = 10;
         
         public static void SaveJsonData(int points)
         {
             var currentDate = DateTime.Now;
             var newData = new ScoreData(currentDate
                 .ToString().Remove(10, 9), "NAME", points.ToString()); // TODO: change name
-            var oldData = JsonHelper.FromJson<ScoreData>(File.ReadAllText(FilePath)).ToList();
+            var oldData = JsonUtils.FromJson<ScoreData>(File.ReadAllText(FilePath)).ToList();
             
             if (oldData.Count == 0)
             {
@@ -26,11 +26,11 @@ namespace UI.MainMenu
             oldData.Add(newData);
             oldData.Sort(new ScoreDataComparer());
             
-            if (oldData.Count > 10)
+            if (oldData.Count > MaxDataElements)
             {
                 oldData.RemoveAt(oldData.Count - 1);
             }
-            File.WriteAllText(FilePath, JsonHelper.ToJson(oldData.ToArray()));
+            File.WriteAllText(FilePath, JsonUtils.ToJson(oldData.ToArray()));
         }
         
         public static ScoreData[] LoadJsonData()
@@ -41,7 +41,7 @@ namespace UI.MainMenu
                 return null;
             }
                 
-            return JsonHelper.FromJson<ScoreData>(File.ReadAllText(FilePath));
+            return JsonUtils.FromJson<ScoreData>(File.ReadAllText(FilePath));
         }
     }
 
