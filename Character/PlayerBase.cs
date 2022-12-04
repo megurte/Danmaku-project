@@ -43,6 +43,8 @@ namespace Character
         public static readonly UnityEvent<int> SpecialUsed = new UnityEvent<int>();
         public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
 
+        public static bool NoDamage = true;
+        
         private static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
         private static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
         private static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
@@ -297,7 +299,7 @@ namespace Character
         {
             OnGetDrop.Invoke(type, value);
         }
-        
+
         private void OnDrop(DropType type, int value)
         {
             switch (type)
@@ -328,6 +330,7 @@ namespace Character
         {
             if (Health > 0 && !IsInvulnerable)
             {
+                NoDamage = false;
                 Health -= damageValue;
                 
                 _flashEffect.FlashEffect();
@@ -346,7 +349,7 @@ namespace Character
         private void OnBossFightFinished()
         {
             TranslateCurrentStageScore.Invoke(Points);
-            JsonScoreDataWriter.SaveJsonData(Points);
+            StartCoroutine(WaitScoreSave());
         }
 
         private IEnumerator Invulnerable()
@@ -358,10 +361,19 @@ namespace Character
             IsInvulnerable = false;
         }
 
+        private IEnumerator WaitScoreSave()
+        {
+            yield return new WaitForSeconds(13);
+
+            PlayerRunInfo.AddRunScore(Points);
+            PlayerRunInfo.SaveScoreData();
+        }
+
         private void PlayerDeath(int score)
         {
-            JsonScoreDataWriter.SaveJsonData(Points);
-
+            PlayerRunInfo.AddRunScore(Points);
+            PlayerRunInfo.SaveScoreData();
+            
             var spawners = GameObject.FindGameObjectsWithTag("Spawner");
 
             foreach (var spawner in spawners)
