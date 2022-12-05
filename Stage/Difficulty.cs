@@ -1,9 +1,10 @@
 ﻿namespace Stage
 {
-    public enum Difficulty
+    public enum Difficulty : int
     {
-        Normal,
-        Hard,
-        HellFire,
+        Default = 0,
+        Easy = 1,
+        Normal = 2,
+        Hellfire = 3,
     }
 }

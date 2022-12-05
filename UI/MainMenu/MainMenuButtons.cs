@@ -1,31 +1,38 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UI.MainMenu
 {
     public class MainMenuButtons : MonoBehaviour
     {
-        [SerializeField] private GameObject recordsPanel;
+        [SerializeField] private GameObject recordsWindow;
+        [SerializeField] private GameObject newGameWindow;
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (recordsPanel)
+                if (recordsWindow)
                 {
-                    recordsPanel.SetActive(false);
+                    recordsWindow.SetActive(false);
+                }
+
+                if (newGameWindow)
+                {
+                    newGameWindow.SetActive(false);
                 }
             }
         }
 
         public void Play()
         {            
-            SceneTransition.SceneTransition.AsyncSceneLoading("StageOne");
+            newGameWindow.SetActive(true);
         }
         
         public void ShowRecords()
         {
-            recordsPanel.SetActive(true);
+            recordsWindow.SetActive(true);
             GetComponent<RecordsWindow>().UpdateRecordsData();
         }
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using Character;
 
 namespace UI.MainMenu
 {
@@ -13,9 +14,8 @@ namespace UI.MainMenu
         
         public static void SaveJsonData(int points)
         {
-            var currentDate = DateTime.Now;
-            var newData = new ScoreData(currentDate
-                .ToString().Remove(10, 9), "NAME", points.ToString()); // TODO: change name
+            var currentDate = DateTime.Now.ToString().Remove(10, 9);
+            var newData = new ScoreData(currentDate, PlayerRunInfo.GetPlayerName(), points.ToString());
             var oldData = JsonUtils.FromJson<ScoreData>(File.ReadAllText(FilePath)).ToList();
             
             if (oldData.Count == 0)

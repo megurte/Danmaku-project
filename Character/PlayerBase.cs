@@ -3,9 +3,7 @@ using System.Collections;
 using Bullets;
 using Drop;
 using Enemy;
-using Newtonsoft.Json;
 using SubEffects;
-using UI.MainMenu;
 using UnityEngine;
 using UnityEngine.Events;
 using Utils;
@@ -49,7 +47,7 @@ namespace Character
         private static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
         private static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
 
-        private const int ExperienceLoseByDamage = 50;
+        private const int ExperienceLoseByDamage = 30;
         
         [Inject]
         public void Construct(PlayerSO playerSettings)

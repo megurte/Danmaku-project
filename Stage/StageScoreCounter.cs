@@ -5,6 +5,7 @@ using Boss;
 using Character;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Stage
 {
@@ -23,6 +24,7 @@ namespace Stage
         [Space(20f)]
         [SerializeField] private GameObject additionalPointsUIPrefab;
         [SerializeField] private Canvas canvas;
+        [SerializeField] private Button finishButton;
 
         private int _cumulativeValue = default;
         private bool _specialUsed = default;
@@ -41,6 +43,7 @@ namespace Stage
 
             stageClearedTextUI.gameObject.SetActive(true);
             stagePointsTextUI.gameObject.SetActive(true);
+            finishButton.GetComponentInChildren<TextMeshProUGUI>().gameObject.SetActive(true);
             StartCoroutine(SpawnCompletePointsPlaceholders(phasesTime));
             StartCoroutine(CumulateCompletePoints(phasesTime));
             StartCoroutine(AddCompletePointsToScore());
@@ -54,50 +57,41 @@ namespace Stage
 
             foreach (var item in phasesTime.Where(item => item.Key > 0))
             {
-                var newHolder = CreateAdditionalPointsHolder();
-                newHolder.gameObject.GetComponent<TextMeshProUGUI>().text = $"+{item.Value}: {item.Key} sec";
-                additionalPointsList.Add(newHolder);
+                var placeholder = CreatePointsPlaceholder($"+{item.Value}: {item.Key} sec");
+                additionalPointsList.Add(placeholder);
                 
                 yield return new WaitForSeconds(1);
             }
 
             if (!_specialUsed)
             {
-                var newHolder = CreateAdditionalPointsHolder();
-                newHolder.gameObject.GetComponent<TextMeshProUGUI>().text = $"+{noSpecialUsePoints}: no special";
-                additionalPointsList.Add(newHolder);
+                var placeholder = CreatePointsPlaceholder($"+{noSpecialUsePoints}: no special");
+                additionalPointsList.Add(placeholder);
                 
                 yield return new WaitForSeconds(1);
             }
 
             if (PlayerBase.NoDamage)
             {
-                var newHolder = CreateAdditionalPointsHolder();
-                newHolder.gameObject.GetComponent<TextMeshProUGUI>().text = $"+{noDamageTaken}: no damage taken";
-                additionalPointsList.Add(newHolder);
+                var placeholder = CreatePointsPlaceholder($"+{noDamageTaken}: no damage taken");
+                additionalPointsList.Add(placeholder);
                 
                 yield return new WaitForSeconds(1);
             }
-            
-            switch (PlayerRunInfo.GetRunDifficulty())
+
+            _currentRunDifficultyPoints = PlayerRunInfo.GetRunDifficulty() switch
             {
-                case Difficulty.Normal:
-                    _currentRunDifficultyPoints = difficultyPoints[0];
-                    break;
-                case Difficulty.Hard:
-                    _currentRunDifficultyPoints = difficultyPoints[1];
-                    break;
-                case Difficulty.HellFire:
-                    _currentRunDifficultyPoints = difficultyPoints[2];
-                    break;
-            }
+                Difficulty.Easy => difficultyPoints[(int)Difficulty.Easy],
+                Difficulty.Normal => difficultyPoints[(int)Difficulty.Normal],
+                Difficulty.Hellfire => difficultyPoints[(int)Difficulty.Hellfire],
+                _ => _currentRunDifficultyPoints
+            };
 
             if (_currentRunDifficultyPoints > 0)
             {
-                var newHolder = CreateAdditionalPointsHolder();
-                newHolder.gameObject.GetComponent<TextMeshProUGUI>().text 
-                    = $"+{_currentRunDifficultyPoints}: ${PlayerRunInfo.GetRunDifficulty().ToString().ToUpper()}";
-                additionalPointsList.Add(newHolder);
+                var placeholder = CreatePointsPlaceholder($"+{_currentRunDifficultyPoints}: " 
+                                                          + $"${PlayerRunInfo.GetRunDifficulty().ToString().ToUpper()}");
+                additionalPointsList.Add(placeholder);
             }
             
             yield return new WaitForSeconds(2);
@@ -145,19 +139,21 @@ namespace Stage
 
         }
 
-        private GameObject CreateAdditionalPointsHolder()
+        private GameObject CreatePointsPlaceholder(string contentText)
         {
-            var newHolder = Instantiate(additionalPointsUIPrefab, 
+            var newPrefab = Instantiate(additionalPointsUIPrefab, 
                 additionalPointsUIPrefab.transform.position, Quaternion.identity);
-            newHolder.transform.SetParent(canvas.transform, false);
+            newPrefab.transform.SetParent(canvas.transform, false);
+            newPrefab.gameObject.GetComponent<TextMeshProUGUI>().text = contentText;
             
-            return newHolder;
+            return newPrefab;
         }
 
         private IEnumerator AddCompletePointsToScore()
         {
             yield return new WaitForSeconds(12);
 
+            finishButton.interactable = true;
             PlayerRunInfo.AddRunScore(_cumulativeValue);
         }
     }
