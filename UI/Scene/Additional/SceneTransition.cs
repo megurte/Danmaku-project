@@ -1,10 +1,8 @@
-﻿using System;
-using System.Net.Mime;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace UI.SceneTransition
+namespace UI.Scene.Additional
 {
     public class SceneTransition: MonoBehaviour
     {

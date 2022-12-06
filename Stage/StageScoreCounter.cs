@@ -4,6 +4,7 @@ using System.Linq;
 using Boss;
 using Character;
 using TMPro;
+using UI.Scene.Additional;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,8 @@ namespace Stage
     {
         [SerializeField] private TextMeshProUGUI stageClearedTextUI;
         [SerializeField] private TextMeshProUGUI stagePointsTextUI;
-
+        [SerializeField] private TextMeshProUGUI finishButtonTextUI;
+        
         [Header("Points Settings")]
         [SerializeField] private int stageNumber;
         [SerializeField] private int stagePoints;
@@ -27,12 +29,14 @@ namespace Stage
         [SerializeField] private Button finishButton;
 
         private int _cumulativeValue = default;
+        private int _collectedPoints = default;
         private bool _specialUsed = default;
         private int _currentRunDifficultyPoints = default;
 
         private void Start()
         {
             BossTimer.TranslateTimerData.AddListener(SetScoreForTimeRemaining);
+            PlayerBase.TranslateCurrentStageScore.AddListener((int points) => _collectedPoints = points);
             PlayerBase.SpecialUsed.AddListener( (int x) => _specialUsed = true);
         }
 
@@ -43,16 +47,15 @@ namespace Stage
 
             stageClearedTextUI.gameObject.SetActive(true);
             stagePointsTextUI.gameObject.SetActive(true);
-            finishButton.GetComponentInChildren<TextMeshProUGUI>().gameObject.SetActive(true);
-            StartCoroutine(SpawnCompletePointsPlaceholders(phasesTime));
-            StartCoroutine(CumulateCompletePoints(phasesTime));
-            StartCoroutine(AddCompletePointsToScore());
+            StartCoroutine(SpawnAndCumulatePoints(phasesTime));
         }
 
-        private IEnumerator SpawnCompletePointsPlaceholders(Dictionary<int, int> phasesTime)
+        private IEnumerator SpawnAndCumulatePoints(Dictionary<int, int> phasesTime)
         {
             var additionalPointsList = new List<GameObject>();
             
+            _cumulativeValue = stagePoints;
+
             yield return new WaitForSeconds(2);
 
             foreach (var item in phasesTime.Where(item => item.Key > 0))
@@ -61,6 +64,8 @@ namespace Stage
                 additionalPointsList.Add(placeholder);
                 
                 yield return new WaitForSeconds(1);
+                
+                StartCoroutine(CumulatePoints(phasesTime[item.Key]));
             }
 
             if (!_specialUsed)
@@ -69,6 +74,8 @@ namespace Stage
                 additionalPointsList.Add(placeholder);
                 
                 yield return new WaitForSeconds(1);
+                
+                StartCoroutine(CumulatePoints(noDamageTaken));
             }
 
             if (PlayerBase.NoDamage)
@@ -77,6 +84,8 @@ namespace Stage
                 additionalPointsList.Add(placeholder);
                 
                 yield return new WaitForSeconds(1);
+                
+                StartCoroutine(CumulatePoints(noSpecialUsePoints));
             }
 
             _currentRunDifficultyPoints = PlayerRunInfo.GetRunDifficulty() switch
@@ -90,53 +99,48 @@ namespace Stage
             if (_currentRunDifficultyPoints > 0)
             {
                 var placeholder = CreatePointsPlaceholder($"+{_currentRunDifficultyPoints}: " 
-                                                          + $"${PlayerRunInfo.GetRunDifficulty().ToString().ToUpper()}");
+                                                          + $"{PlayerRunInfo.GetRunDifficulty().ToString()}");
                 additionalPointsList.Add(placeholder);
+                
+                yield return new WaitForSeconds(1);
+                
+                StartCoroutine(CumulatePoints(_currentRunDifficultyPoints));
+            }
+
+            if (_collectedPoints > 0)
+            {
+                var placeholder = CreatePointsPlaceholder($"+{_collectedPoints}: collected points");
+                additionalPointsList.Add(placeholder);
+                
+                yield return new WaitForSeconds(1);
+                
+                StartCoroutine(CumulatePoints(_collectedPoints));
             }
             
+            PlayerRunInfo.AddRunScore(_cumulativeValue);
+            PlayerRunInfo.SaveScoreData();
+
+            finishButton.interactable = true;
+            finishButtonTextUI.gameObject.SetActive(true);
+
             yield return new WaitForSeconds(2);
 
             foreach (var item in additionalPointsList)
             {
                 Destroy(item);
             }
+            
+            yield return new WaitForSeconds(8);
+
+            SceneTransition.AsyncSceneLoading("MainMenu");
         }
-        
-        private IEnumerator CumulateCompletePoints(Dictionary<int, int> phasesTime)
+
+        private IEnumerator CumulatePoints(int pointsToCumulate)
         {
-            _cumulativeValue = stagePoints;
-            
-            yield return new WaitForSeconds(3);
-
-            foreach (var item in phasesTime.Where(item => item.Key > 0))
-            {
-                yield return new WaitForSeconds(1);
-                    
-                _cumulativeValue += phasesTime[item.Key];
-                stagePointsTextUI.text = $"{_cumulativeValue}";
-            }
-
-            if (!_specialUsed)
-            {
-                yield return new WaitForSeconds(1);
-                
-                _cumulativeValue += noDamageTaken;
-                stagePointsTextUI.text = $"{_cumulativeValue}";
-            }
-            
-            if (PlayerBase.NoDamage)
-            {
-                yield return new WaitForSeconds(1);
-                
-                _cumulativeValue += noSpecialUsePoints;
-                stagePointsTextUI.text = $"{_cumulativeValue}";
-            }
-            
             yield return new WaitForSeconds(1);
-                
-            _cumulativeValue += _currentRunDifficultyPoints;
+            
+            _cumulativeValue += pointsToCumulate;
             stagePointsTextUI.text = $"{_cumulativeValue}";
-
         }
 
         private GameObject CreatePointsPlaceholder(string contentText)
@@ -147,14 +151,6 @@ namespace Stage
             newPrefab.gameObject.GetComponent<TextMeshProUGUI>().text = contentText;
             
             return newPrefab;
-        }
-
-        private IEnumerator AddCompletePointsToScore()
-        {
-            yield return new WaitForSeconds(12);
-
-            finishButton.interactable = true;
-            PlayerRunInfo.AddRunScore(_cumulativeValue);
         }
     }
 }

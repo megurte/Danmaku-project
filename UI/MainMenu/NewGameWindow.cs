@@ -3,6 +3,7 @@ using Character;
 using ModestTree;
 using Stage;
 using TMPro;
+using UI.Scene.Additional;
 using UnityEngine;
 using Button = UnityEngine.UI.Button;
 
@@ -14,7 +15,7 @@ namespace UI.MainMenu
         [SerializeField] private Button startButton;
         [SerializeField] private string playerName;
 
-        public void Update()
+        public void LateUpdate()
         {
             CheckStartButtonAvailability();
         }
@@ -47,7 +48,7 @@ namespace UI.MainMenu
             }
             
             PlayerRunInfo.SetPlayerName(playerName);
-            SceneTransition.SceneTransition.AsyncSceneLoading("StageOne");
+            SceneTransition.AsyncSceneLoading("StageOne");
         }
     }
 }

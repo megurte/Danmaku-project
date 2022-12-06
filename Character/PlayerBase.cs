@@ -37,13 +37,13 @@ namespace Character
         private float _targetBulletFrequency;
         private Vector2 _moveVector;
         private float _innerTimer;
+        
+        public static bool NoDamage = true;
 
         public static readonly UnityEvent<int> SpecialUsed = new UnityEvent<int>();
         public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
-
-        public static bool NoDamage = true;
+        public static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
         
-        private static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
         private static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
         private static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
 
@@ -77,7 +77,6 @@ namespace Character
             SpeedUpdate();
         }
 
-        // move to Update() method 
         private void FixedUpdate()
         {
             if (Input.anyKey)
@@ -338,7 +337,6 @@ namespace Character
 
             if (!IsInvulnerable && Health <= 0)
             {
-                TranslateCurrentStageScore.Invoke(Points);
                 Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity);
                 OnDeath.Invoke(Points);
             }
@@ -347,7 +345,6 @@ namespace Character
         private void OnBossFightFinished()
         {
             TranslateCurrentStageScore.Invoke(Points);
-            StartCoroutine(WaitScoreSave());
         }
 
         private IEnumerator Invulnerable()
@@ -359,19 +356,12 @@ namespace Character
             IsInvulnerable = false;
         }
 
-        private IEnumerator WaitScoreSave()
-        {
-            yield return new WaitForSeconds(13);
-
-            PlayerRunInfo.AddRunScore(Points);
-            PlayerRunInfo.SaveScoreData();
-        }
-
         private void PlayerDeath(int score)
         {
             PlayerRunInfo.AddRunScore(Points);
             PlayerRunInfo.SaveScoreData();
             
+            //TODO: move to interface ISpawner
             var spawners = GameObject.FindGameObjectsWithTag("Spawner");
 
             foreach (var spawner in spawners)

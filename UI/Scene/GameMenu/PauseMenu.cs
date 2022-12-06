@@ -1,4 +1,6 @@
 ﻿using System;
+using UI.Scene;
+using UI.Scene.Additional;
 using UnityEngine;
 
 namespace UI.Scene.GameMenu
@@ -42,14 +44,14 @@ namespace UI.Scene.GameMenu
 
         public void LoadMenu()
         {
-            SceneTransition.SceneTransition.AsyncSceneLoading("MainMenu");
+            SceneTransition.AsyncSceneLoading("MainMenu");
             Time.timeScale = 1f;
             IsPaused = false;
         }
 
         public void RestartStage()
         {
-            SceneTransition.SceneTransition.AsyncSceneLoading("StageOne");
+            SceneTransition.AsyncSceneLoading("StageOne");
             Time.timeScale = 1f;
             IsPaused = false;
         }
