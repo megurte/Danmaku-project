@@ -243,7 +243,7 @@ namespace Boss.Camilla
 
                 currentAngle = settings.IsReverse
                     ? currentAngle - settings.StepAngle * Mathf.Deg2Rad 
-                    : currentAngle + settings.StepAngle;
+                    : currentAngle + settings.StepAngle * Mathf.Deg2Rad;
                 duration -= Time.deltaTime;
             }
         }

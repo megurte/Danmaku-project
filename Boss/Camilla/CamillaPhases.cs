@@ -116,10 +116,12 @@ namespace Boss.Camilla
             
             yield return new WaitForSeconds(2);
             PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_fireBulletOrange, _self, 1, 33, 
-                4, 0.01f, 99, false));
-            PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_fireBulletOrange, _self, 1, 33, 
-                4, 0.01f, 99, true));
-            
+                4, 0.001f, 99, false));
+            /*PropellerBulletSpawn.Invoke(new PropellerSpellSettings(_fireBulletOrange, _self, 1, 33, 
+                30, 0.001f, 99, true));*/
+            RandomShooting.Invoke(new CommonSpellSettingsWithDelay(_fireSmallBulletBlue, _self, 1, 0.01f));
+            RandomShooting.Invoke(new CommonSpellSettingsWithDelay(_fireSmallBulletOrange, _self, 1, 0.01f));
+
             while (true)
             {
                 yield return new WaitForSeconds(2);

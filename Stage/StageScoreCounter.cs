@@ -12,6 +12,7 @@ namespace Stage
 {
     public class StageScoreCounter: MonoBehaviour
     {
+        [Header("TMP references")]
         [SerializeField] private TextMeshProUGUI stageClearedTextUI;
         [SerializeField] private TextMeshProUGUI stagePointsTextUI;
         [SerializeField] private TextMeshProUGUI finishButtonTextUI;
@@ -23,7 +24,7 @@ namespace Stage
         [SerializeField] private int noDamageTaken;
         [SerializeField] private List<int> difficultyPoints;
 
-        [Space(20f)]
+        [Header("Other references")]
         [SerializeField] private GameObject additionalPointsUIPrefab;
         [SerializeField] private Canvas canvas;
         [SerializeField] private Button finishButton;

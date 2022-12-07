@@ -19,7 +19,7 @@ namespace Boss.Camilla
         {
             Container.Bind<CamillaSO>().FromInstance(camillaSettings).AsCached().NonLazy();
             
-            StartCoroutine(CamillaInit(90));
+            StartCoroutine(CamillaInit(3));
         }
 
         private IEnumerator CamillaInit(float time)
