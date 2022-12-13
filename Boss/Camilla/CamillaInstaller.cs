@@ -9,16 +9,16 @@ namespace Boss.Camilla
     public class CamillaInstaller: MonoInstaller
     {
         [SerializeField] private CamillaSO camillaSettings;
-        [SerializeField] private GameObject camillaPrefab;
-        [SerializeField] private GameObject bossTimerUI;
-        [SerializeField] private GameObject bossBarUI;
+        [SerializeField] private CamillaPhaseSettings camillaPhaseSettings;
+        [SerializeField] private CamillaBase camillaPrefab;
         [SerializeField] private AudioSource backgroundMusic;
         [SerializeField] private AudioClip bossMusic;
 
         public override void InstallBindings()
         {
             Container.Bind<CamillaSO>().FromInstance(camillaSettings).AsCached().NonLazy();
-            
+            Container.Bind<CamillaPhaseSettings>().FromInstance(camillaPhaseSettings).AsCached().NonLazy();
+
             StartCoroutine(CamillaInit(3));
         }
 
@@ -27,8 +27,8 @@ namespace Boss.Camilla
             yield return new WaitForSeconds(time);
             backgroundMusic.clip = bossMusic;
             backgroundMusic.Play();
-            camillaPrefab.SetActive(true);
-            camillaPrefab.GetComponent<CamillaBase>().BossUI(true);
+            camillaPrefab.gameObject.SetActive(true);
+            camillaPrefab.BossUI(true);
         }
     }
 }

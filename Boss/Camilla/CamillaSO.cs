@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Boss.Camilla
 {
-    [CreateAssetMenu(fileName = "new Camilla", menuName = "Camilla")]
+    [CreateAssetMenu(fileName = "new Camilla", menuName = "Scriptable Object/Camilla")]
     public class CamillaSO: ScriptableObject
     {
         public float maxHp;

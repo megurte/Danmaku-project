@@ -23,7 +23,7 @@ namespace Spells
             direction.y = Mathf.Cos(degree);
             direction.x = Mathf.Sin(degree);
             
-            var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
+            var instObject = Instantiate(settings.Bullet.gameObject, position, Quaternion.identity);
             
             instObject.GetComponent<Bullet>().Direction = -direction;
         }

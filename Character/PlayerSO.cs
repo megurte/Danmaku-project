@@ -7,7 +7,7 @@ using Utils;
 
 namespace Character
 {
-    [CreateAssetMenu(fileName = "new PlayerConfig", menuName = "PlayerConfig")]
+    [CreateAssetMenu(fileName = "new PlayerConfig", menuName = "Scriptable Object/PlayerConfig")]
     public class PlayerSO: ScriptableObject
     {
         public int health;

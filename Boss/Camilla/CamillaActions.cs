@@ -112,22 +112,22 @@ namespace Boss.Camilla
             }
         }
         
-        private void RandomShooting(CommonSpellSettingsWithDelay settings)
+        private void RandomShooting(SpellRandomShootingSettings randomShootingSettings)
         {
-            StartCoroutine(RandomShootingRoutine(settings));
+            StartCoroutine(RandomShootingRoutine(randomShootingSettings));
         }
 
-        private void SpiralBulletSpawn(SpellSettingsWithDirectionAndAngle settings)
+        private void SpiralBulletSpawn(SpellReverseBulletShootSettings reverseBulletShootSettings)
         {
-            StartCoroutine(SpiralBulletSpawnRoutine(settings));
+            StartCoroutine(SpiralBulletSpawnRoutine(reverseBulletShootSettings));
         }
         
-        private void ReverseBulletSpawn(SpellSettingsWithDirectionAndAngle settings)
+        private void ReverseBulletSpawn(SpellReverseBulletShootSettings reverseBulletShootSettings)
         {
-            StartCoroutine(ReverseBulletSpawnRoutine(settings));
+            StartCoroutine(ReverseBulletSpawnRoutine(reverseBulletShootSettings));
         }
         
-        private void PropellerBulletSpawn(PropellerSpellSettings settings)
+        private void PropellerBulletSpawn(SpellPropellerBulletShootSettings settings)
         {
             StartCoroutine(PropellerBulletSpawnRoutine(settings));
         }
@@ -137,7 +137,7 @@ namespace Boss.Camilla
             StopAllCoroutines();
         }
         
-        private IEnumerator RandomShootingRoutine(CommonSpellSettingsWithDelay settings)
+        private IEnumerator RandomShootingRoutine(SpellRandomShootingSettings randomShootingSettings)
         {
             while (true)
             {
@@ -147,39 +147,39 @@ namespace Boss.Camilla
                 var direction = new Vector2(0, 0);
                 var position = new Vector3
                 {
-                    y = settings.CenterPosition.y + Mathf.Cos(degree) * settings.Distance,
-                    x = settings.CenterPosition.x + Mathf.Sin(degree) * settings.Distance
+                    y = randomShootingSettings.CenterPosition.y + Mathf.Cos(degree) * randomShootingSettings.Distance,
+                    x = randomShootingSettings.CenterPosition.x + Mathf.Sin(degree) * randomShootingSettings.Distance
                 };
 
                 direction.y = Mathf.Cos(degree);
                 direction.x = Mathf.Sin(degree);
 
-                yield return new WaitForSeconds(settings.Delay);
-                var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
+                yield return new WaitForSeconds(randomShootingSettings.Delay);
+                var instObject = Instantiate(randomShootingSettings.Bullet, position, Quaternion.identity);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
         
-        private IEnumerator SpiralBulletSpawnRoutine(SpellSettingsWithDirectionAndAngle settings)
+        private IEnumerator SpiralBulletSpawnRoutine(SpellReverseBulletShootSettings reverseBulletShootSettings)
         {
             const float angle = 360 * Mathf.Deg2Rad;
             var direction = new Vector2(-1, 1);
             var position = new Vector3();
 
-            for (var i = 1; i <= settings.Count; i++)
+            for (var i = 1; i <= reverseBulletShootSettings.Count; i++)
             {
-                var element = settings.RightDirection ? i : settings.Count - i;
-                var degree = angle / settings.Count * element;
-                position.y = settings.CenterPosition.y 
-                             + Mathf.Cos(degree + settings.Angle * Mathf.Deg2Rad) * settings.Distance;
-                position.x = settings.CenterPosition.x 
-                             + Mathf.Sin(degree+ settings.Angle * Mathf.Deg2Rad) * settings.Distance;
+                var element = reverseBulletShootSettings.RightDirection ? i : reverseBulletShootSettings.Count - i;
+                var degree = angle / reverseBulletShootSettings.Count * element;
+                position.y = reverseBulletShootSettings.CenterPosition.y 
+                             + Mathf.Cos(degree + reverseBulletShootSettings.Angle * Mathf.Deg2Rad) * reverseBulletShootSettings.Distance;
+                position.x = reverseBulletShootSettings.CenterPosition.x 
+                             + Mathf.Sin(degree+ reverseBulletShootSettings.Angle * Mathf.Deg2Rad) * reverseBulletShootSettings.Distance;
 
                 direction.y = Mathf.Cos(degree);
                 direction.x = Mathf.Sin(degree);
 
                 yield return new WaitForSeconds(0.01f);
-                var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
+                var instObject = Instantiate(reverseBulletShootSettings.Bullet, position, Quaternion.identity);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
@@ -189,31 +189,31 @@ namespace Boss.Camilla
             StartCoroutine(TargetPositionShootingRoutine(settings));
         }
         
-        private IEnumerator ReverseBulletSpawnRoutine(SpellSettingsWithDirectionAndAngle settings)
+        private IEnumerator ReverseBulletSpawnRoutine(SpellReverseBulletShootSettings reverseBulletShootSettings)
         {
             const float angle = 360 * Mathf.Deg2Rad;
             var direction = new Vector2(-1, 1);
             var position = new Vector3();
 
-            for (var i = 1; i <= settings.Count; i++)
+            for (var i = 1; i <= reverseBulletShootSettings.Count; i++)
             {
-                var element = settings.RightDirection ? i : settings.Count - i;
-                var degree = angle / settings.Count * element;
-                position.y = settings.CenterPosition.y 
-                             + Mathf.Cos(degree + settings.Angle * Mathf.Deg2Rad) * settings.Distance;
-                position.x = settings.CenterPosition.x 
-                             + Mathf.Sin(degree+ settings.Angle * Mathf.Deg2Rad) * settings.Distance;
+                var element = reverseBulletShootSettings.RightDirection ? i : reverseBulletShootSettings.Count - i;
+                var degree = angle / reverseBulletShootSettings.Count * element;
+                position.y = reverseBulletShootSettings.CenterPosition.y 
+                             + Mathf.Cos(degree + reverseBulletShootSettings.Angle * Mathf.Deg2Rad) * reverseBulletShootSettings.Distance;
+                position.x = reverseBulletShootSettings.CenterPosition.x 
+                             + Mathf.Sin(degree+ reverseBulletShootSettings.Angle * Mathf.Deg2Rad) * reverseBulletShootSettings.Distance;
 
                 direction.x = Mathf.Cos(degree);
                 direction.y = Mathf.Sin(degree);
 
                 yield return new WaitForSeconds(0.01f);
-                var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
+                var instObject = Instantiate(reverseBulletShootSettings.Bullet, position, Quaternion.identity);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
         
-        private IEnumerator PropellerBulletSpawnRoutine(PropellerSpellSettings settings)
+        private IEnumerator PropellerBulletSpawnRoutine(SpellPropellerBulletShootSettings settings)
         {
             var direction = new Vector2();
             var position = new Vector3();

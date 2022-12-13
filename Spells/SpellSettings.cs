@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Spells
 {
-        public readonly struct CommonSpellSettings
+    [Serializable]
+    public struct CommonSpellSettings
     {
-        public readonly GameObject Bullet;
-        public readonly Vector3 CenterPosition;
-        public readonly float Distance;
+        public GameObject Bullet;
+        public Vector3 CenterPosition;
+        public float Distance;
 
         public CommonSpellSettings(GameObject bullet, Vector3 centerPosition, float distance)
         {
@@ -16,14 +18,15 @@ namespace Spells
         }
     }
     
-    public readonly struct CommonSpellSettingsWithDelay
+    [Serializable]
+    public struct SpellRandomShootingSettings
     {
-        public readonly GameObject Bullet;
-        public readonly Vector3 CenterPosition;
-        public readonly float Distance;
-        public readonly float Delay;
+        public GameObject Bullet;
+        public Vector3 CenterPosition;
+        public float Distance;
+        public float Delay;
 
-        public CommonSpellSettingsWithDelay( GameObject bullet,  Vector3 centerPosition, float distance, float delay)
+        public SpellRandomShootingSettings(GameObject bullet,  Vector3 centerPosition, float distance, float delay)
         {
             Delay = delay;
             Distance = distance;
@@ -32,18 +35,19 @@ namespace Spells
         }
     }
     
-    public readonly struct PropellerSpellSettings
+    [Serializable]
+    public struct SpellPropellerBulletShootSettings
     {
-        public readonly GameObject Bullet;
-        public readonly Vector3 CenterPosition;
-        public readonly float Distance;
-        public readonly float StartAngle;
-        public readonly float StepAngle;
-        public readonly float Delay;
-        public readonly float Duration;
-        public readonly bool IsReverse;
+        public GameObject Bullet;
+        public Vector3 CenterPosition;
+        public float Distance;
+        public float StartAngle;
+        public float StepAngle;
+        public float Delay;
+        public float Duration;
+        public bool IsReverse;
 
-        public PropellerSpellSettings(GameObject bullet, Vector3 centerPosition, float distance, float startAngle,
+        public SpellPropellerBulletShootSettings(GameObject bullet, Vector3 centerPosition, float distance, float startAngle,
             float stepAngle,float delay, float duration, bool isReverse)
         {
             Duration = duration;
@@ -57,12 +61,13 @@ namespace Spells
         }
     }
     
-    public readonly struct SpellSettingsWithCount
+    [Serializable]
+    public struct SpellSettingsWithCount
     {
-        public readonly GameObject Bullet;
-        public readonly Vector3 CenterPosition;
-        public readonly float Distance;
-        public readonly int Count;
+        public GameObject Bullet;
+        public Vector3 CenterPosition;
+        public float Distance;
+        public int Count;
 
         public SpellSettingsWithCount(GameObject bullet, Vector3 centerPosition, float distance, int count)
         {
@@ -73,36 +78,26 @@ namespace Spells
         }
     }
     
-    public readonly struct SpellSettingsWithDirectionAndAngle
+    [Serializable]
+    public struct SpellReverseBulletShootSettings
     {
-        public readonly GameObject Bullet;
-        public readonly Vector3 CenterPosition;
-        public readonly float Distance;
-        public readonly int Count;
-        public readonly bool RightDirection;
-        public readonly float Angle;
-        public readonly float Delay;
-
-        public SpellSettingsWithDirectionAndAngle(GameObject bullet, Vector3 centerPosition, float distance, 
-            int count, bool rightDirection, float angle, float delay)
-        {
-            Bullet = bullet;
-            CenterPosition = centerPosition;
-            Distance = distance;
-            Count = count;
-            RightDirection = rightDirection;
-            Angle = angle;
-            Delay = delay;
-        }
+        public GameObject Bullet;
+        public Vector3 CenterPosition;
+        public float Distance;
+        public int Count;
+        public bool RightDirection;
+        public float Angle;
+        public float Delay;
     }
-    
-    public readonly struct CommonSpellSettingsWithTarget
+   
+    [Serializable]
+    public struct CommonSpellSettingsWithTarget
     {
-        public readonly GameObject Bullet;
-        public readonly Vector3 CenterPosition;
-        public readonly float Distance;
-        public readonly Vector3 TargetDirection;
-        public readonly float Delay;
+        public GameObject Bullet;
+        public Vector3 CenterPosition;
+        public float Distance;
+        public Vector3 TargetDirection;
+        public float Delay;
 
         public CommonSpellSettingsWithTarget(GameObject bullet, Vector3 centerPosition, float distance, 
             Vector3 targetDirection, float delay)
