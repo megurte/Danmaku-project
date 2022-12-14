@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UI.Scene.Additional;
+using UnityEngine;
 
 namespace UI.Scene.GameMenu
 {
@@ -7,7 +7,7 @@ namespace UI.Scene.GameMenu
     {
         public void ReturnToTitle()
         {            
-            SceneManager.LoadScene("MainMenu");
+            SceneTransition.AsyncSceneLoading("MainMenu");
         }
     }
 }

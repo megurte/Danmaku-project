@@ -5,13 +5,10 @@ namespace UI.Scene.Special
     public class ClockSpecial : MonoBehaviour
     {
         public GameObject hourArrow;
-    
         public GameObject minuteArrow;
-    
         public float timeRemaining = default;
 
         private const float DelayHourArrow = 1f;
-    
         private float _delayTimer = default;
 
         private void Start()

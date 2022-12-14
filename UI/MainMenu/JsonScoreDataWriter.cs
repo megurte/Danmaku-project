@@ -30,6 +30,7 @@ namespace UI.MainMenu
             {
                 oldData.RemoveAt(oldData.Count - 1);
             }
+            
             File.WriteAllText(FilePath, JsonUtils.ToJson(oldData.ToArray()));
         }
         
@@ -37,7 +38,7 @@ namespace UI.MainMenu
         {
             if (!File.Exists(FilePath))
             {
-                Debug.LogError("LoadJsonData: file RecordsData.json doesn't exist at path ${_filePath}");
+                Debug.LogError($"LoadJsonData: file RecordsData.json doesn't exist at path {FilePath}");
                 return null;
             }
                 
@@ -59,8 +60,8 @@ namespace UI.MainMenu
             this.score = score;
         }
     }
-    
-    class ScoreDataComparer : IComparer<ScoreData>
+
+    internal class ScoreDataComparer : IComparer<ScoreData>
     {
         public int Compare(ScoreData p1, ScoreData p2)
         {

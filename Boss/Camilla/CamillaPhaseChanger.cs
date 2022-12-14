@@ -5,7 +5,7 @@ namespace Boss.Camilla
 {
     public class CamillaPhaseChanger: MonoBehaviour
     {
-        [Inject] private CamillaSO _camillaSettings;
+        [Inject] private CamillaScriptableObject _camillaSettings;
         private CamillaPhases _camillaPhases;
         private int _phaseNumber = 1;
         private bool _isPhaseActive = default;

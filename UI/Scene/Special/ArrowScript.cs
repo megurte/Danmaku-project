@@ -13,7 +13,7 @@ namespace UI.Scene.Special
         [SerializeField] private int damageToBoss;
 
         [Inject]
-        public void Construct(PlayerSO settings)
+        public void Construct(PlayerScriptableObject settings)
         {
             damageToBoss = settings.specialSettings[0].damageToBoss;
         }

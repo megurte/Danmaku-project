@@ -5,24 +5,25 @@ using Bullets;
 using Spells;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils;
 
 namespace Enemy
 {
     public class CommonEnemy : EnemyBase, IDestroyable
     {
-        public EnemySO enemySo;
-        private float Cooldown => enemySo.cooldown;
-        private GameObject Bullet => enemySo.bullet;
-        private int BulletCount => enemySo.counter;
-        private float Speed => enemySo.speed;
-        private Spells Spell => enemySo.spell;
-        private MoveSet MoveSet => enemySo.moveSet;
+        [FormerlySerializedAs("enemySo")] public EnemyScriptableObject enemyScriptableObject;
+        private float Cooldown => enemyScriptableObject.cooldown;
+        private GameObject Bullet => enemyScriptableObject.bullet;
+        private int BulletCount => enemyScriptableObject.counter;
+        private float Speed => enemyScriptableObject.speed;
+        private Spells Spell => enemyScriptableObject.spell;
+        private MoveSet MoveSet => enemyScriptableObject.moveSet;
         private float _innerTimer;
         
         private void Awake()
         {
-            CurrentHp = enemySo.maxHp;
+            CurrentHp = enemyScriptableObject.maxHp;
             _innerTimer = Cooldown;
         }
 
@@ -31,7 +32,7 @@ namespace Enemy
             switch (MoveSet)
             {
                 case MoveSet.MoveAround:
-                    StartCoroutine(MoveAroundRoutine(TargetPosition, enemySo.radius, Speed, enemySo.angularSpeed));
+                    StartCoroutine(MoveAroundRoutine(TargetPosition, enemyScriptableObject.radius, Speed, enemyScriptableObject.angularSpeed));
                     break;
                 case MoveSet.ToPosition:
                     StartCoroutine(MovementToPosition(TargetPosition, Speed));
@@ -46,7 +47,7 @@ namespace Enemy
 
         private void FixedUpdate()
         {
-            CheckHealth(enemySo.lootSettings, enemySo.destroyEffect);
+            CheckHealth(enemyScriptableObject.lootSettings, enemyScriptableObject.destroyEffect);
 
             if (_innerTimer > 0)
             {
@@ -76,7 +77,7 @@ namespace Enemy
 
         public void DestroySelf()
         {
-            Instantiate(enemySo.destroyEffect, transform.position, quaternion.identity);
+            Instantiate(enemyScriptableObject.destroyEffect, transform.position, quaternion.identity);
             Destroy(gameObject);
         }
     }

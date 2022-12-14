@@ -37,6 +37,12 @@ namespace Boss.Camilla
         public struct PhaseFourSettings
         {
             public SpellPropellerBulletShootSettings propellerBulletShoot;
+            public SpellPropellerBulletShootSettings propellerBulletShootIteration1;
+            public SpellPropellerBulletShootSettings propellerBulletShootIteration2;
+            public SpellPropellerBulletShootSettings propellerBulletShootIteration3;
+            public SpellPropellerBulletShootSettings propellerBulletShootIteration4;
+            
+            public SpellRandomShootingSettings randomShooting;
         }
     }
 }

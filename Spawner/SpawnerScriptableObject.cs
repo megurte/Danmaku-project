@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Spawner
 {
     [CreateAssetMenu(fileName = "new Spawner", menuName = "Scriptable Object/Spawner")]
-    public class SpawnerSO : ScriptableObject
+    public class SpawnerScriptableObject : ScriptableObject
     {
         public List<EnemySpawnProperties> enemySpawnPropertiesList;
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Enemy
 {
     [CreateAssetMenu(fileName = "new Enemy", menuName = "Scriptable Object/Enemy")]
-    public class EnemySO : ScriptableObject
+    public class EnemyScriptableObject : ScriptableObject
     {
         public int maxHp;
         public int counter;

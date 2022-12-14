@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Enemy;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Spawner
 {
@@ -9,11 +10,11 @@ namespace Spawner
     {
         public int spawnerIndex = default;
     
-        public SpawnerSO spawnerSo;
+        [FormerlySerializedAs("spawnerSo")] public SpawnerScriptableObject spawnerScriptableObject;
     
         public bool isAwake;
 
-        private List<EnemySpawnProperties> EnemySpawnPropertiesList => spawnerSo.enemySpawnPropertiesList;
+        private List<EnemySpawnProperties> EnemySpawnPropertiesList => spawnerScriptableObject.enemySpawnPropertiesList;
     
         private float _innerTimer = default;
     
@@ -38,7 +39,7 @@ namespace Spawner
             var instance = Instantiate(EnemySpawnPropertiesList[_iteration].enemyPrefab,
                 transform.position, Quaternion.identity);
 
-            if (instance.GetComponent<CommonEnemy>().enemySo.moveSet != MoveSet.MoveAround)
+            if (instance.GetComponent<CommonEnemy>().enemyScriptableObject.moveSet != MoveSet.MoveAround)
             {
                 instance.GetComponent<EnemyBase>()
                     .SetTargetPosition(EnemySpawnPropertiesList[_iteration].targetPosition);
@@ -56,7 +57,9 @@ namespace Spawner
                     StartCoroutine(Spawn(_innerTimer));
 
                     if (_innerTimer > 0)
+                    {
                         _innerTimer -= _spawnDelta;
+                    }
                 }
             
                 _iteration++;
@@ -70,7 +73,7 @@ namespace Spawner
 
         private float SetSpawnDelta()
         {
-            return _spawnDelta = _innerTimer / spawnerSo.enemySpawnPropertiesList[_iteration].enemyNumber;
+            return _spawnDelta = _innerTimer / spawnerScriptableObject.enemySpawnPropertiesList[_iteration].enemyNumber;
         }
 
         private void SetIterationData()

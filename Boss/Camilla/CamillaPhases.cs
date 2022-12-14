@@ -11,7 +11,7 @@ namespace Boss.Camilla
 {
     public class CamillaPhases : MonoBehaviour
     {
-        public static readonly UnityEvent<int, int> AllRandomSpawnersActivate = new UnityEvent<int, int>();
+        public static readonly UnityEvent<int, int, int> AllRandomSpawnersActivate = new UnityEvent<int, int, int>();
         public static readonly UnityEvent<int, int, int> RandomSpawnersActivate = new UnityEvent<int, int, int>();
         public static readonly UnityEvent<int, int, bool> WaveChainsSpawn = new UnityEvent<int, int, bool>();
         public static readonly UnityEvent<SpellPropellerBulletShootSettings> PropellerBulletSpawn = new UnityEvent<SpellPropellerBulletShootSettings>();
@@ -23,7 +23,7 @@ namespace Boss.Camilla
         public static readonly UnityEvent CreateMagicalBarrier = new UnityEvent();
         public static readonly UnityEvent StopAllSpells = new UnityEvent();
         
-        private CamillaSO _camillaSettings;
+        private CamillaScriptableObject _camillaSettings;
         private CamillaPhaseSettings _camillaPhaseSettings;
 
         #region Spawner Indexes
@@ -34,7 +34,7 @@ namespace Boss.Camilla
         #endregion
 
         [Inject] 
-        public void Construct(CamillaPhaseSettings phaseSettings, CamillaSO enemySettings)
+        public void Construct(CamillaPhaseSettings phaseSettings, CamillaScriptableObject enemySettings)
         {
             _camillaPhaseSettings = phaseSettings;
             _camillaSettings = enemySettings;
@@ -114,12 +114,28 @@ namespace Boss.Camilla
             CreateMagicalBarrier.Invoke();
             
             yield return new WaitForSeconds(2);
+            
+            
+            while (CamillaBase.IsMagicBarrierActive)
+            {
+                PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShoot);
 
-            PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShoot);
-            AllRandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown);
+                AllRandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown, 2);
+                
+                yield return new WaitForSeconds(2);
+            }
+            
+            StopAllSpells.Invoke();
+            UtilsBase.ClearBullets<Bullet>();
+            
+            PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShootIteration1);
+            PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShootIteration2);
+            PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShootIteration3);
+            PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShootIteration4);
+
+            RandomShooting.Invoke(_camillaPhaseSettings.phaseFourSettings.randomShooting);
             
             yield return new WaitForSeconds(14);
-            UtilsBase.ClearBullets<ChainBase>();
         }
 
         private void OnPhaseChange(int phase)

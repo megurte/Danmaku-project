@@ -10,7 +10,6 @@ namespace UI.MainMenu
     public class DifficultyChanger : MonoBehaviour
     {
         [SerializeField] private Difficulty difficultyValue = Difficulty.Default;
-
         private TextMeshProUGUI _difficultyText;
 
         private void Start()

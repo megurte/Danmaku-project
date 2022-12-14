@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Bullets;
+using Enemy;
 using Spells;
 using UnityEngine;
 using Utils;
@@ -36,6 +37,7 @@ namespace Boss.Camilla
             var newBarrierInstance = Instantiate(barrier, transform.position, Quaternion.identity);
             
             newBarrierInstance.transform.parent = gameObject.transform;
+            newBarrierInstance.GetComponent<Barrier>().SwitchIsMagicBarrierActive(true);
         }
 
         private void WaveChainSpawn(int startIndex, int endIndex, bool fromLeft = true)
@@ -76,16 +78,16 @@ namespace Boss.Camilla
             }
         }
 
-        private void AllRandomSpawnersActivate(int startIndex, int endIndex)
+        private void AllRandomSpawnersActivate(int startIndex, int endIndex, int times)
         {
-            for (var spawnerIndex = startIndex; spawnerIndex <= endIndex; spawnerIndex++)
+            for (var i = 0; i < times; i++)
             {
                 var rnd = new Random(Guid.NewGuid().GetHashCode());
-                var randomDelay = rnd.NextFloat(0, 10);
-            
+                var randomIndex = rnd.NextFloat(startIndex, endIndex);
+                
                 foreach (var spawner in _chainSpawners)
                 {
-                    StartCoroutine(spawner.Spawn(spawnerIndex, randomDelay));
+                    StartCoroutine(spawner.Spawn((int)randomIndex));
                 }
             }
         }

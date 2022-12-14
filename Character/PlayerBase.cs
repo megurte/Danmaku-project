@@ -6,6 +6,7 @@ using Enemy;
 using SubEffects;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Utils;
 using Zenject;
 using Random = System.Random;
@@ -14,7 +15,7 @@ namespace Character
 {
     public class PlayerBase : MonoBehaviour
     {
-        public PlayerSO playerSo;
+        [FormerlySerializedAs("playerSo")] public PlayerScriptableObject playerScriptableObject;
         public bool godMod = default;
         public int Health { get; private set; }
         public int Level { get; private set; }
@@ -50,7 +51,7 @@ namespace Character
         private const int ExperienceLoseByDamage = 30;
         
         [Inject]
-        public void Construct(PlayerSO playerSettings)
+        public void Construct(PlayerScriptableObject playerSettings)
         {
             InitPlayer(playerSettings);
         }
@@ -131,14 +132,14 @@ namespace Character
 
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                _playerSpeed = playerSo.speed;
+                _playerSpeed = playerScriptableObject.speed;
                 _slowMode = false;
             }
         }
 
         private void LevelUpdate()
         {
-            var keyMap = playerSo.levelUpMap;
+            var keyMap = playerScriptableObject.levelUpMap;
             
             if (!keyMap.CheckLength())
                 return;
@@ -160,7 +161,7 @@ namespace Character
         {
             if (!(_specialTimer <= 0) || _special <= 0) return;
             
-            var settings = playerSo.specialSettings[0];
+            var settings = playerScriptableObject.specialSettings[0];
                 
             _special--;
             _specialTimer = _specialCooldown;
@@ -247,7 +248,7 @@ namespace Character
             
             if (Experience - ExperienceLoseByDamage < 0)
             {
-                var keyMap = playerSo.levelUpMap;
+                var keyMap = playerScriptableObject.levelUpMap;
                 var remainder = Mathf.Abs(Experience - ExperienceLoseByDamage);
 
                 while (remainder > 0)
@@ -337,7 +338,7 @@ namespace Character
 
             if (!IsInvulnerable && Health <= 0)
             {
-                Instantiate(playerSo.destroyEffect, transform.position, Quaternion.identity);
+                Instantiate(playerScriptableObject.destroyEffect, transform.position, Quaternion.identity);
                 OnDeath.Invoke(Points);
             }
         }
@@ -373,9 +374,9 @@ namespace Character
             Destroy(gameObject);
         }
         
-        private void InitPlayer(PlayerSO settings)
+        private void InitPlayer(PlayerScriptableObject settings)
         {
-            playerSo = settings;
+            playerScriptableObject = settings;
             Health = settings.health;
             Level = settings.level;
             Experience = settings.experience;

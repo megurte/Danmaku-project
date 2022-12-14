@@ -67,14 +67,15 @@ namespace Enemy
 
         protected void CheckHealth(List<LootSettings> lootSettings = null, GameObject deathEffect = null)
         {
-            if (CurrentHp <= 0)
-            {
-                if (deathEffect != null)
-                    Instantiate(deathEffect, transform.position, Quaternion.identity);
-                
-                DropItems(lootSettings);
-                Destroy(gameObject);
-            }
+            if (CurrentHp > 0) return;
+            
+            if (deathEffect != null)
+                Instantiate(deathEffect, transform.position, Quaternion.identity);
+
+            gameObject.HasComponent<Barrier>(component => component.SwitchIsMagicBarrierActive(false));
+            
+            DropItems(lootSettings);
+            Destroy(gameObject);
         }
         
         protected void OnTriggerEnter2D(Collider2D other)
@@ -125,7 +126,7 @@ namespace Enemy
 
         public void SetTargetPosition(Vector3 newPosition)
         {
-            this.TargetPosition = newPosition;
+            TargetPosition = newPosition;
         }
     }
 }

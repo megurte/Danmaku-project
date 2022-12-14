@@ -24,6 +24,7 @@ namespace Bullets
         private void MoveToEnemy()
         {
             var enemy = FindClosestEnemy();
+            
             direction = GetDirection(enemy.transform.position, transform.position);
             transform.Translate(direction.normalized * startSpeed);
         }

@@ -11,15 +11,17 @@ namespace Boss.Camilla
         [SerializeField] private Image bar;
         [SerializeField] private GameObject bossTimerUI;
         [SerializeField] private GameObject bossBarUI;
-        private CamillaSO _camillaSo;
+        private CamillaScriptableObject _camillaScriptableObject;
         // private bool _isInvulnerable;
         private float _maxHp;
-
+        
+        public static bool IsMagicBarrierActive;
+        
         [Inject]
-        public void Construct(CamillaSO settings)
+        public void Construct(CamillaScriptableObject settings)
         {
-            _camillaSo = settings;
-            _maxHp = _camillaSo.maxHp;
+            _camillaScriptableObject = settings;
+            _maxHp = _camillaScriptableObject.maxHp;
             bar.fillAmount = 100;
             CurrentHp = _maxHp;
         }
@@ -51,7 +53,7 @@ namespace Boss.Camilla
         public void OnBossFightFinished()
         {
             // Dialog init
-            DropItems(_camillaSo.lootSettings);
+            DropItems(_camillaScriptableObject.lootSettings);
             BossUI(false);
             Destroy(gameObject);
         }

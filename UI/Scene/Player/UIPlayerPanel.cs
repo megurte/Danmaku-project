@@ -34,8 +34,8 @@ namespace UI.Scene.Player
         
         private void Start()
         {
-            UpdateHealthFiller(player.playerSo.health);
-            UpdateSpecialFiller(player.playerSo.special);
+            UpdateHealthFiller(player.playerScriptableObject.health);
+            UpdateSpecialFiller(player.playerScriptableObject.special);
 
             PlayerBase.OnDeath.AddListener(ShowDeathScreen);
             PlayerBase.SpecialUsed.AddListener(UpdateSpecialFiller);
@@ -50,7 +50,7 @@ namespace UI.Scene.Player
 
         private void UpdateUI()
         {
-            var levelUpMap = player.playerSo.levelUpMap;
+            var levelUpMap = player.playerScriptableObject.levelUpMap;
         
             levelText.text = "Lv. " + player.Level;
             points.text = player.Points + "";
@@ -85,43 +85,39 @@ namespace UI.Scene.Player
 
         private void UpdateHealthFiller(int currentHealth)
         {
-            if (currentHealth < 0 || currentHealth > player.playerSo.maxHealth) return;
+            if (currentHealth < 0 || currentHealth > player.playerScriptableObject.maxHealth) return;
             
             ClearFiller(health);
 
             for (var i = 0; i < currentHealth; i++)
             {
-                var prefab = Instantiate(iconHealthFull);
-                prefab.transform.SetParent(health.transform);
+                var prefab = Instantiate(iconHealthFull, health.transform, true);
                 SetNormalScale(prefab);
             }
             
-            for (var i = 0; i < player.playerSo.maxHealth - currentHealth; i++)
+            for (var i = 0; i < player.playerScriptableObject.maxHealth - currentHealth; i++)
             {
-                var prefab = Instantiate(iconHealthEmpty);
-                prefab.transform.SetParent(health.transform);
+                var prefab = Instantiate(iconHealthEmpty, health.transform, true);
                 SetNormalScale(prefab);
             }
         }
         
         private void UpdateSpecialFiller(int currentSpecials)
         {
-            if (currentSpecials < 0 || currentSpecials > player.playerSo.maxValue)
+            if (currentSpecials < 0 || currentSpecials > player.playerScriptableObject.maxValue)
                 return;
          
             ClearFiller(specials);
 
             for (var i = 0; i < currentSpecials; i++)
             {
-                var prefab = Instantiate(iconSpecialFull);
-                prefab.transform.SetParent(specials.transform);
+                var prefab = Instantiate(iconSpecialFull, specials.transform, true);
                 SetNormalScale(prefab);
             }
             
-            for (var i = 0; i < player.playerSo.maxValue - currentSpecials; i++)
+            for (var i = 0; i < player.playerScriptableObject.maxValue - currentSpecials; i++)
             {
-                var prefab = Instantiate(iconSpecialEmpty);
-                prefab.transform.SetParent(specials.transform);
+                var prefab = Instantiate(iconSpecialEmpty, specials.transform, true);
                 SetNormalScale(prefab);
             }
         }

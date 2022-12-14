@@ -1,4 +1,5 @@
 ﻿using System;
+using Bullets;
 using UnityEngine;
 
 namespace Spells
@@ -21,24 +22,24 @@ namespace Spells
     [Serializable]
     public struct SpellRandomShootingSettings
     {
-        public GameObject Bullet;
+        public Bullet Bullet;
         public Vector3 CenterPosition;
         public float Distance;
         public float Delay;
 
-        public SpellRandomShootingSettings(GameObject bullet,  Vector3 centerPosition, float distance, float delay)
+        public SpellRandomShootingSettings(Bullet bullet1,  Vector3 centerPosition, float distance, float delay)
         {
             Delay = delay;
             Distance = distance;
             CenterPosition = centerPosition;
-            Bullet = bullet;
+            Bullet = bullet1;
         }
     }
     
     [Serializable]
     public struct SpellPropellerBulletShootSettings
     {
-        public GameObject Bullet;
+        public Bullet Bullet;
         public Vector3 CenterPosition;
         public float Distance;
         public float StartAngle;
@@ -47,7 +48,7 @@ namespace Spells
         public float Duration;
         public bool IsReverse;
 
-        public SpellPropellerBulletShootSettings(GameObject bullet, Vector3 centerPosition, float distance, float startAngle,
+        public SpellPropellerBulletShootSettings(Bullet bullet, Vector3 centerPosition, float distance, float startAngle,
             float stepAngle,float delay, float duration, bool isReverse)
         {
             Duration = duration;
@@ -81,7 +82,7 @@ namespace Spells
     [Serializable]
     public struct SpellReverseBulletShootSettings
     {
-        public GameObject Bullet;
+        public Bullet Bullet;
         public Vector3 CenterPosition;
         public float Distance;
         public int Count;

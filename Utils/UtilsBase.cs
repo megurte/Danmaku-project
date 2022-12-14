@@ -36,7 +36,7 @@ namespace Utils
 
             foreach (var type in bullets)
             {
-                type.gameObject.GetComponent<T>().DestroySelf();
+                type.DestroySelf();
             }
         }
         

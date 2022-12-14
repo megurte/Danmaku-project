@@ -6,15 +6,10 @@ namespace SubEffects
     public class SimpleFlash : MonoBehaviour
     {
         [SerializeField] private Material flashMaterial;
-
         [SerializeField] private float flashDuration;
-    
         [SerializeField] private float duration;
-    
         private SpriteRenderer _spriteRenderer;
-
         private Material _originalMaterial;
-
         private Coroutine _flashRoutine;
     
         private void Start()

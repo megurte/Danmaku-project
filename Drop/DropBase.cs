@@ -2,16 +2,17 @@
 using Character;
 using Environment;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils;
 
 namespace Drop
 {
     public class DropBase: MonoBehaviour
     {
-        public DropSO dropSo;
+        [FormerlySerializedAs("dropSo")] public DropScriptableObject dropScriptableObject;
 
-        private int Value => dropSo.value;
-        private DropType DropType => dropSo.dropType;
+        private int Value => dropScriptableObject.value;
+        private DropType DropType => dropScriptableObject.dropType;
         private float _speed = 3f;
 
         public void AttractToPlayer()

@@ -28,7 +28,7 @@ namespace Bullets
 
         private new void Moving()
         {
-            transform.Translate(Direction.normalized * Time.deltaTime * StartSpeed, Space.World);
+            transform.Translate(Direction.normalized * (Time.deltaTime * StartSpeed), Space.World);
         }
 
         private void Accelerate()

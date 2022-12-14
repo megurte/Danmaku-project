@@ -8,7 +8,7 @@ using Utils;
 namespace Character
 {
     [CreateAssetMenu(fileName = "new PlayerConfig", menuName = "Scriptable Object/PlayerConfig")]
-    public class PlayerSO: ScriptableObject
+    public class PlayerScriptableObject: ScriptableObject
     {
         public int health;
         public int maxHealth;

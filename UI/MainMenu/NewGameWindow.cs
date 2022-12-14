@@ -1,6 +1,4 @@
-﻿using System.Net.Mime;
-using Character;
-using ModestTree;
+﻿using Character;
 using Stage;
 using TMPro;
 using UI.Scene.Additional;
@@ -36,7 +34,7 @@ namespace UI.MainMenu
 
         public void StartGame()
         {
-            if (playerName.IsEmpty())
+            if (string.IsNullOrEmpty(playerName))
             {
                 playerName = "Unknown";
             }

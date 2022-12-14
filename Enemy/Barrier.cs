@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Boss.Camilla;
 using UnityEngine.PlayerLoop;
 
 namespace Enemy
@@ -8,12 +9,17 @@ namespace Enemy
     {
         private void Start()
         {
-            CurrentHp = 100;
+            CurrentHp = 250;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             CheckHealth();
+        }
+
+        public void SwitchIsMagicBarrierActive(bool state)
+        {
+            CamillaBase.IsMagicBarrierActive = state;
         }
     }
 }
