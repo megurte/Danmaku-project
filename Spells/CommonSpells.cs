@@ -8,7 +8,7 @@ namespace Spells
 {
     public class CommonSpells : MonoBehaviour
     {
-        public static void RandomShooting(CommonSpellSettings settings)
+        public static void RandomShooting(CommonSpellSettings settings, BulletFactory factory)
         {
             var seed = Guid.NewGuid().GetHashCode();
 
@@ -22,7 +22,8 @@ namespace Spells
 
             direction.y = Mathf.Cos(degree);
             direction.x = Mathf.Sin(degree);
-            
+
+            //factory.SpawnBullet(settings.Bullet, position, direction); TODO: move to factory pattern
             var instObject = Instantiate(settings.Bullet.gameObject, position, Quaternion.identity);
             
             instObject.GetComponent<Bullet>().Direction = -direction;

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Bullets;
+﻿using Bullets;
 using Drop;
 using Enemy;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 namespace Utils
 {
@@ -30,8 +26,10 @@ namespace Utils
             return heading / distance;
         }
         
+        // TODO: move to ObjectPool pattern
         public static void ClearBullets<T>() where T : Bullet
         {
+            //GlobalEvents.OnClearBullets.Invoke();
             var bullets = Object.FindObjectsOfType<T>();
 
             foreach (var type in bullets)
@@ -40,6 +38,7 @@ namespace Utils
             }
         }
         
+        // TODO: move to ObjectPool pattern
         public static void ClearEnemies<T>() where T : EnemyBase
         {
             var enemies = Object.FindObjectsOfType<T>();
@@ -50,6 +49,7 @@ namespace Utils
             }
         }
         
+        // TODO: move to ObjectPool pattern
         public static void ClearDrop<T>() where T : DropBase
         {
             var drops = Object.FindObjectsOfType<T>();
@@ -60,6 +60,7 @@ namespace Utils
             }
         }
 
+        // TODO: move to ObjectPool pattern
         public static void CollectDrop()
         {
             var dropItems = Object.FindObjectsOfType<DropBase>();

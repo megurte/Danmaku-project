@@ -58,7 +58,7 @@ namespace Environment.LocationChunk
                 }
             }
 
-            targetTransform.position = closestDistance < 230 ? bestPosition : newPosition;
+            targetTransform.position = closestDistance < 400 ? bestPosition : newPosition;
         }
     }
 }

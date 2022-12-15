@@ -18,7 +18,7 @@ namespace Boss.Camilla
             Container.Bind<CamillaScriptableObject>().FromInstance(camillaSettings).AsCached().NonLazy();
             Container.Bind<CamillaPhaseSettings>().FromInstance(camillaPhaseSettings).AsCached().NonLazy();
             
-            StartCoroutine(CamillaInit(105));
+            StartCoroutine(CamillaInit(95));
         }
 
         private IEnumerator CamillaInit(float time)

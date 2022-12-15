@@ -7,9 +7,10 @@ namespace UI.Scene.Additional
     public class SceneTransition: MonoBehaviour
     {
         [SerializeField] 
-        private Image progressBar;
+        private RectTransform arrowPivot;
 
-        
+        private Quaternion _angle;
+
         private static SceneTransition instance;
         private static bool isSceneOpeningAnimation = false;
 
@@ -30,11 +31,19 @@ namespace UI.Scene.Additional
             _animator = GetComponent<Animator>();
 
             if (isSceneOpeningAnimation) _animator.SetTrigger("Opening");
+
+            _angle = arrowPivot.rotation;
         }
         
         private void Update()
         {
-            if (_asyncOperation != null) progressBar.fillAmount = _asyncOperation.progress;
+            if (_asyncOperation == null) return;
+
+            if (_angle != arrowPivot.rotation || arrowPivot.rotation.z == 0)
+            {
+                arrowPivot.Rotate(new Vector3(0, 0, _asyncOperation.progress * 360f));
+                _angle = arrowPivot.rotation;
+            }
         }
 
         public void OnAnimationOver()

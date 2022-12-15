@@ -18,7 +18,12 @@ namespace Bullets
 
         protected BulletType BulletType { get => bulletType; set => bulletType = value; }
         protected float StartSpeed { get; set; }
-        
+
+        private void Start()
+        {
+            GlobalEvents.OnClearBullets.AddListener(DestroySelf);
+        }
+
         private void FixedUpdate()
         {
             Moving();

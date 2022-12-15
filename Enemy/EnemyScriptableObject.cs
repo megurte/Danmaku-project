@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Bullets;
 using UnityEngine;
 
 namespace Enemy
@@ -9,7 +10,7 @@ namespace Enemy
         public int maxHp;
         public int counter;
         public float cooldown;
-        public GameObject bullet;
+        public Bullet bullet;
         public GameObject destroyEffect;
         public Spells spell;
         public MoveSet moveSet;

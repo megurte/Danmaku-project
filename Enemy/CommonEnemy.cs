@@ -14,7 +14,7 @@ namespace Enemy
     {
         [FormerlySerializedAs("enemySo")] public EnemyScriptableObject enemyScriptableObject;
         private float Cooldown => enemyScriptableObject.cooldown;
-        private GameObject Bullet => enemyScriptableObject.bullet;
+        private Bullet Bullet => enemyScriptableObject.bullet;
         private int BulletCount => enemyScriptableObject.counter;
         private float Speed => enemyScriptableObject.speed;
         private Spells Spell => enemyScriptableObject.spell;
@@ -23,6 +23,7 @@ namespace Enemy
         
         private void Awake()
         {
+            Factory = gameObject.AddComponent<BulletFactory>();
             CurrentHp = enemyScriptableObject.maxHp;
             _innerTimer = Cooldown;
         }
@@ -61,7 +62,7 @@ namespace Enemy
                         CommonSpells.CircleBulletSpawn(new SpellSettingsWithCount(Bullet, transform.position, 1, BulletCount));
                         break;
                     case Spells.RandomShooting:
-                        CommonSpells.RandomShooting(new CommonSpellSettings(Bullet, transform.position, 1));
+                        CommonSpells.RandomShooting(new CommonSpellSettings(Bullet, transform.position, 1), Factory);
                         break;
                     case Spells.DirectTarget:
                         CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,

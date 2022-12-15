@@ -1,4 +1,5 @@
-﻿using UnityEngine.Events;
+﻿using Bullets;
+using UnityEngine.Events;
 
 public static class GlobalEvents
 {
@@ -7,7 +8,9 @@ public static class GlobalEvents
     public static readonly UnityEvent<int> OnSpecialChange = new UnityEvent<int>();
         
     public static readonly UnityEvent<int> OnHealthChange = new UnityEvent<int>();
-        
+    
+    public static readonly UnityEvent OnClearBullets = new UnityEvent();
+
     public static readonly UnityEvent OnBossFightFinish = new UnityEvent();
     
     private static int _phaseNumber = 1;

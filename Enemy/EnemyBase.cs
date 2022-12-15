@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Bullets;
 using Character;
 using Environment;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Enemy
     {
         protected float CurrentHp { get; set; }
         protected Vector3 TargetPosition;
+        protected BulletFactory Factory;
         
         private float _angle = default;
         private Vector3 _circleCenterPoint = default;

@@ -7,11 +7,11 @@ namespace Spells
     [Serializable]
     public struct CommonSpellSettings
     {
-        public GameObject Bullet;
+        public Bullet Bullet;
         public Vector3 CenterPosition;
         public float Distance;
 
-        public CommonSpellSettings(GameObject bullet, Vector3 centerPosition, float distance)
+        public CommonSpellSettings(Bullet bullet, Vector3 centerPosition, float distance)
         {
             Bullet = bullet;
             CenterPosition = centerPosition;
@@ -65,12 +65,12 @@ namespace Spells
     [Serializable]
     public struct SpellSettingsWithCount
     {
-        public GameObject Bullet;
+        public Bullet Bullet;
         public Vector3 CenterPosition;
         public float Distance;
         public int Count;
 
-        public SpellSettingsWithCount(GameObject bullet, Vector3 centerPosition, float distance, int count)
+        public SpellSettingsWithCount(Bullet bullet, Vector3 centerPosition, float distance, int count)
         {
             Bullet = bullet;
             CenterPosition = centerPosition;
@@ -94,13 +94,13 @@ namespace Spells
     [Serializable]
     public struct CommonSpellSettingsWithTarget
     {
-        public GameObject Bullet;
+        public Bullet Bullet;
         public Vector3 CenterPosition;
         public float Distance;
         public Vector3 TargetDirection;
         public float Delay;
 
-        public CommonSpellSettingsWithTarget(GameObject bullet, Vector3 centerPosition, float distance, 
+        public CommonSpellSettingsWithTarget(Bullet bullet, Vector3 centerPosition, float distance, 
             Vector3 targetDirection, float delay)
         {
             Bullet = bullet;
