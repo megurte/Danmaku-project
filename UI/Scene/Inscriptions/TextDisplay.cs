@@ -1,41 +1,38 @@
 ﻿using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using Zenject;
+using UnityEngine.Events;
 
 namespace UI.Scene.Inscriptions
 {
     public class TextDisplay: MonoBehaviour
     {
-        [SerializeField] private float fadeInTime;
-        [SerializeField] private float fadeOutTime;
+        public static UnityEvent<string, string> DisplayContent = new UnityEvent<string, string>();
 
-        private Animator _animator;
-        private static readonly int FadeIn = Animator.StringToHash("FadeIn");
-        private static readonly int FadeOut = Animator.StringToHash("FadeOut");
+        [SerializeField] private GameObject popup;
+        [SerializeField] private TextMeshProUGUI popupTextHeader;
+        [SerializeField] private TextMeshProUGUI popupTextContent;
 
         private void Start()
         {
-            _animator = GetComponent<Animator>();
-            
-            StartCoroutine(InscriptionFadeIn());
+            DisplayContent.AddListener(ShowBookContent);
         }
 
-        private IEnumerator InscriptionFadeIn()
+        private void Update()
         {
-            yield return new WaitForSeconds(fadeInTime);
-            
-            _animator.SetTrigger(FadeIn);
-            
-            yield return InscriptionFadeOut();
+            if (Input.GetKeyDown(KeyCode.Escape) && popup)
+            {
+                popup.SetActive(false);
+            }
         }
-        
-        private IEnumerator InscriptionFadeOut()
+
+        private void ShowBookContent(string header, string content)
         {
-            yield return new WaitForSeconds(fadeOutTime);
-            
-            _animator.SetTrigger(FadeOut);
+            popup.SetActive(true);
+            popupTextHeader.gameObject.SetActive(true);
+            popupTextContent.gameObject.SetActive(true);
+            popupTextHeader.text = header;
+            popupTextContent.text = content;
         }
     }
 }
