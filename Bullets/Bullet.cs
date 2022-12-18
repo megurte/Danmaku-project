@@ -1,10 +1,10 @@
-﻿using System;
-using Character;
+﻿using Character;
 using Environment;
+using Interfaces;
+using ObjectPool;
 using Unity.Mathematics;
 using UnityEngine;
 using Utils;
-using Random = System.Random;
 
 namespace Bullets
 {
@@ -15,14 +15,15 @@ namespace Bullets
         [SerializeField] protected float startSpeed = 0.1f;
         
         public Vector3 Direction { get; set; }
+        public ObjectPoolTags objectTag;
 
         protected BulletType BulletType { get => bulletType; set => bulletType = value; }
         protected float StartSpeed { get; set; }
 
-        private void Start()
+        /*private void Start()
         {
             GlobalEvents.OnClearBullets.AddListener(DestroySelf);
-        }
+        }*/
 
         private void FixedUpdate()
         {
@@ -48,7 +49,7 @@ namespace Bullets
             collision.gameObject.HasComponent<Border>(component =>
             {
                 if (bulletType != BulletType.Chain)
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
             });
         }
 
@@ -60,7 +61,7 @@ namespace Bullets
         public void DestroySelf()
         {
             Instantiate(destroyEffect, transform.position, quaternion.identity);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

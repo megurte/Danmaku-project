@@ -1,18 +1,22 @@
-﻿using UnityEngine;
+﻿using Enemy;
+using Interfaces;
+using UnityEngine;
 using Utils;
 
 namespace Bullets
 {
-    public class BulletFactory: MonoBehaviour
+    public class BulletFactory: MonoBehaviour, IFactory<Bullet, Vector3, Vector2, Bullet>
     {
         private ObjectPool<Bullet> _bulletPool = new ObjectPool<Bullet>();
 
-        public void SpawnBullet(Bullet bullet, Vector3 position, Vector2 direction)
+        public Bullet Create(Bullet param1, Vector3 param2, Vector2 param3)
         {
-            var bulletFromPool = _bulletPool.Get(bullet);
+            var bulletFromPool = _bulletPool.Get(param1);
 
-            var instObject = Instantiate(bulletFromPool, position, Quaternion.identity);
-            instObject.Direction = direction;
+            var instantiatedObject = Instantiate(bulletFromPool, param2, Quaternion.identity);
+            instantiatedObject.Direction = param3;
+
+            return instantiatedObject;
         }
     }
 }

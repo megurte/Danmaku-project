@@ -1,5 +1,7 @@
 ﻿using System;
 using Bullets;
+using ObjectPool;
+using Unity.Profiling;
 using UnityEngine;
 using Utils;
 using Random = System.Random;
@@ -8,8 +10,11 @@ namespace Spells
 {
     public class CommonSpells : MonoBehaviour
     {
+        private static ProfilerMarker _profilerMarker = new ProfilerMarker(ProfilerCategory.Memory, "RandomShoot");
+        
         public static void RandomShooting(CommonSpellSettings settings, BulletFactory factory)
         {
+            _profilerMarker.Begin();
             var seed = Guid.NewGuid().GetHashCode();
 
             var degree = new Random(seed).Next(0, 360);
@@ -24,9 +29,10 @@ namespace Spells
             direction.x = Mathf.Sin(degree);
 
             //factory.SpawnBullet(settings.Bullet, position, direction); TODO: move to factory pattern
-            var instObject = Instantiate(settings.Bullet.gameObject, position, Quaternion.identity);
-            
+            var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
+            //var instObject = Instantiate(settings.Bullet.gameObject, position, Quaternion.identity);
             instObject.GetComponent<Bullet>().Direction = -direction;
+            _profilerMarker.End();
         }
         
         public static void CircleBulletSpawn(SpellSettingsWithCount settings)
@@ -44,7 +50,7 @@ namespace Spells
                 direction.y = Mathf.Cos(degree);
                 direction.x = Mathf.Sin(degree);
 
-                var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
+                var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
@@ -59,7 +65,7 @@ namespace Spells
             var newPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
             var direction = settings.TargetDirection;
 
-            var instObject = Instantiate(settings.Bullet, newPosition, Quaternion.identity);
+            var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, newPosition);
             instObject.GetComponent<Bullet>().Direction = direction;
         }
     }

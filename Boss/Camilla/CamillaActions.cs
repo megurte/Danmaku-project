@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Bullets;
 using Enemy;
+using ObjectPool;
 using Spells;
 using UnityEngine;
 using Utils;
@@ -108,8 +109,7 @@ namespace Boss.Camilla
                 direction.y = Mathf.Cos(degree);
                 direction.x = Mathf.Sin(degree);
 
-                var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
-
+                var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
@@ -157,7 +157,8 @@ namespace Boss.Camilla
                 direction.x = Mathf.Sin(degree);
 
                 yield return new WaitForSeconds(randomShootingSettings.Delay);
-                var instObject = Instantiate(randomShootingSettings.Bullet, position, Quaternion.identity);
+                
+                var instObject = ObjectPoolBase.GetBulletFromPool(randomShootingSettings.Bullet.objectTag, position);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
@@ -181,7 +182,8 @@ namespace Boss.Camilla
                 direction.x = Mathf.Sin(degree);
 
                 yield return new WaitForSeconds(0.01f);
-                var instObject = Instantiate(reverseBulletShootSettings.Bullet, position, Quaternion.identity);
+                
+                var instObject = ObjectPoolBase.GetBulletFromPool(reverseBulletShootSettings.Bullet.objectTag, position);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
@@ -202,15 +204,18 @@ namespace Boss.Camilla
                 var element = reverseBulletShootSettings.RightDirection ? i : reverseBulletShootSettings.Count - i;
                 var degree = angle / reverseBulletShootSettings.Count * element;
                 position.y = reverseBulletShootSettings.CenterPosition.y 
-                             + Mathf.Cos(degree + reverseBulletShootSettings.Angle * Mathf.Deg2Rad) * reverseBulletShootSettings.Distance;
+                             + Mathf.Cos(degree + reverseBulletShootSettings.Angle * Mathf.Deg2Rad)
+                             * reverseBulletShootSettings.Distance;
                 position.x = reverseBulletShootSettings.CenterPosition.x 
-                             + Mathf.Sin(degree+ reverseBulletShootSettings.Angle * Mathf.Deg2Rad) * reverseBulletShootSettings.Distance;
+                             + Mathf.Sin(degree+ reverseBulletShootSettings.Angle * Mathf.Deg2Rad) 
+                             * reverseBulletShootSettings.Distance;
 
                 direction.x = Mathf.Cos(degree);
                 direction.y = Mathf.Sin(degree);
 
                 yield return new WaitForSeconds(0.01f);
-                var instObject = Instantiate(reverseBulletShootSettings.Bullet, position, Quaternion.identity);
+                
+                var instObject = ObjectPoolBase.GetBulletFromPool(reverseBulletShootSettings.Bullet.objectTag, position);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
@@ -239,8 +244,7 @@ namespace Boss.Camilla
 
                 yield return new WaitForSeconds(settings.Delay);
                 
-                var instObject = Instantiate(settings.Bullet, position, Quaternion.identity);
-                
+                var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
                 instObject.GetComponent<Bullet>().Direction = direction;
 
                 currentAngle = settings.IsReverse
@@ -261,8 +265,8 @@ namespace Boss.Camilla
                 var randomYOffset = rnd.NextFloat(-2, 2);
                 var newPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
                 var direction = UtilsBase.GetDirection(UtilsBase.GetNewPlayerPosition(), startPos);
-                var instObject = Instantiate(settings.Bullet, newPosition, Quaternion.identity);
                 
+                var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, newPosition);
                 instObject.GetComponent<Bullet>().Direction = direction;
                 
                 yield return new WaitForSeconds(settings.Delay);

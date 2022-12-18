@@ -1,6 +1,7 @@
 ﻿using Bullets;
 using Drop;
 using Enemy;
+using ObjectPool;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -26,6 +27,11 @@ namespace Utils
             return heading / distance;
         }
         
+        public static void ClearBulletsInPool(ObjectPoolTags poolTag)
+        {
+            
+        }
+        
         // TODO: move to ObjectPool pattern
         public static void ClearBullets<T>() where T : Bullet
         {
@@ -34,6 +40,7 @@ namespace Utils
 
             foreach (var type in bullets)
             {
+                //type.gameObject.SetActive(false);
                 type.DestroySelf();
             }
         }

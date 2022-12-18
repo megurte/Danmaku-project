@@ -3,6 +3,7 @@ using System.Collections;
 using Bullets;
 using Drop;
 using Enemy;
+using ObjectPool;
 using SubEffects;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,7 +23,7 @@ namespace Character
         public int Experience { get; private set; }
         public int Points { get; private set; }
         public bool IsInvulnerable { get; private set; }
-        
+
         private int _maxHealth;
         private float _maxLevel;
         private int _special;
@@ -176,19 +177,19 @@ namespace Character
             switch (characterLevel)
             {
                 case 1:
-                    CreateShoot(_playerBullet, 0, 0.3f);
+                    CreateShoot(ObjectPoolTags.PlayerBullet, 0, 0.3f);
                     break;
                 case 2:
-                    CreateShoot(_playerBullet, 0.3f, 0.3f);
-                    CreateShoot(_playerBullet, 0.3f, 0.3f, true);
+                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f);
+                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f, true);
                     break;
                 case 3:
-                    CreateShoot(_playerBullet, 0.3f, 0.3f);
-                    CreateShoot(_playerBullet, 0.3f, 0.3f, true);
+                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f);
+                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f, true);
                     break;
                 case 4:
-                    CreateShoot(_playerBullet, 0.3f, 0.3f);
-                    CreateShoot(_playerBullet, 0.3f, 0.3f, true);
+                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f);
+                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f, true);
                     break;
             }
         }
@@ -200,28 +201,29 @@ namespace Character
             switch (characterLevel)
             {
                 case 3:
-                    CreateShoot(_targetBullet, 1.2f, 0.3f);
-                    CreateShoot(_targetBullet, 1.2f, 0.3f, true);
+                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.2f, 0.3f);
+                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.2f, 0.3f, true);
                     break;
                 case 4:
-                    CreateShoot(_targetBullet, 1.2f, 0.3f);
-                    CreateShoot(_targetBullet, 1.2f, 0.3f, true);
-                    CreateShoot(_targetBullet, 1.8f, 0);
-                    CreateShoot(_targetBullet, 1.8f, 0, true);
+                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.2f, 0.3f);
+                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.2f, 0.3f, true);
+                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.8f, 0);
+                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.8f, 0, true);
                     break;
             }
             
             _innerTimer = _targetBulletFrequency;
         }
         
-        private void CreateShoot(GameObject prefab, float xOffset, float yOffset, bool deduction = false)
+        private void CreateShoot(ObjectPoolTags objectPoolTag, float xOffset, float yOffset, bool deduction = false)
         {
             var position = transform.position;
             
             Vector3 bulletPosition = deduction 
                 ? new Vector2(position.x - xOffset, position.y + yOffset) 
                 : new Vector2(position.x + xOffset, position.y + yOffset);
-            Instantiate(prefab, bulletPosition, Quaternion.identity);
+            ObjectPoolBase.GetBulletFromPool(objectPoolTag, bulletPosition);
+            //Instantiate(prefab, bulletPosition, Quaternion.identity);
         }
 
         private void LoseExperienceCrystals()

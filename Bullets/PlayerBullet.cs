@@ -8,9 +8,7 @@ namespace Bullets
     public class PlayerBullet : MonoBehaviour
     {
         public float startSpeed;
-
         public GameObject destroyEffect;
-        
         public Vector2 direction;
 
         private const int DamageToEnemy = 1;
@@ -31,10 +29,10 @@ namespace Bullets
             {
                 component.TakeDamage(DamageToEnemy);
                 Instantiate(destroyEffect, transform.position, Quaternion.identity);
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             });
 
-            collision.gameObject.HasComponent<Border>(component => Destroy(gameObject));
+            collision.gameObject.HasComponent<Border>(component => gameObject.SetActive(false));
         }
     }
 }

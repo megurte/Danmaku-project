@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Bullets;
+using ObjectPool;
 using Spells;
 using UnityEngine;
 using UnityEngine.Events;
@@ -43,6 +44,7 @@ namespace Boss.Camilla
         public IEnumerator InitPhaseOne()
         {
             UtilsBase.ClearBullets<Bullet>();
+            //ObjectPoolBase.HideObjectsInPool();
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
 
             yield return new WaitForSeconds(2);
@@ -127,6 +129,7 @@ namespace Boss.Camilla
             
             StopAllSpells.Invoke();
             UtilsBase.ClearBullets<Bullet>();
+            //ObjectPoolBase.HideObjectsInPool();
             
             PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShootIteration1);
             PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShootIteration2);
@@ -143,6 +146,7 @@ namespace Boss.Camilla
             StopAllCoroutines();
             StopAllSpells.Invoke();
             UtilsBase.ClearBullets<Bullet>();
+            //ObjectPoolBase.HideObjectsInPool();
 
             if (_camillaSettings.maxPhases <= phase)
             {
