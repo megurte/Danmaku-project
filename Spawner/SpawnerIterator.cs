@@ -12,8 +12,7 @@ namespace Spawner
     {
         public List<GameObject> bookSpawners;
 
-        [SerializeField]
-        private SpawnerIteratorConfig spawnerIteratorConfig;
+        [SerializeField] private SpawnerIteratorConfig spawnerIteratorConfig;
         private GameObject _bookPrefab;
         
         public static readonly UnityEvent<int> AwakeSpawner = new UnityEvent<int>();
@@ -31,7 +30,7 @@ namespace Spawner
                 new Vector3(1.11f,9.43f,0)));
             StartCoroutine(BookSpawn(73, bookSpawners[0].transform,
                 new Vector3(-12.6f, 9.43f, 0)));
-            StartCoroutine(AddsPhaseEnd(89));
+            StartCoroutine(AddsPhaseEnd(92));
         }
 
         private static void OnSpawnerAwake(int index)

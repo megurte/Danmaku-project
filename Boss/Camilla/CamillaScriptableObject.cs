@@ -9,8 +9,7 @@ namespace Boss.Camilla
     {
         public float maxHp;
         public int maxPhases;
-        
+        public int barrierMaxHp;
         public List<LootSettings> lootSettings = new List<LootSettings>();
-        public List<GameObject> bullets = new List<GameObject>();
     }
 }

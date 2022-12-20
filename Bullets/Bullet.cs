@@ -41,7 +41,7 @@ namespace Bullets
             {
                 if (component.IsInvulnerable) return;
                 
-                PlayerBase.TakeDamage(1);
+                PlayerBase.OnTakeDamage.Invoke(1);
                 GlobalEvents.HealthChanged(component.Health);
                 DestroySelf();
             });

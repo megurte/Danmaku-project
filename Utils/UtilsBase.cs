@@ -1,4 +1,5 @@
 ﻿using Bullets;
+using Character;
 using Drop;
 using Enemy;
 using ObjectPool;
@@ -16,7 +17,7 @@ namespace Utils
 
         public static Vector3 GetNewPlayerPosition()
         {
-            return GameObject.FindGameObjectWithTag("Player").transform.position;
+            return PlayerReference.PlayerBase.transform.position;
         }
         
         public static Vector3 GetDirection(Vector3 targetPos, Vector3 objectPosition)

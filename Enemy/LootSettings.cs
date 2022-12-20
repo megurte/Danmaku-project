@@ -1,4 +1,5 @@
 ﻿using System;
+using Drop;
 using UnityEngine;
 
 namespace Enemy
@@ -6,7 +7,7 @@ namespace Enemy
     [Serializable]
     public struct LootSettings
     {
-        public GameObject dropItem;
+        public DropBase dropItem;
         public int dropNumber;
         public float chance;
     }

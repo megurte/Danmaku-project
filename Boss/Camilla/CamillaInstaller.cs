@@ -15,13 +15,23 @@ namespace Boss.Camilla
 
         public override void InstallBindings()
         {
-            Container.Bind<CamillaScriptableObject>().FromInstance(camillaSettings).AsCached().NonLazy();
-            Container.Bind<CamillaPhaseSettings>().FromInstance(camillaPhaseSettings).AsCached().NonLazy();
+            InjectScriptableObject();
+            InjectPhaseSettings();
             
-            StartCoroutine(CamillaInit(95));
+            StartCoroutine(InstantiateCamilla(93));
         }
 
-        private IEnumerator CamillaInit(float time)
+        private void InjectScriptableObject()
+        {
+            Container.Bind<CamillaScriptableObject>().FromInstance(camillaSettings).AsCached().NonLazy();
+        }
+
+        private void InjectPhaseSettings()
+        {
+            Container.Bind<CamillaPhaseSettings>().FromInstance(camillaPhaseSettings).AsCached().NonLazy();
+        }
+        
+        private IEnumerator InstantiateCamilla(float time)
         {
             yield return new WaitForSeconds(time);
             

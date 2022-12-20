@@ -12,7 +12,6 @@ namespace Boss.Camilla
         [SerializeField] private GameObject bossTimerUI;
         [SerializeField] private GameObject bossBarUI;
         private CamillaScriptableObject _camillaScriptableObject;
-        // private bool _isInvulnerable;
         private float _maxHp;
         
         public static bool IsMagicBarrierActive;

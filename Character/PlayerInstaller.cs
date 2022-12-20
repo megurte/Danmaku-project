@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace Character
@@ -21,6 +20,12 @@ namespace Character
                     null);
             
             Container.Bind<PlayerBase>().FromInstance(playerInstance).AsSingle().NonLazy();
+            SetReference();
+        }
+
+        private void SetReference()
+        {
+            PlayerReference.PlayerBase = characterPrefab;
         }
     }
 }

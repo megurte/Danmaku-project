@@ -1,4 +1,5 @@
 ﻿using System;
+using Enemy;
 using UnityEngine;
 
 namespace Spawner
@@ -7,7 +8,7 @@ namespace Spawner
     public struct EnemySpawnProperties
     {
         public float spawnTime;
-        public GameObject enemyPrefab;
+        public EnemyBase enemyPrefab;
         public Vector2 targetPosition;
         public int enemyNumber;
     }

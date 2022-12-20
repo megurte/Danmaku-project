@@ -1,11 +1,11 @@
-﻿using Enemy;
+﻿using Bullets;
 using Interfaces;
 using UnityEngine;
 using Utils;
 
-namespace Bullets
+namespace Factories
 {
-    public class BulletFactory: MonoBehaviour, IFactory<Bullet, Vector3, Vector2, Bullet>
+    /*public class BulletFactory: MonoBehaviour, IFactory<Bullet, Vector3, Vector2, Bullet>
     {
         private ObjectPool<Bullet> _bulletPool = new ObjectPool<Bullet>();
 
@@ -18,5 +18,5 @@ namespace Bullets
 
             return instantiatedObject;
         }
-    }
+    }*/
 }

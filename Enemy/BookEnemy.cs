@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Bullets;
+using Factories;
 using Spells;
 using Unity.Mathematics;
 using UnityEngine;
@@ -27,7 +28,6 @@ namespace Enemy
 
         private void Awake()
         {
-            Factory = gameObject.AddComponent<BulletFactory>();
             CurrentHp = enemyScriptableObject.maxHp;
             _innerTimer = Cooldown;
             _animator = GetComponent<Animator>();
@@ -72,7 +72,7 @@ namespace Enemy
                         CommonSpells.CircleBulletSpawn(new SpellSettingsWithCount(Bullet, transform.position, 1, BulletCount));
                         break;
                     case Spells.RandomShooting:
-                        CommonSpells.RandomShooting(new CommonSpellSettings(Bullet, transform.position, 1), Factory);
+                        CommonSpells.RandomShooting(new CommonSpellSettings(Bullet, transform.position, 1));
                         break;
                     case Spells.DirectTarget:
                         /*CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,

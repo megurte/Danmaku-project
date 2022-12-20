@@ -25,7 +25,7 @@ namespace Drop
         {
             other.gameObject.HasComponent<PlayerBase>(component =>
             {
-                PlayerBase.GetDrop(DropType, Value);
+                PlayerBase.OnGetDrop.Invoke(DropType, Value);
                 Destroy(gameObject);
             });
             

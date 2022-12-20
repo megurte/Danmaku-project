@@ -3,7 +3,6 @@ using System.Collections;
 using Bullets;
 using Drop;
 using Enemy;
-using ObjectPool;
 using SubEffects;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,15 +15,25 @@ namespace Character
 {
     public class PlayerBase : MonoBehaviour
     {
-        [FormerlySerializedAs("playerSo")] public PlayerScriptableObject playerScriptableObject;
-        public bool godMod = default;
+        public PlayerScriptableObject playerScriptableObject;
         public int Health { get; private set; }
-        public int Level { get; private set; }
-        public int Experience { get; private set; }
+        public int Level { get; set; }
+        public int Experience { get; set; }
         public int Points { get; private set; }
         public bool IsInvulnerable { get; private set; }
+        public int experienceLoseByDamage = 30;
+        public static bool NoDamage = true;
 
-        private int _maxHealth;
+        public static readonly UnityEvent<int> SpecialUsed = new UnityEvent<int>();
+        public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
+        public static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
+        public static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
+        public static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
+        public static readonly UnityEvent UpdatePlayerUI = new UnityEvent();
+        
+        [SerializeField] private bool godMode = default;
+        private PlayerLoseCrystalsService _playerLoseCrystalsService;
+        private PlayerShootService _playerShootService;
         private float _maxLevel;
         private int _special;
         private float _maxSpecials;
@@ -32,24 +41,10 @@ namespace Character
         private bool _slowMode = false;
         private float _specialTimer;
         private float _specialCooldown;
-        private GameObject _playerBullet;
-        private GameObject _targetBullet;
-        private GameObject _destroyEffect;
         private SimpleFlash _flashEffect;
         private float _targetBulletFrequency;
         private Vector2 _moveVector;
         private float _innerTimer;
-        
-        public static bool NoDamage = true;
-
-        public static readonly UnityEvent<int> SpecialUsed = new UnityEvent<int>();
-        public static readonly UnityEvent<int> OnDeath = new UnityEvent<int>();
-        public static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
-        
-        private static readonly UnityEvent<DropType, int> OnGetDrop = new UnityEvent<DropType, int>();
-        private static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
-
-        private const int ExperienceLoseByDamage = 30;
         
         [Inject]
         public void Construct(PlayerScriptableObject playerSettings)
@@ -59,15 +54,9 @@ namespace Character
         
         private void Start()
         {
-            _innerTimer = _targetBulletFrequency;
-            _flashEffect = GetComponent<SimpleFlash>();
+            TurnGodMode();
 
-            if (godMod)
-            {
-                IsInvulnerable = true;
-                Experience = 10000;
-            }
-            
+            UpdatePlayerUI.Invoke();
             OnGetDrop.AddListener(OnDrop);
             OnTakeDamage.AddListener(OnDamage);
             OnDeath.AddListener(PlayerDeath);
@@ -85,34 +74,47 @@ namespace Character
                 Moving();
             
             LevelUpdate();
+            CheatKeyBinds();
 
             if (Input.GetKey(KeyCode.Z))
             {
-                ShootCommon(Level);
+                _playerShootService.ShootCommon(Level, transform.position);
             
                 if (Level >= 3)
                 {
-                    ShootTarget(Level);
+                    var value =
+                        _playerShootService.ShootTarget(Level, transform.position, _innerTimer, _targetBulletFrequency);
+                    _innerTimer = value != 0 ? value : _innerTimer;
                     _innerTimer -= Time.deltaTime;
                 }
             }
 
             if (Input.GetKey(KeyCode.X))
                 UseSpecial();
-            
-            // Test
-            if (Input.GetKey(KeyCode.F12))
-                Points += 100;
 
             if (_specialTimer - _specialCooldown < 0)
                 _specialTimer -= Time.deltaTime;
+        }
 
+        private void CheatKeyBinds()
+        {
             if (Input.GetKey(KeyCode.F2))
                 Level = 2;
             if (Input.GetKey(KeyCode.F3))
                 Level = 3;
             if (Input.GetKey(KeyCode.F4))
                 Level = 4;
+            if (Input.GetKey(KeyCode.O))
+                TurnGodMode();
+        }
+
+        private void TurnGodMode()
+        {
+            if (!godMode) return;
+            
+            IsInvulnerable = true;
+            Experience = 10000;
+            Debug.LogWarning("God mode is on");
         }
 
         private void Moving()
@@ -156,6 +158,8 @@ namespace Character
                 Level++;
                 Experience = 0;
             }
+            
+            UpdatePlayerUI.Invoke();
         }
 
         private void UseSpecial()
@@ -170,134 +174,6 @@ namespace Character
             
             SpecialUsed.Invoke(_special);
             Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
-        }
-
-        private void ShootCommon(int characterLevel)
-        {
-            switch (characterLevel)
-            {
-                case 1:
-                    CreateShoot(ObjectPoolTags.PlayerBullet, 0, 0.3f);
-                    break;
-                case 2:
-                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f);
-                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f, true);
-                    break;
-                case 3:
-                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f);
-                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f, true);
-                    break;
-                case 4:
-                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f);
-                    CreateShoot(ObjectPoolTags.PlayerBullet, 0.3f, 0.3f, true);
-                    break;
-            }
-        }
-
-        private void ShootTarget(int characterLevel)
-        {
-            if (!(_innerTimer <= 0)) return;
-
-            switch (characterLevel)
-            {
-                case 3:
-                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.2f, 0.3f);
-                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.2f, 0.3f, true);
-                    break;
-                case 4:
-                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.2f, 0.3f);
-                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.2f, 0.3f, true);
-                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.8f, 0);
-                    CreateShoot(ObjectPoolTags.TargetPlayerBullet, 1.8f, 0, true);
-                    break;
-            }
-            
-            _innerTimer = _targetBulletFrequency;
-        }
-        
-        private void CreateShoot(ObjectPoolTags objectPoolTag, float xOffset, float yOffset, bool deduction = false)
-        {
-            var position = transform.position;
-            
-            Vector3 bulletPosition = deduction 
-                ? new Vector2(position.x - xOffset, position.y + yOffset) 
-                : new Vector2(position.x + xOffset, position.y + yOffset);
-            ObjectPoolBase.GetBulletFromPool(objectPoolTag, bulletPosition);
-            //Instantiate(prefab, bulletPosition, Quaternion.identity);
-        }
-
-        private void LoseExperienceCrystals()
-        {
-            var prefab = Resources.Load<GameObject>("Prefab/Drops/expDrop");
-            var seed = Guid.NewGuid().GetHashCode();
-            var maxVisualCrystals = new Random(seed).Next(6, 12);
-
-            for (var i = 0; i < maxVisualCrystals; i++)
-            {
-                seed = Guid.NewGuid().GetHashCode();
-                
-                var rnd = new Random(seed);
-                var startPos = transform.position;
-                var randomXOffset = rnd.NextFloat(-1, 1);
-                var randomYOffset = rnd.NextFloat(-1, 1);
-                var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
-                var newObject = Instantiate(prefab, dropPosition, Quaternion.identity);
-                
-                newObject.gameObject.HasComponent<Collider2D>(component => component.enabled = false);
-                newObject.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
-                newObject.gameObject.HasComponent<DropBase>(Destroy);
-            }
-            
-            if (Experience - ExperienceLoseByDamage < 0)
-            {
-                var keyMap = playerScriptableObject.levelUpMap;
-                var remainder = Mathf.Abs(Experience - ExperienceLoseByDamage);
-
-                while (remainder > 0)
-                {
-                    for (var index = keyMap.keys.Count - 1; index >= 0; index--)
-                    {
-                        if (Level < keyMap.keys[index]) continue;
-
-                        if (keyMap.keys[index] == 1)
-                        {
-                            Experience = 0;
-                            remainder = 0;
-                            break;
-                        }
-
-                        remainder = keyMap.values[index] - remainder;
-
-                        if (remainder < 0)
-                        {
-                            remainder = Mathf.Abs(remainder);
-                            Level -= 1;
-                            break;
-                        }
-                        
-                        if (keyMap.keys[index] > 1)
-                            Level -= 1;
-
-                        Experience = remainder;
-                        remainder = 0;
-                        break;
-                    }
-                }
-            }
-            else
-                Experience -= ExperienceLoseByDamage;
-            
-            LevelUpdate();
-        }
-        
-        public static void TakeDamage(int damageValue)
-        {
-            OnTakeDamage.Invoke(damageValue);
-        }
-
-        public static void GetDrop(DropType type, int value)
-        {
-            OnGetDrop.Invoke(type, value);
         }
 
         private void OnDrop(DropType type, int value)
@@ -334,7 +210,8 @@ namespace Character
                 Health -= damageValue;
                 
                 _flashEffect.FlashEffect();
-                LoseExperienceCrystals();
+                _playerLoseCrystalsService.LoseExperienceCrystals(this);
+                LevelUpdate();
                 StartCoroutine(Invulnerable());
             }
 
@@ -383,17 +260,17 @@ namespace Character
             Level = settings.level;
             Experience = settings.experience;
             Points = settings.points;
-            _maxHealth = settings.maxHealth;
             _maxSpecials = settings.maxValue;
             _specialTimer = 0;
             _specialCooldown = settings.specialCooldown;
             _maxLevel = settings.maxLevel;
             _special = settings.special;
             _playerSpeed = settings.speed;
-            _playerBullet = settings.bullet;
-            _targetBullet = settings.targetBullet;
-            _destroyEffect = settings.destroyEffect;
             _targetBulletFrequency = settings.targetBulletFrequency;
+            _playerLoseCrystalsService = GetComponent<PlayerLoseCrystalsService>();
+            _playerShootService = GetComponent<PlayerShootService>();
+            _flashEffect = GetComponent<SimpleFlash>();
+            _innerTimer = _targetBulletFrequency;
         }
     }
 }

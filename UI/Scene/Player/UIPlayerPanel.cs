@@ -1,74 +1,84 @@
+using System;
 using Character;
+using Drop;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace UI.Scene.Player
 {
     public class UIPlayerPanel : MonoBehaviour
     {
-        [SerializeField] private PlayerBase player;
         [SerializeField] private GameObject health;
         [SerializeField] private GameObject specials;
     
-        [Header("Experience")][SerializeField] private TextMeshProUGUI levelText;
+        [Header("Experience"), SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private TextMeshProUGUI experienceText;
         
-        [Space(20f)][SerializeField] private TextMeshProUGUI points;
+        [Space(20f), SerializeField] private TextMeshProUGUI points;
         [SerializeField] private TextMeshProUGUI scoreText;
 
-        [Header("Prefabs")][SerializeField] private GameObject iconHealthFull;
+        [Header("Prefabs"), SerializeField] private GameObject iconHealthFull;
         [SerializeField] private GameObject iconHealthEmpty;
         [SerializeField] private GameObject iconSpecialFull;
         [SerializeField] private GameObject iconSpecialEmpty;
         
-        [Space(20f)][SerializeField] private GameObject deathText;
+        [Space(20f), SerializeField] private GameObject deathText;
         [SerializeField] private GameObject scoreDeathText;
+
+        private PlayerBase _player;
 
         [Inject]
         public void Construct(PlayerBase settings)
         {
-            player = settings;
+            _player = settings;
         }
         
         private void Start()
         {
-            UpdateHealthFiller(player.playerScriptableObject.health);
-            UpdateSpecialFiller(player.playerScriptableObject.special);
+            UpdateHealthPlaceholder(_player.playerScriptableObject.health);
+            UpdateSpecialPlaceholder(_player.playerScriptableObject.special);
 
             PlayerBase.OnDeath.AddListener(ShowDeathScreen);
-            PlayerBase.SpecialUsed.AddListener(UpdateSpecialFiller);
-            GlobalEvents.OnHealthChange.AddListener(UpdateHealthFiller);
-            GlobalEvents.OnSpecialChange.AddListener(UpdateSpecialFiller);
+            PlayerBase.SpecialUsed.AddListener(UpdateSpecialPlaceholder);
+            PlayerBase.UpdatePlayerUI.AddListener(UpdateExperienceUI);
+            GlobalEvents.OnHealthChange.AddListener(UpdateHealthPlaceholder);
+            GlobalEvents.OnSpecialChange.AddListener(UpdateSpecialPlaceholder);
         }
 
-        private void FixedUpdate()
+        private void UpdateExperienceUI()
         {
-            UpdateUI();
-        }
-
-        private void UpdateUI()
-        {
-            var levelUpMap = player.playerScriptableObject.levelUpMap;
+            var levelUpMap = _player.playerScriptableObject.levelUpMap;
         
-            levelText.text = "Lv. " + player.Level;
-            points.text = player.Points + "";
-            scoreText.text = player.Points + "";
+            levelText.text = $"Lv. {_player.Level}";;
+            points.text = _player.Points + "";
+            scoreText.text = _player.Points + "";
 
-            if (player.Level + 1 <= levelUpMap.keys.Count)
+            if (_player.Level + 1 <= levelUpMap.keys.Count)
             {
-                experienceText.text = player.Experience + "/" + levelUpMap.values[player.Level];
+                experienceText.text = $"{_player.Experience}/{levelUpMap.values[_player.Level]}";
             }
             else
             {
-                experienceText.text = levelUpMap.values[levelUpMap.values.Count - 1] + "/" 
-                    + levelUpMap.values[levelUpMap.values.Count - 1];
+                experienceText.text = $"{levelUpMap.values[levelUpMap.values.Count - 1]}/" +
+                                      $"{levelUpMap.values[levelUpMap.values.Count - 1]}";
             }
         }
 
-        private static void ClearFiller(GameObject filler) {
-            var allChildren = new GameObject[filler.transform.childCount];
+
+        /// <summary>
+        /// Clears the placeholder game object by removing all its children
+        /// </summary>
+        /// <param name="placeholder">The placeholder game object</param>
+        private void ClearPlaceholder(GameObject placeholder) {
+            while (placeholder.transform.childCount > 0)
+            {
+                var child = placeholder.transform.GetChild(0);
+                child.SetParent(null);
+                Destroy(child.gameObject);
+            }
+            
+            /*var allChildren = new GameObject[filler.transform.childCount];
             var i = 0;
 
             foreach (Transform child in filler.transform)
@@ -80,42 +90,51 @@ namespace UI.Scene.Player
             foreach (var child in allChildren)
             {
                 Destroy(child.gameObject);
-            }
+            }*/
         }
 
-        private void UpdateHealthFiller(int currentHealth)
+        
+        /// <summary>
+        /// Updates the filler game object for the player's health.
+        /// </summary>
+        /// <param name="currentHealth">The current health value.</param>
+        private void UpdateHealthPlaceholder(int currentHealth)
         {
-            if (currentHealth < 0 || currentHealth > player.playerScriptableObject.maxHealth) return;
+            if (currentHealth < 0 || currentHealth > _player.playerScriptableObject.maxHealth) return;
             
-            ClearFiller(health);
-
-            for (var i = 0; i < currentHealth; i++)
+            ClearPlaceholder(health);
+            
+            var minHealth = Mathf.Min(currentHealth, _player.playerScriptableObject.maxHealth);
+            
+            for (var i = 0; i < minHealth; i++)
             {
                 var prefab = Instantiate(iconHealthFull, health.transform, true);
                 SetNormalScale(prefab);
             }
-            
-            for (var i = 0; i < player.playerScriptableObject.maxHealth - currentHealth; i++)
+
+            for (var i = 0; i < _player.playerScriptableObject.maxHealth - minHealth; i++)
             {
                 var prefab = Instantiate(iconHealthEmpty, health.transform, true);
                 SetNormalScale(prefab);
             }
         }
         
-        private void UpdateSpecialFiller(int currentSpecials)
+        private void UpdateSpecialPlaceholder(int currentSpecials)
         {
-            if (currentSpecials < 0 || currentSpecials > player.playerScriptableObject.maxValue)
+            if (currentSpecials < 0 || currentSpecials > _player.playerScriptableObject.maxValue)
                 return;
          
-            ClearFiller(specials);
-
-            for (var i = 0; i < currentSpecials; i++)
+            ClearPlaceholder(specials);
+            
+            var minSpecials = Mathf.Min(currentSpecials, _player.playerScriptableObject.maxValue);
+            
+            for (var i = 0; i < minSpecials; i++)
             {
                 var prefab = Instantiate(iconSpecialFull, specials.transform, true);
                 SetNormalScale(prefab);
             }
             
-            for (var i = 0; i < player.playerScriptableObject.maxValue - currentSpecials; i++)
+            for (var i = 0; i < _player.playerScriptableObject.maxValue - minSpecials; i++)
             {
                 var prefab = Instantiate(iconSpecialEmpty, specials.transform, true);
                 SetNormalScale(prefab);

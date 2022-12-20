@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Bullets;
 using Character;
+using Drop;
 using Environment;
+using Factories;
 using UnityEngine;
 using Utils;
+using Zenject;
 using Random = System.Random;
 
 namespace Enemy
@@ -14,8 +17,8 @@ namespace Enemy
     {
         protected float CurrentHp { get; set; }
         protected Vector3 TargetPosition;
-        protected BulletFactory Factory;
-        
+
+        [Inject] private DropFactory _dropFactory;
         private float _angle = default;
         private Vector3 _circleCenterPoint = default;
 
@@ -86,7 +89,7 @@ namespace Enemy
             {
                 if (component.IsInvulnerable) return;
                 
-                PlayerBase.TakeDamage(1);
+                PlayerBase.OnTakeDamage.Invoke(1);
                 GlobalEvents.HealthChanged(component.Health);
             });
             other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
@@ -107,17 +110,11 @@ namespace Enemy
             }
         }
 
-        private void DropSpawn(GameObject drop, float chance, int seed)
+        private void DropSpawn(DropBase drop, float chance, int seed)
         {
             if (new Random(seed).NextFloat(0, 1) <= chance)
             {
-                var rnd = new Random(seed);
-                var startPos = transform.position;
-                var randomXOffset = rnd.NextFloat(-1, 1);
-                var randomYOffset = rnd.NextFloat(-1, 1);
-                var dropPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
-                
-                Instantiate(drop, dropPosition, Quaternion.identity);
+                _dropFactory.Create(drop, transform.position, seed);
             }
         }
 

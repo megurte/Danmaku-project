@@ -45,5 +45,12 @@ namespace Character
         {            
             JsonScoreDataWriter.SaveJsonData(_runScore);
         }
+
+        public static void ClearRunInfo()
+        {
+            SetDifficulty(Difficulty.Default);
+            SetPlayerName("");
+            _runScore = 0;
+        }
     }
 }

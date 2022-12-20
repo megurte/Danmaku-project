@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using System.IO;
 using System.Linq;
@@ -14,7 +15,8 @@ namespace UI.MainMenu
         
         public static void SaveJsonData(int points)
         {
-            var currentDate = DateTime.Now.ToString().Remove(10, 9);
+            var currentDate = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+            currentDate = currentDate.Remove(10, 9);
             var newData = new ScoreData(currentDate, PlayerRunInfo.GetPlayerName(), points.ToString());
             var oldData = JsonUtils.FromJson<ScoreData>(File.ReadAllText(FilePath)).ToList();
             

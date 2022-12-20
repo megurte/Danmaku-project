@@ -1,5 +1,6 @@
 ﻿using System;
 using Bullets;
+using Factories;
 using ObjectPool;
 using Unity.Profiling;
 using UnityEngine;
@@ -12,9 +13,8 @@ namespace Spells
     {
         private static ProfilerMarker _profilerMarker = new ProfilerMarker(ProfilerCategory.Memory, "RandomShoot");
         
-        public static void RandomShooting(CommonSpellSettings settings, BulletFactory factory)
+        public static void RandomShooting(CommonSpellSettings settings)
         {
-            _profilerMarker.Begin();
             var seed = Guid.NewGuid().GetHashCode();
 
             var degree = new Random(seed).Next(0, 360);
@@ -32,7 +32,6 @@ namespace Spells
             var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
             //var instObject = Instantiate(settings.Bullet.gameObject, position, Quaternion.identity);
             instObject.GetComponent<Bullet>().Direction = -direction;
-            _profilerMarker.End();
         }
         
         public static void CircleBulletSpawn(SpellSettingsWithCount settings)
