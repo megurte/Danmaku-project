@@ -11,7 +11,6 @@ namespace Factories
         public override void InstallBindings()
         {
             Container.Bind<EnemyFactory>().FromInstance(enemyFactory).AsSingle().NonLazy();
-            //Container.Bind<DropFactory>().FromInstance(dropFactory).AsSingle().NonLazy();
             Container.Bind<DropFactory>().FromInstance(dropFactory).AsCached();
         }
     }

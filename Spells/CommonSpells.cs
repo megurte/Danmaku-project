@@ -29,7 +29,7 @@ namespace Spells
             direction.x = Mathf.Sin(degree);
 
             //factory.SpawnBullet(settings.Bullet, position, direction); TODO: move to factory pattern
-            var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
+            var instObject = ObjectPool.ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
             //var instObject = Instantiate(settings.Bullet.gameObject, position, Quaternion.identity);
             instObject.GetComponent<Bullet>().Direction = -direction;
         }
@@ -49,7 +49,7 @@ namespace Spells
                 direction.y = Mathf.Cos(degree);
                 direction.x = Mathf.Sin(degree);
 
-                var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
+                var instObject = ObjectPool.ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
@@ -64,7 +64,7 @@ namespace Spells
             var newPosition = new Vector3(startPos.x + randomXOffset, startPos.y + randomYOffset, 0);
             var direction = settings.TargetDirection;
 
-            var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, newPosition);
+            var instObject = ObjectPool.ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, newPosition);
             instObject.GetComponent<Bullet>().Direction = direction;
         }
     }

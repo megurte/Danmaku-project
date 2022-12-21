@@ -1,3 +1,4 @@
+using Common;
 using Enemy;
 using Environment;
 using UnityEngine;
@@ -13,6 +14,14 @@ namespace Bullets
 
         private const int DamageToEnemy = 1;
 
+        protected void Awake()
+        {
+            if (gameObject.layer == LayerMask.NameToLayer("Default"))
+            {
+                gameObject.layer = (int)Layers.BulletLayer;
+            }
+        }
+        
         private void FixedUpdate()
         {
             Movement();
@@ -25,6 +34,12 @@ namespace Bullets
     
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if ((collision.gameObject.layer & (int)Layers.BulletLayer) != 0 
+                || (collision.gameObject.layer & (int)Layers.DropLayer) != 0)
+            {
+                return;
+            }
+            
             collision.gameObject.HasComponent<IDamageable>(component =>
             {
                 component.TakeDamage(DamageToEnemy);

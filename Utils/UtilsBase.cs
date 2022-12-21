@@ -15,11 +15,6 @@ namespace Utils
             return new Vector3(position.x - radius , position.y, position.z);
         }
 
-        public static Vector3 GetNewPlayerPosition()
-        {
-            return PlayerReference.PlayerBase.transform.position;
-        }
-        
         public static Vector3 GetDirection(Vector3 targetPos, Vector3 objectPosition)
         {
             var heading = targetPos - objectPosition;
@@ -27,12 +22,7 @@ namespace Utils
 
             return heading / distance;
         }
-        
-        public static void ClearBulletsInPool(ObjectPoolTags poolTag)
-        {
-            
-        }
-        
+
         // TODO: move to ObjectPool pattern
         public static void ClearBullets<T>() where T : Bullet
         {

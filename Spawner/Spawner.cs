@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Enemy;
 using Factories;
+using Interfaces;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;
 
 namespace Spawner
 {
-    public class Spawner : MonoBehaviour
+    public class Spawner : MonoBehaviour, ISpawner
     {
-        public int spawnerIndex = default;
-        [FormerlySerializedAs("spawnerSo")] public SpawnerScriptableObject spawnerScriptableObject;
-        public bool isAwake;
-
+        [SerializeField] private SpawnerScriptableObject spawnerScriptableObject;
+        [SerializeField] private int spawnerIndex = default;
+        [SerializeField] private bool isAwake;
         [Inject] private EnemyFactory _enemyFactory;
         private List<EnemySpawnProperties> EnemySpawnList => spawnerScriptableObject.enemySpawnPropertiesList;
         private float _innerTimer = default;
@@ -32,7 +32,7 @@ namespace Spawner
             SpawnCycle();
         }
 
-        private void SpawnCycle()
+        public void SpawnCycle()
         {
             if (isAwake)
             {

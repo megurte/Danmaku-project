@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections;
 using Bullets;
-using Factories;
 using Spells;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 
 namespace Enemy
 {
     public class BookEnemy : EnemyBase, IShoot, IDestroyable
     {
-        [FormerlySerializedAs("enemySo")] public EnemyScriptableObject enemyScriptableObject;
+        [SerializeField] private EnemyScriptableObject enemyScriptableObject;
+        [SerializeField] private bool shootingIsAvailable;
         private float Cooldown => enemyScriptableObject.cooldown;
         private Bullet Bullet => enemyScriptableObject.bullet;
         private int BulletCount => enemyScriptableObject.counter;
@@ -21,8 +20,6 @@ namespace Enemy
         private MoveSet MoveSet => enemyScriptableObject.moveSet;
         private float _innerTimer;
         private Animator _animator;
-
-        [SerializeField] private bool shootingIsAvailable;
 
         private static readonly int IsCasting = Animator.StringToHash("isCasting");
 
@@ -43,9 +40,6 @@ namespace Enemy
                 case MoveSet.ToPosition:
                     StartCoroutine(MovementToPosition(TargetPosition, Speed));
                     break;
-                case MoveSet.ToPoint:
-                    //
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -59,31 +53,6 @@ namespace Enemy
         private void FixedUpdate()
         {
             CheckHealth(enemyScriptableObject.lootSettings, enemyScriptableObject.destroyEffect);
-
-            if (_innerTimer > 0)
-            {
-                _innerTimer -= Time.deltaTime;
-            }
-            else
-            {
-                switch (Spell)
-                {
-                    case Spells.Circle:
-                        CommonSpells.CircleBulletSpawn(new SpellSettingsWithCount(Bullet, transform.position, 1, BulletCount));
-                        break;
-                    case Spells.RandomShooting:
-                        CommonSpells.RandomShooting(new CommonSpellSettings(Bullet, transform.position, 1));
-                        break;
-                    case Spells.DirectTarget:
-                        /*CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, transform.position,
-                            1,GetDirection(GetNewTargetPosition(), transform.position)));*/
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-                
-                _innerTimer = Cooldown;
-            }
         }
 
         public IEnumerator Shoot()
@@ -101,10 +70,10 @@ namespace Enemy
                 yield return new WaitForSeconds(0.1f);
 
                 var position = transform.position;
+                var direction = UtilsBase.GetDirection(Player.GetPlayerPosition(), position);
+                var spellSettings = new CommonSpellSettingsWithTarget(Bullet, position, 0.5f, direction, 0.01f);
                 
-                CommonSpells.TargetPositionShooting(new CommonSpellSettingsWithTarget(Bullet, position,
-                    0.5f, UtilsBase.GetDirection(UtilsBase.GetNewPlayerPosition(), position),
-                    0.01f));
+                CommonSpells.TargetPositionShooting(spellSettings);
             }
 
             yield return Shoot();

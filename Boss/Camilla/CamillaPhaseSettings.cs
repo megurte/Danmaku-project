@@ -10,6 +10,7 @@ namespace Boss.Camilla
         public PhaseTwoSettings phaseTwoSettings;
         public PhaseThreeSettings phaseThreeSettings;
         public PhaseFourSettings phaseFourSettings;
+        public SpawnerIndexes spawnerIndexes;
         
         [Serializable]
         public struct PhaseOneSettings
@@ -43,6 +44,15 @@ namespace Boss.Camilla
             public SpellPropellerBulletShootSettings propellerBulletShootIteration4;
             
             public SpellRandomShootingSettings randomShooting;
+        }
+
+        [Serializable]
+        public struct SpawnerIndexes
+        {
+            public int startIndexDown;
+            public int endIndexDown;
+            public int startIndexUp;
+            public int endIndexUp;
         }
     }
 }

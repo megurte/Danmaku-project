@@ -8,6 +8,7 @@ namespace UI.Scene.Additional
         public TextMeshProUGUI fpsText;
 
         private const float PollingTime = 1f;
+        private int _fpsCup = 60;
         private float _time = default;
         private int _frameCount = default;
 
@@ -26,7 +27,7 @@ namespace UI.Scene.Additional
 
         private int CalculateFrameRate()
         {
-            return Mathf.RoundToInt(_frameCount / _time);
+            return Mathf.Min(_fpsCup, Mathf.RoundToInt(_frameCount / _time));
         }
     }
 }

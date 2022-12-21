@@ -1,20 +1,29 @@
 ﻿using System.Collections;
 using Character;
+using Common;
 using Environment;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
+using Zenject;
 
 namespace Drop
 {
     public class DropBase: MonoBehaviour
     {
-        [FormerlySerializedAs("dropSo")] public DropScriptableObject dropScriptableObject;
-
+        [SerializeField] private DropScriptableObject dropScriptableObject;
+        [Inject] private PlayerBase _player;
         private int Value => dropScriptableObject.value;
         private DropType DropType => dropScriptableObject.dropType;
         private float _speed = 3f;
-
+        
+        protected void Awake()
+        {
+            if (gameObject.layer == LayerMask.NameToLayer("Default"))
+            {
+                gameObject.layer = (int)Layers.DropLayer;
+            }
+        }
+        
         public void AttractToPlayer()
         {
             StopAllCoroutines();
@@ -23,12 +32,18 @@ namespace Drop
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            other.gameObject.HasComponent<PlayerBase>(component =>
+            if ((other.gameObject.layer & (int)Layers.BulletLayer) != 0 
+                || (other.gameObject.layer & (int)Layers.DropLayer) != 0)
+            {
+                return;
+            }
+            
+            if (other.gameObject == _player.gameObject)
             {
                 PlayerBase.OnGetDrop.Invoke(DropType, Value);
                 Destroy(gameObject);
-            });
-            
+            }
+
             other.gameObject.HasComponent<Border>(component => Destroy(gameObject));
         }
 
@@ -36,10 +51,10 @@ namespace Drop
         {
             gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
             
-            while (transform.position != UtilsBase.GetNewPlayerPosition())
+            while (transform.position != _player.GetPlayerPosition())
             {
                 transform.position = Vector3.MoveTowards(transform.position,
-                    UtilsBase.GetNewPlayerPosition(), _speed * 7 * Time.deltaTime);
+                    _player.GetPlayerPosition(), _speed * 7 * Time.deltaTime);
                 yield return null;
             }
         }

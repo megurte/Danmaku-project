@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using Boss.Camilla;
+using Character;
 using Environment;
 using Interfaces;
 using UnityEngine;
 using Utils;
+using Zenject;
 
 namespace Bullets
 {
     public class ChainTarget : ChainBase
     {
+        [Inject] private PlayerBase _playerBase;
         private bool _isMoving;
 
         private void Start()
@@ -27,7 +30,7 @@ namespace Bullets
             yield return StartCoroutine(ChargeAnimation());
             yield return new WaitForSeconds(1.5f);
             
-            var targetPosition = UtilsBase.GetNewPlayerPosition();
+            var targetPosition = _playerBase.GetPlayerPosition();
             
             Direction = UtilsBase.GetDirection(targetPosition, transform.position);
 

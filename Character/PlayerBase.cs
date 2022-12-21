@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using Bullets;
 using Drop;
 using Enemy;
+using ObjectPool;
 using SubEffects;
 using UnityEngine;
 using UnityEngine.Events;
@@ -52,9 +54,17 @@ namespace Character
             InitPlayer(playerSettings);
         }
         
+        public Vector3 GetPlayerPosition()
+        {
+            return transform.position;
+        }
+        
         private void Start()
         {
-            TurnGodMode();
+            if (godMode)
+            {
+                TurnGodMode();
+            }
 
             UpdatePlayerUI.Invoke();
             OnGetDrop.AddListener(OnDrop);
@@ -66,14 +76,17 @@ namespace Character
         private void Update()
         {
             SpeedUpdate();
+            
+            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.UpArrow) ||
+                Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
+            {
+                Moving();
+            }
         }
 
         private void FixedUpdate()
         {
-            if (Input.anyKey)
-                Moving();
-            
-            LevelUpdate();
+            LevelAndExperienceUpdate();
             CheatKeyBinds();
 
             if (Input.GetKey(KeyCode.Z))
@@ -104,14 +117,15 @@ namespace Character
                 Level = 3;
             if (Input.GetKey(KeyCode.F4))
                 Level = 4;
-            if (Input.GetKey(KeyCode.O))
+            if (Input.GetKey(KeyCode.F7))
                 TurnGodMode();
         }
 
         private void TurnGodMode()
         {
-            if (!godMode) return;
-            
+            if (godMode) return;
+
+            godMode = true;
             IsInvulnerable = true;
             Experience = 10000;
             Debug.LogWarning("God mode is on");
@@ -140,7 +154,7 @@ namespace Character
             }
         }
 
-        private void LevelUpdate()
+        private void LevelAndExperienceUpdate()
         {
             var keyMap = playerScriptableObject.levelUpMap;
             
@@ -211,7 +225,7 @@ namespace Character
                 
                 _flashEffect.FlashEffect();
                 _playerLoseCrystalsService.LoseExperienceCrystals(this);
-                LevelUpdate();
+                LevelAndExperienceUpdate();
                 StartCoroutine(Invulnerable());
             }
 
@@ -248,6 +262,7 @@ namespace Character
                 spawner.SetActive(false);
 
             UtilsBase.ClearBullets<Bullet>();
+            //ObjectPoolBase.HideAllActiveBullets();
             UtilsBase.ClearEnemies<EnemyBase>();
             UtilsBase.ClearDrop<DropBase>();
             Destroy(gameObject);

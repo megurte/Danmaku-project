@@ -44,7 +44,7 @@ namespace Boss.Camilla
         public IEnumerator InitPhaseOne()
         {
             UtilsBase.ClearBullets<Bullet>();
-            //ObjectPoolBase.HideObjectsInPool();
+            //ObjectPoolBase.HideAllActiveBullets();
             GlobalEvents.OnPhaseChange.AddListener(OnPhaseChange);
 
             yield return new WaitForSeconds(2);
@@ -81,7 +81,8 @@ namespace Boss.Camilla
             {
                 yield return new WaitForSeconds(2);
 
-                RandomSpawnersActivate.Invoke(StartIndexUp, EndIndexUp, 3);
+                RandomSpawnersActivate.Invoke(_camillaPhaseSettings.spawnerIndexes.startIndexUp,
+                    _camillaPhaseSettings.spawnerIndexes.endIndexUp, 3);
 
                 yield return new WaitForSeconds(6);
                 UtilsBase.ClearBullets<ChainBase>();
@@ -101,7 +102,8 @@ namespace Boss.Camilla
             {
                 yield return new WaitForSeconds(2);
 
-                RandomSpawnersActivate.Invoke(StartIndexUp, EndIndexUp, 2);
+                RandomSpawnersActivate.Invoke(_camillaPhaseSettings.spawnerIndexes.startIndexUp,
+                    _camillaPhaseSettings.spawnerIndexes.endIndexUp, 2);
 
                 yield return new WaitForSeconds(8);
                 
@@ -122,14 +124,15 @@ namespace Boss.Camilla
             {
                 PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShoot);
 
-                AllRandomSpawnersActivate.Invoke(StartIndexDown, EndIndexDown, 2);
+                AllRandomSpawnersActivate.Invoke(_camillaPhaseSettings.spawnerIndexes.startIndexDown,
+                    _camillaPhaseSettings.spawnerIndexes.endIndexDown, 2);
                 
                 yield return new WaitForSeconds(2);
             }
             
             StopAllSpells.Invoke();
             UtilsBase.ClearBullets<Bullet>();
-            //ObjectPoolBase.HideObjectsInPool();
+            //ObjectPoolBase.HideAllActiveBullets();
             
             PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShootIteration1);
             PropellerBulletSpawn.Invoke(_camillaPhaseSettings.phaseFourSettings.propellerBulletShootIteration2);
@@ -146,7 +149,7 @@ namespace Boss.Camilla
             StopAllCoroutines();
             StopAllSpells.Invoke();
             UtilsBase.ClearBullets<Bullet>();
-            //ObjectPoolBase.HideObjectsInPool();
+            //ObjectPoolBase.HideAllActiveBullets();
 
             if (_camillaSettings.maxPhases <= phase)
             {

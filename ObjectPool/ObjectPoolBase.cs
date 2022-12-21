@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bullets;
 using Interfaces;
 using UnityEngine;
-using Utils;
 
 namespace ObjectPool
 {
@@ -18,14 +16,14 @@ namespace ObjectPool
             public int maxSize;
         }
 
-        public static ObjectPoolBase Instance;
-
         public List<Pool> pools;
+        
+        private static ObjectPoolBase _instance;
         private static Dictionary<ObjectPoolTags, Queue<GameObject>> _objectPoolDictionary;
 
         private void Awake()
         {
-            Instance = this;
+            _instance = this;
         }
 
         private void Start()

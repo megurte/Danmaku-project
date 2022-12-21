@@ -19,6 +19,7 @@ namespace Enemy
         protected Vector3 TargetPosition;
 
         [Inject] private DropFactory _dropFactory;
+        [Inject] protected PlayerBase Player;
         private float _angle = default;
         private Vector3 _circleCenterPoint = default;
 

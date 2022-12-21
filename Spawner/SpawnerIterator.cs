@@ -5,6 +5,7 @@ using Enemy;
 using UnityEngine;
 using UnityEngine.Events;
 using Utils;
+using Zenject;
 
 namespace Spawner
 {
@@ -13,6 +14,8 @@ namespace Spawner
         public List<GameObject> bookSpawners;
 
         [SerializeField] private SpawnerIteratorConfig spawnerIteratorConfig;
+        [Inject] private DiContainer _diContainer;
+
         private GameObject _bookPrefab;
         
         public static readonly UnityEvent<int> AwakeSpawner = new UnityEvent<int>();
@@ -52,8 +55,9 @@ namespace Spawner
             if (!_bookPrefab)
                 _bookPrefab = Resources.Load<GameObject>("Prefab/Enemies/BookEnemy");
 
-            var newInstance = Instantiate(_bookPrefab, spawner.position, Quaternion.identity);
-            newInstance.GetComponent<EnemyBase>().SetTargetPosition(targetPosition);
+            var instance = _diContainer.InstantiatePrefabAs<BookEnemy>(_bookPrefab, spawner.position);
+            
+            instance.SetTargetPosition(targetPosition);
         }
         
         private static IEnumerator AddsPhaseEnd(float time)

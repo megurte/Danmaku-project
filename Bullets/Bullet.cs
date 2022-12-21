@@ -1,4 +1,6 @@
-﻿using Character;
+﻿using System;
+using Character;
+using Common;
 using Environment;
 using Interfaces;
 using ObjectPool;
@@ -19,11 +21,14 @@ namespace Bullets
 
         protected BulletType BulletType { get => bulletType; set => bulletType = value; }
         protected float StartSpeed { get; set; }
-
-        /*private void Start()
+        
+        protected void Awake()
         {
-            GlobalEvents.OnClearBullets.AddListener(DestroySelf);
-        }*/
+            if (gameObject.layer == LayerMask.NameToLayer("Default"))
+            {
+                gameObject.layer = (int)Layers.BulletLayer;
+            }
+        }
 
         private void FixedUpdate()
         {
@@ -37,6 +42,12 @@ namespace Bullets
         
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if ((collision.gameObject.layer & (int)Layers.BulletLayer) != 0 
+                || (collision.gameObject.layer & (int)Layers.DropLayer) != 0)
+            {
+                return;
+            }
+            
             collision.gameObject.HasComponent<PlayerBase>(component =>
             {
                 if (component.IsInvulnerable) return;
