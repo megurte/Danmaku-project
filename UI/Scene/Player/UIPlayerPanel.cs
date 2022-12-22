@@ -27,17 +27,19 @@ namespace UI.Scene.Player
         [SerializeField] private GameObject scoreDeathText;
 
         private PlayerBase _player;
+        private PlayerSpecials _playerSpecials;
 
         [Inject]
         public void Construct(PlayerBase settings)
         {
             _player = settings;
+            _playerSpecials = _player.GetComponent<PlayerSpecials>();
         }
         
         private void Start()
         {
             UpdateHealthPlaceholder(_player.playerScriptableObject.health);
-            UpdateSpecialPlaceholder(_player.playerScriptableObject.special);
+            UpdateSpecialPlaceholder(_playerSpecials.SpecialsCount);
 
             PlayerBase.OnDeath.AddListener(ShowDeathScreen);
             PlayerBase.SpecialUsed.AddListener(UpdateSpecialPlaceholder);
@@ -77,20 +79,6 @@ namespace UI.Scene.Player
                 child.SetParent(null);
                 Destroy(child.gameObject);
             }
-            
-            /*var allChildren = new GameObject[filler.transform.childCount];
-            var i = 0;
-
-            foreach (Transform child in filler.transform)
-            {
-                allChildren[i] = child.gameObject;
-                i += 1;
-            }
-
-            foreach (var child in allChildren)
-            {
-                Destroy(child.gameObject);
-            }*/
         }
 
         
@@ -100,11 +88,11 @@ namespace UI.Scene.Player
         /// <param name="currentHealth">The current health value.</param>
         private void UpdateHealthPlaceholder(int currentHealth)
         {
-            if (currentHealth < 0 || currentHealth > _player.playerScriptableObject.maxHealth) return;
+            if (currentHealth < 0 || currentHealth > _player.MaxHealth) return;
             
             ClearPlaceholder(health);
             
-            var minHealth = Mathf.Min(currentHealth, _player.playerScriptableObject.maxHealth);
+            var minHealth = Mathf.Min(currentHealth, _player.MaxHealth);
             
             for (var i = 0; i < minHealth; i++)
             {
@@ -112,7 +100,7 @@ namespace UI.Scene.Player
                 SetNormalScale(prefab);
             }
 
-            for (var i = 0; i < _player.playerScriptableObject.maxHealth - minHealth; i++)
+            for (var i = 0; i < _player.MaxHealth - minHealth; i++)
             {
                 var prefab = Instantiate(iconHealthEmpty, health.transform, true);
                 SetNormalScale(prefab);
@@ -121,12 +109,12 @@ namespace UI.Scene.Player
         
         private void UpdateSpecialPlaceholder(int currentSpecials)
         {
-            if (currentSpecials < 0 || currentSpecials > _player.playerScriptableObject.maxValue)
+            if (currentSpecials < 0 || currentSpecials > _playerSpecials.MaxSpecials)
                 return;
          
             ClearPlaceholder(specials);
             
-            var minSpecials = Mathf.Min(currentSpecials, _player.playerScriptableObject.maxValue);
+            var minSpecials = Mathf.Min(currentSpecials, _playerSpecials.MaxSpecials);
             
             for (var i = 0; i < minSpecials; i++)
             {
@@ -134,7 +122,7 @@ namespace UI.Scene.Player
                 SetNormalScale(prefab);
             }
             
-            for (var i = 0; i < _player.playerScriptableObject.maxValue - minSpecials; i++)
+            for (var i = 0; i < _playerSpecials.MaxSpecials - minSpecials; i++)
             {
                 var prefab = Instantiate(iconSpecialEmpty, specials.transform, true);
                 SetNormalScale(prefab);

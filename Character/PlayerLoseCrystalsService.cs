@@ -8,6 +8,15 @@ namespace Character
 {
     public class PlayerLoseCrystalsService : MonoBehaviour
     {
+        private PlayerBase _playerBase;
+        private int _experienceLoseByDamage;
+
+        private void Start()
+        {
+            _playerBase = GetComponent<PlayerBase>();
+            _experienceLoseByDamage = _playerBase.playerScriptableObject.experienceLoseByDamage;
+        }
+        
         public void LoseExperienceCrystals(PlayerBase player)
         {
             var maxVisualCrystals = GetRandomNumberOfCrystals();
@@ -18,10 +27,10 @@ namespace Character
                 CreateLostDrop(seed);
             }
             
-            if (player.Experience - player.experienceLoseByDamage < 0)
+            if (player.Experience - _experienceLoseByDamage < 0)
             {
                 var keyMap = player.playerScriptableObject.levelUpMap;
-                var remainder = Mathf.Abs(player.Experience - player.experienceLoseByDamage);
+                var remainder = Mathf.Abs(player.Experience - _experienceLoseByDamage);
 
                 while (remainder > 0)
                 {
@@ -56,7 +65,7 @@ namespace Character
             }
             else
             {
-                player.Experience -= player.experienceLoseByDamage;
+                player.Experience -= _experienceLoseByDamage;
             }
         }
         

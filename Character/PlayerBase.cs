@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using Bullets;
 using Drop;
 using Enemy;
-using ObjectPool;
 using SubEffects;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using Utils;
 using Zenject;
-using Random = System.Random;
 
 namespace Character
 {
@@ -19,11 +15,11 @@ namespace Character
     {
         public PlayerScriptableObject playerScriptableObject;
         public int Health { get; private set; }
+        public int MaxHealth { get; private set; }
         public int Level { get; set; }
         public int Experience { get; set; }
         public int Points { get; private set; }
         public bool IsInvulnerable { get; private set; }
-        public int experienceLoseByDamage = 30;
         public static bool NoDamage = true;
 
         public static readonly UnityEvent<int> SpecialUsed = new UnityEvent<int>();
@@ -32,22 +28,13 @@ namespace Character
         public static readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
         public static readonly UnityEvent<int> TranslateCurrentStageScore = new UnityEvent<int>();
         public static readonly UnityEvent UpdatePlayerUI = new UnityEvent();
-        
-        [SerializeField] private bool godMode = default;
+
+        private bool _godMode = default;
         private PlayerLoseCrystalsService _playerLoseCrystalsService;
-        private PlayerShootService _playerShootService;
+        private PlayerSpecials _playerSpecials;
         private float _maxLevel;
-        private int _special;
-        private float _maxSpecials;
-        private float _playerSpeed;
-        private bool _slowMode = false;
-        private float _specialTimer;
-        private float _specialCooldown;
         private SimpleFlash _flashEffect;
-        private float _targetBulletFrequency;
-        private Vector2 _moveVector;
-        private float _innerTimer;
-        
+
         [Inject]
         public void Construct(PlayerScriptableObject playerSettings)
         {
@@ -61,7 +48,7 @@ namespace Character
         
         private void Start()
         {
-            if (godMode)
+            if (_godMode)
             {
                 TurnGodMode();
             }
@@ -73,40 +60,10 @@ namespace Character
             GlobalEvents.OnBossFightFinish.AddListener(OnBossFightFinished);
         }
 
-        private void Update()
-        {
-            SpeedUpdate();
-            
-            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.UpArrow) ||
-                Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
-            {
-                Moving();
-            }
-        }
-
         private void FixedUpdate()
         {
             LevelAndExperienceUpdate();
-            CheatKeyBinds();
-
-            if (Input.GetKey(KeyCode.Z))
-            {
-                _playerShootService.ShootCommon(Level, transform.position);
-            
-                if (Level >= 3)
-                {
-                    var value =
-                        _playerShootService.ShootTarget(Level, transform.position, _innerTimer, _targetBulletFrequency);
-                    _innerTimer = value != 0 ? value : _innerTimer;
-                    _innerTimer -= Time.deltaTime;
-                }
-            }
-
-            if (Input.GetKey(KeyCode.X))
-                UseSpecial();
-
-            if (_specialTimer - _specialCooldown < 0)
-                _specialTimer -= Time.deltaTime;
+            //CheatKeyBinds();
         }
 
         private void CheatKeyBinds()
@@ -123,37 +80,14 @@ namespace Character
 
         private void TurnGodMode()
         {
-            if (godMode) return;
+            if (_godMode) return;
 
-            godMode = true;
+            _godMode = true;
             IsInvulnerable = true;
             Experience = 10000;
             Debug.LogWarning("God mode is on");
         }
-
-        private void Moving()
-        {
-            var moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            
-            _moveVector = moveInput.normalized * _playerSpeed;
-            transform.Translate(_moveVector);
-        }
-
-        private void SpeedUpdate()
-        {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !_slowMode)
-            {
-                _playerSpeed /= 6;
-                _slowMode = true;
-            }
-
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                _playerSpeed = playerScriptableObject.speed;
-                _slowMode = false;
-            }
-        }
-
+        
         private void LevelAndExperienceUpdate()
         {
             var keyMap = playerScriptableObject.levelUpMap;
@@ -176,20 +110,6 @@ namespace Character
             UpdatePlayerUI.Invoke();
         }
 
-        private void UseSpecial()
-        {
-            if (!(_specialTimer <= 0) || _special <= 0) return;
-            
-            var settings = playerScriptableObject.specialSettings[0];
-                
-            _special--;
-            _specialTimer = _specialCooldown;
-            _specialTimer -= Time.deltaTime;
-            
-            SpecialUsed.Invoke(_special);
-            Instantiate(settings.specialGameObject, settings.specialPosition, Quaternion.identity);
-        }
-
         private void OnDrop(DropType type, int value)
         {
             switch (type)
@@ -204,12 +124,12 @@ namespace Character
                     Points += value;
                     break;
                 case DropType.HealthDrop:
-                    Health += Health + value <= _maxSpecials ? value : 0;
+                    Health += Health + value <= MaxHealth ? value : 0;
                     GlobalEvents.HealthChanged(Health);
                     break;
                 case DropType.SpecialDrop:
-                    _special += _special + value <= _maxSpecials ? value : 0;
-                    GlobalEvents.SpecialChanged(_special);
+                    _playerSpecials.AddSpecial(value);
+                    GlobalEvents.SpecialChanged(_playerSpecials.SpecialsCount);
                     break;
                 default:
                     throw new Exception($"DropType index out of range: {type}");
@@ -262,7 +182,6 @@ namespace Character
                 spawner.SetActive(false);
 
             UtilsBase.ClearBullets<Bullet>();
-            //ObjectPoolBase.HideAllActiveBullets();
             UtilsBase.ClearEnemies<EnemyBase>();
             UtilsBase.ClearDrop<DropBase>();
             Destroy(gameObject);
@@ -275,17 +194,11 @@ namespace Character
             Level = settings.level;
             Experience = settings.experience;
             Points = settings.points;
-            _maxSpecials = settings.maxValue;
-            _specialTimer = 0;
-            _specialCooldown = settings.specialCooldown;
+            MaxHealth = settings.maxHealth;
             _maxLevel = settings.maxLevel;
-            _special = settings.special;
-            _playerSpeed = settings.speed;
-            _targetBulletFrequency = settings.targetBulletFrequency;
             _playerLoseCrystalsService = GetComponent<PlayerLoseCrystalsService>();
-            _playerShootService = GetComponent<PlayerShootService>();
+            _playerSpecials = GetComponent<PlayerSpecials>();
             _flashEffect = GetComponent<SimpleFlash>();
-            _innerTimer = _targetBulletFrequency;
         }
     }
 }

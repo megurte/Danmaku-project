@@ -1,12 +1,39 @@
-﻿using System;
-using ObjectPool;
+﻿using ObjectPool;
 using UnityEngine;
+using Zenject;
 
 namespace Character
 {
-    [Serializable]
     public class PlayerShootService : MonoBehaviour
     {
+        [Inject] private PlayerInputService _inputService;
+        private PlayerBase _playerBase;
+        private float _targetBulletFrequency;
+        private float _innerTimer;
+        
+        private void Start()
+        {
+            _playerBase = GetComponent<PlayerBase>();
+            _targetBulletFrequency = _playerBase.playerScriptableObject.targetBulletFrequency;
+            _innerTimer = _targetBulletFrequency;
+        }
+
+        private void FixedUpdate()
+        {
+            if (_inputService.IsShootKeyPressed())
+            {
+                ShootCommon(_playerBase.Level, transform.position);
+            
+                if (_playerBase.Level >= 3)
+                {
+                    var value =
+                        ShootTarget(_playerBase.Level, transform.position, _innerTimer, _targetBulletFrequency);
+                    _innerTimer = value != 0 ? value : _innerTimer;
+                    _innerTimer -= Time.deltaTime;
+                }
+            }
+        }
+
         public void ShootCommon(int characterLevel, Vector3 position)
         {
             switch (characterLevel)

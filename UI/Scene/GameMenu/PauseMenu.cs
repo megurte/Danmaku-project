@@ -1,7 +1,9 @@
 ﻿using System;
+using Character;
 using UI.Scene;
 using UI.Scene.Additional;
 using UnityEngine;
+using Zenject;
 
 namespace UI.Scene.GameMenu
 {
@@ -9,6 +11,7 @@ namespace UI.Scene.GameMenu
     {
         public static bool IsPaused;
 
+        [Inject] private PlayerInputService _inputService;
         [SerializeField] private GameObject pauseMenuUI;
         [SerializeField] private GameObject backgroundMusicSource;
         
@@ -21,7 +24,7 @@ namespace UI.Scene.GameMenu
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (_inputService.IsReturnKeyPressed())
             {
                 if (IsPaused)
                 {

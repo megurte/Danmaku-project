@@ -13,7 +13,7 @@ namespace Boss.Camilla
         [SerializeField] private GameObject bossBarUI;
         private CamillaScriptableObject _camillaScriptableObject;
         private float _maxHp;
-        
+
         public static bool IsMagicBarrierActive;
         
         [Inject]
@@ -47,6 +47,11 @@ namespace Boss.Camilla
         {
             if (Math.Abs(CurrentHp / _maxHp - bar.fillAmount) >= 0)
                 bar.fillAmount = CurrentHp / _maxHp;
+        }
+
+        public int GetBarrierMaxHealth()
+        {
+            return _camillaScriptableObject.barrierMaxHp;
         }
 
         public void OnBossFightFinished()

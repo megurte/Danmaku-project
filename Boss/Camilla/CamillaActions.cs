@@ -16,6 +16,7 @@ namespace Boss.Camilla
     public class CamillaActions: MonoBehaviour
     {
         [Inject] private PlayerBase _player;
+        [Inject] private DiContainer _diContainer;
         private ChainSpawner[] _chainSpawners;
         
         private void Start()
@@ -38,10 +39,10 @@ namespace Boss.Camilla
         private void CreateMagicalBarrier()
         {
             var barrier = Resources.Load<GameObject> ("Prefab/Effects/Barrier");
-            var newBarrierInstance = Instantiate(barrier, transform.position, Quaternion.identity);
+            var newBarrierInstance = _diContainer.InstantiatePrefabAs<Barrier>(barrier, transform.position);
             
-            newBarrierInstance.transform.parent = gameObject.transform;
-            newBarrierInstance.GetComponent<Barrier>().SwitchIsMagicBarrierActive(true);
+            newBarrierInstance.gameObject.transform.parent = gameObject.transform;
+            newBarrierInstance.SwitchIsMagicBarrierActive(true);
         }
 
         private void WaveChainSpawn(int startIndex, int endIndex, bool fromLeft = true)
