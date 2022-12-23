@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace UI.Scene.Inscriptions
 {
+    [Serializable]
     public class BookData: MonoBehaviour
     {
         [SerializeField] private string header;

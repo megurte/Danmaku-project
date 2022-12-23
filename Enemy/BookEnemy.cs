@@ -23,15 +23,12 @@ namespace Enemy
 
         private static readonly int IsCasting = Animator.StringToHash("isCasting");
 
-        private void Awake()
+        private void Start()
         {
             CurrentHp = enemyScriptableObject.maxHp;
             _innerTimer = Cooldown;
             _animator = GetComponent<Animator>();
-        }
-
-        private void Start()
-        {
+            
             switch (MoveSet)
             {
                 case MoveSet.MoveAround:

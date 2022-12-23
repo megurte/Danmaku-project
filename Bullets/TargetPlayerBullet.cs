@@ -9,6 +9,7 @@ namespace Bullets
     
         private void FixedUpdate()
         {
+            // TODO: refactor this to add enemies when they spawn [optimisation task]
             _enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
             if (_enemies.Length != 0)
@@ -17,7 +18,7 @@ namespace Bullets
             }
             else
             {
-                Movement();
+                MoveEnemy();
             }
         }
 

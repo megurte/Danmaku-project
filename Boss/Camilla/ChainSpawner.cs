@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Bullets;
 using UnityEngine;
+using Zenject;
 
 namespace Boss.Camilla
 {
@@ -9,6 +10,7 @@ namespace Boss.Camilla
         public int index;
         public GameObject chainPrefab;
         public SpawnerType spawnerType;
+        [Inject] private DiContainer _diContainer;
 
         private void SpawnChain()
         {
@@ -27,7 +29,7 @@ namespace Boss.Camilla
                 newRotation = new Vector3(0, 0, 90);
             }
 
-            var chain = Instantiate(chainPrefab, newPosition, Quaternion.Euler(newRotation));
+            var chain = _diContainer.InstantiatePrefab(chainPrefab, newPosition, Quaternion.Euler(newRotation), null);
             
             chain.GetComponent<ChainBase>().spawnerType = spawnerType;
         }

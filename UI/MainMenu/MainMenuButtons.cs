@@ -1,4 +1,5 @@
 using System;
+using UI.Scene.Inscriptions;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -8,6 +9,7 @@ namespace UI.MainMenu
     {
         [SerializeField] private GameObject recordsWindow;
         [SerializeField] private GameObject newGameWindow;
+        [SerializeField, TextArea(5,7)] private string controlsDescription;
 
         private void Update()
         {
@@ -34,6 +36,11 @@ namespace UI.MainMenu
         {
             recordsWindow.SetActive(true);
             GetComponent<RecordsWindow>().UpdateRecordsData();
+        }
+        
+        public void ShowGameControls()
+        {
+            TextDisplay.DisplayContent.Invoke("", controlsDescription);
         }
         
         public void ExitApplication()

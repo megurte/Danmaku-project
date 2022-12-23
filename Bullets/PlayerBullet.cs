@@ -24,10 +24,10 @@ namespace Bullets
         
         private void FixedUpdate()
         {
-            Movement();
+            MoveEnemy();
         }
 
-        protected void Movement()
+        protected void MoveEnemy()
         {
             transform.Translate(direction.normalized * startSpeed);
         }

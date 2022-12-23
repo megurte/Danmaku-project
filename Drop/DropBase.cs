@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Character;
 using Common;
 using Environment;
@@ -14,7 +15,9 @@ namespace Drop
         [Inject] private PlayerBase _player;
         private int Value => dropScriptableObject.value;
         private DropType DropType => dropScriptableObject.dropType;
-        private float _speed = 3f;
+        private float _followSpeed = 3f;
+        private Vector3 _moveVector;
+        private bool _isAttracted;
         
         protected void Awake()
         {
@@ -22,10 +25,22 @@ namespace Drop
             {
                 gameObject.layer = (int)Layers.DropLayer;
             }
+
+            _moveVector = new Vector3(0, -0.08f, 0);
+            _isAttracted = false;
         }
-        
+
+        private void FixedUpdate()
+        {
+            if (!_isAttracted)
+            {
+                transform.Translate(_moveVector);
+            }
+        }
+
         public void AttractToPlayer()
         {
+            _isAttracted = true;
             StopAllCoroutines();
             StartCoroutine(FollowPlayer());
         }
@@ -54,7 +69,7 @@ namespace Drop
             while (transform.position != _player.GetPlayerPosition())
             {
                 transform.position = Vector3.MoveTowards(transform.position,
-                    _player.GetPlayerPosition(), _speed * 7 * Time.deltaTime);
+                    _player.GetPlayerPosition(), _followSpeed * 7 * Time.deltaTime);
                 yield return null;
             }
         }

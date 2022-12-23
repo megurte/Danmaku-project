@@ -5,6 +5,7 @@ using Boss;
 using Character;
 using TMPro;
 using UI.Scene.Additional;
+using UI.Scene.GameMenu;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -133,7 +134,7 @@ namespace Stage
             
             yield return new WaitForSeconds(8);
 
-            SceneTransition.AsyncSceneLoading("MainMenu");
+            SceneTransition.AsyncSceneLoading(Scenes.MainMenu.ToString());
         }
 
         private IEnumerator CumulatePoints(int pointsToCumulate)

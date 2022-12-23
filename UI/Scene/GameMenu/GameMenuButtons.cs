@@ -7,7 +7,7 @@ namespace UI.Scene.GameMenu
     {
         public void ReturnToTitle()
         {            
-            SceneTransition.AsyncSceneLoading("MainMenu");
+            SceneTransition.AsyncSceneLoading(Scenes.MainMenu.ToString());
         }
     }
 }

@@ -44,6 +44,7 @@ namespace Boss.Camilla
             camillaPrefab.BossUI(true);
             backgroundMusic.clip = bossMusic;
             backgroundMusic.Play();
+            Container.Bind<CamillaBase>().FromInstance(bossInstance).AsSingle().NonLazy();
         }
     }
 }

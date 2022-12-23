@@ -21,15 +21,12 @@ namespace Enemy
         private Spells Spell => enemyScriptableObject.spell;
         private MoveSet MoveSet => enemyScriptableObject.moveSet;
         private float _innerTimer;
-        
-        private void Awake()
-        {
-            CurrentHp = enemyScriptableObject.maxHp;
-            _innerTimer = Cooldown;
-        }
 
         private void Start()
         {
+            CurrentHp = enemyScriptableObject.maxHp;
+            _innerTimer = Cooldown;
+            
             switch (MoveSet)
             {
                 case MoveSet.MoveAround:

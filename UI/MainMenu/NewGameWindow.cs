@@ -2,6 +2,7 @@
 using Stage;
 using TMPro;
 using UI.Scene.Additional;
+using UI.Scene.GameMenu;
 using UnityEngine;
 using Button = UnityEngine.UI.Button;
 
@@ -46,7 +47,7 @@ namespace UI.MainMenu
             }
             
             PlayerRunInfo.SetPlayerName(playerName);
-            SceneTransition.AsyncSceneLoading("StageOne");
+            SceneTransition.AsyncSceneLoading(Scenes.StageOne.ToString());
         }
     }
 }

@@ -47,14 +47,14 @@ namespace UI.Scene.GameMenu
 
         public void LoadMenu()
         {
-            SceneTransition.AsyncSceneLoading("MainMenu");
+            SceneTransition.AsyncSceneLoading(Scenes.MainMenu.ToString());
             Time.timeScale = 1f;
             IsPaused = false;
         }
 
         public void RestartStage()
         {
-            SceneTransition.AsyncSceneLoading("StageOne");
+            SceneTransition.AsyncSceneLoading(Scenes.StageOne.ToString());
             Time.timeScale = 1f;
             IsPaused = false;
         }

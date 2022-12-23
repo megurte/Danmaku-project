@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zenject;
 
 namespace Character
@@ -22,7 +23,10 @@ namespace Character
         private void Update()
         {
             SpeedUpdate();
+        }
 
+        private void FixedUpdate()
+        {
             if (_inputService.IsMovementControlKeysDown())
             {
                 MovePlayer();

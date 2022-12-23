@@ -63,7 +63,7 @@ namespace Character
         private void FixedUpdate()
         {
             LevelAndExperienceUpdate();
-            //CheatKeyBinds();
+            CheatKeyBinds();
         }
 
         private void CheatKeyBinds()

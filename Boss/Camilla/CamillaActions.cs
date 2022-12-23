@@ -113,7 +113,7 @@ namespace Boss.Camilla
                 direction.y = Mathf.Cos(degree);
                 direction.x = Mathf.Sin(degree);
 
-                var instObject = ObjectPool.ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
+                var instObject = ObjectPoolBase.GetBulletFromPool(settings.Bullet.objectTag, position);
                 instObject.GetComponent<Bullet>().Direction = direction;
             }
         }
