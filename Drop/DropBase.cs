@@ -30,13 +30,13 @@ namespace Drop
             _isAttracted = false;
         }
 
-        private void FixedUpdate()
+        /*private void FixedUpdate()
         {
             if (!_isAttracted)
             {
                 transform.Translate(_moveVector);
             }
-        }
+        }*/
 
         public void AttractToPlayer()
         {
